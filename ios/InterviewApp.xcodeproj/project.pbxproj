@@ -1,0 +1,225 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 56;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		A1000001 /* InterviewApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1000001 /* InterviewApp.swift */; };
+		A1000002 /* AppConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1000002 /* AppConfig.swift */; };
+		A1000003 /* SupabaseService.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1000003 /* SupabaseService.swift */; };
+		A1000004 /* Category.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1000004 /* Category.swift */; };
+		A1000005 /* Question.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1000005 /* Question.swift */; };
+		A1000006 /* DashboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1000006 /* DashboardView.swift */; };
+		A1000007 /* DashboardViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1000007 /* DashboardViewModel.swift */; };
+		A1000008 /* QuestionDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1000008 /* QuestionDetailView.swift */; };
+		A1000009 /* InterviewSimulatorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1000009 /* InterviewSimulatorView.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		B0000001 /* InterviewApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = InterviewApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		B1000001 /* InterviewApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InterviewApp.swift; sourceTree = "<group>"; };
+		B1000002 /* AppConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppConfig.swift; sourceTree = "<group>"; };
+		B1000003 /* SupabaseService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SupabaseService.swift; sourceTree = "<group>"; };
+		B1000004 /* Category.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Category.swift; sourceTree = "<group>"; };
+		B1000005 /* Question.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Question.swift; sourceTree = "<group>"; };
+		B1000006 /* DashboardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardView.swift; sourceTree = "<group>"; };
+		B1000007 /* DashboardViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardViewModel.swift; sourceTree = "<group>"; };
+		B1000008 /* QuestionDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuestionDetailView.swift; sourceTree = "<group>"; };
+		B1000009 /* InterviewSimulatorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InterviewSimulatorView.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		C0000001 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		D0000001 = {
+			isa = PBXGroup;
+			children = (
+				D1000001 /* InterviewApp */,
+				D0000002 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		D0000002 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				B0000001 /* InterviewApp.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		D1000001 /* InterviewApp */ = {
+			isa = PBXGroup;
+			children = (
+				B1000001 /* InterviewApp.swift */,
+				B1000002 /* AppConfig.swift */,
+				B1000003 /* SupabaseService.swift */,
+				B1000004 /* Category.swift */,
+				B1000005 /* Question.swift */,
+				B1000006 /* DashboardView.swift */,
+				B1000007 /* DashboardViewModel.swift */,
+				B1000008 /* QuestionDetailView.swift */,
+				B1000009 /* InterviewSimulatorView.swift */,
+			);
+			path = InterviewApp;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		E0000001 /* InterviewApp */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = F0000001 /* Build configuration list for PBXNativeTarget "InterviewApp" */;
+			buildPhases = (
+				C1000001 /* Sources */,
+				C0000001 /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = InterviewApp;
+			productName = InterviewApp;
+			productReference = B0000001 /* InterviewApp.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		P0000001 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastUpgradeCheck = 1500;
+				TargetAttributes = {
+					E0000001 = {
+						CreatedOnToolsVersion = 15.0;
+					};
+				};
+			};
+			buildConfigurationList = F1000001 /* Build configuration list for PBXProject "InterviewApp" */;
+			compatibilityVersion = "Xcode 14.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = D0000001;
+			productRefGroup = D0000002 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				E0000001 /* InterviewApp */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXSourcesBuildPhase section */
+		C1000001 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A1000001 /* InterviewApp.swift in Sources */,
+				A1000002 /* AppConfig.swift in Sources */,
+				A1000003 /* SupabaseService.swift in Sources */,
+				A1000004 /* Category.swift in Sources */,
+				A1000005 /* Question.swift in Sources */,
+				A1000006 /* DashboardView.swift in Sources */,
+				A1000007 /* DashboardViewModel.swift in Sources */,
+				A1000008 /* QuestionDetailView.swift in Sources */,
+				A1000009 /* InterviewSimulatorView.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		G0000001 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ENABLE_MODULES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = "Interview App";
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.umutocguder.interviewapp;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		G0000002 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ENABLE_MODULES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = "Interview App";
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.umutocguder.interviewapp;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		G1000001 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+			};
+			name = Debug;
+		};
+		G1000002 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		F0000001 /* Build configuration list for PBXNativeTarget "InterviewApp" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				G0000001 /* Debug */,
+				G0000002 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		F1000001 /* Build configuration list for PBXProject "InterviewApp" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				G1000001 /* Debug */,
+				G1000002 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+
+	};
+	rootObject = P0000001 /* Project object */;
+}
