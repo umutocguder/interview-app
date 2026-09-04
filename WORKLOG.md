@@ -63,3 +63,19 @@ Bu dosya, Interview App projesinde gerçekleştirilen tüm mimari kararları, te
   - `WORKLOG.md` [MODIFY]
 - **Mevcut Durum**: Tüm platformlar (Web, iOS, Android) kimlik doğrulama ve yapay zeka mülakat simülasyonu yeteneklerine sahip olup, Web platformu canlıda başarıyla derlenip doğrulanmıştır.
 
+### [2026-09-05 00:41] Automated Unit Test Suite Implementation
+- **Goal & Purpose**: Implement automated tests for interview evaluation and simulator state models according to AGENTS.md Section 8.
+- **Implementation Highlights**:
+  - Implemented `tests/test_interview.py`: Validates question category filtering, difficulty level filtering, and interview session percentage scoring.
+  - Implemented `web/tests/interview.test.ts`: Validates average score calculations, total session time formatting, and performance grading.
+  - Configured `npm test` inside `web/package.json`.
+- **Affected Files**:
+  - [tests/test_interview.py](file:///Users/umut/mycodespaces/interview-app/tests/test_interview.py)
+  - [web/tests/interview.test.ts](file:///Users/umut/mycodespaces/interview-app/web/tests/interview.test.ts)
+  - [web/package.json](file:///Users/umut/mycodespaces/interview-app/web/package.json)
+  - [WORKLOG.md](file:///Users/umut/mycodespaces/interview-app/WORKLOG.md)
+- **Current State & Verification**:
+  - `python3 -m unittest discover -s tests`: 3/3 tests passed in 0.000s.
+  - `npm test` (web): 3/3 tests passed with 100% success.
+
+
