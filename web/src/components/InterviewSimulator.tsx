@@ -26,6 +26,12 @@ interface EvaluationResult {
   suggestedAnswer: string;
   followUpQuestion: string;
   provider: "gemini-flash" | "smart-local-ai";
+  rateLimitInfo?: {
+    remaining: number;
+    limit: number;
+    isLimited: boolean;
+    notice?: string;
+  };
 }
 
 interface InterviewSimulatorProps {
@@ -341,16 +347,37 @@ export default function InterviewSimulator({ questions, isOpen, onClose }: Inter
                     <Award className="w-6 h-6" />
                   </div>
                   <div>
-                    <div className="text-xs font-bold text-slate-500 uppercase">Gemini Değerlendirme Skoru</div>
+                    <div className="text-xs font-bold text-slate-500 uppercase">Mülakat Değerlendirme Skoru</div>
                     <div className="text-xl font-extrabold text-slate-900 dark:text-slate-100">
                       {evaluation.score} <span className="text-xs text-slate-400 font-normal">/ 100</span>
                     </div>
                   </div>
                 </div>
-                <span className="text-[11px] font-mono px-2.5 py-1 rounded-full bg-slate-200/70 dark:bg-slate-700 text-slate-600 dark:text-slate-300">
-                  {evaluation.provider === "gemini-flash" ? "⚡ Gemini 1.5 Flash" : "🧠 Smart Evaluator"}
-                </span>
+                <div className="text-right">
+                  <span className="text-[11px] font-mono px-2.5 py-1 rounded-full bg-slate-200/70 dark:bg-slate-700 text-slate-600 dark:text-slate-300 inline-block mb-1">
+                    {evaluation.provider === "gemini-flash" ? "⚡ Gemini 1.5 Flash" : "🧠 Smart Local Evaluator"}
+                  </span>
+                  {evaluation.rateLimitInfo && (
+                    <div className="text-[10px] text-slate-500">
+                      Kalan Günlük AI Hakkı: {evaluation.rateLimitInfo.remaining}/{evaluation.rateLimitInfo.limit}
+                    </div>
+                  )}
+                </div>
               </div>
+
+              {/* Kota Aşımı Uyarısı */}
+              {evaluation.rateLimitInfo?.isLimited && (
+                <div className="p-3 bg-amber-50 dark:bg-amber-950/40 border border-amber-200 dark:border-amber-800 rounded-xl text-xs text-amber-800 dark:text-amber-200 flex items-start gap-2">
+                  <AlertTriangle className="w-4 h-4 shrink-0 text-amber-600 mt-0.5" />
+                  <div>
+                    <div className="font-semibold">AI Kotası Sınırlandırıldı</div>
+                    <p className="mt-0.5 text-[11px] text-amber-700 dark:text-amber-300">
+                      {evaluation.rateLimitInfo.notice} Analiziniz kesintiye uğramadan yerel akıllı motorla tamamlandı.
+                      Sınırsız Gemini analizi için yukarıdan kendi API anahtarınızı girebilirsiniz.
+                    </p>
+                  </div>
+                </div>
+              )}
 
               {/* Güçlü Yönler */}
               <div className="space-y-2">

@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { checkRateLimit, getClientIP, RateLimitResult } from "@/lib/rate-limiter";
 
 export interface EvaluationRequest {
   questionTitle: string;
@@ -16,6 +17,12 @@ export interface EvaluationResponse {
   suggestedAnswer: string;
   followUpQuestion: string;
   provider: "gemini-flash" | "smart-local-ai";
+  rateLimitInfo?: {
+    remaining: number;
+    limit: number;
+    isLimited: boolean;
+    notice?: string;
+  };
 }
 
 export async function POST(req: Request) {
@@ -25,12 +32,54 @@ export async function POST(req: Request) {
 
     if (!userAnswer || userAnswer.trim().length < 5) {
       return NextResponse.json(
-        { error: "Lütfen değerlendirme için anlamlı bir mülakat cevabı girin." },
+        { error: "Lütfen değerlendirme için anlamlı bir mülakat cevabı girin (en az 5 karakter)." },
         { status: 400 }
       );
     }
 
-    const apiKey = customApiKey || process.env.GEMINI_API_KEY;
+    // Güvenlik: Maksimum metin uzunluğu denetimi (Gemini token şişirmesini önleme)
+    const sanitizedAnswer = userAnswer.slice(0, 2000).trim();
+
+    const clientIP = getClientIP(req);
+    const hasCustomKey = Boolean(customApiKey && customApiKey.trim().length > 10);
+
+    // Kendi API anahtarını getiren kullanıcı sınırsızdır
+    let rateLimitResult: RateLimitResult = {
+      allowed: true,
+      remaining: 999,
+      limit: 999,
+      resetInSeconds: 0,
+    };
+
+    if (!hasCustomKey) {
+      rateLimitResult = checkRateLimit(clientIP);
+    }
+
+    // Kota aşıldıysa veya spam tespit edildiyse:
+    // Umut'un kredisini tüketmemek için doğrudan Akıllı Yerel Simülatör çalıştırılır ve kullanıcı bilgilendirilir.
+    if (!rateLimitResult.allowed) {
+      const localResult = evaluateLocally({
+        questionTitle,
+        questionText,
+        idealAnswer,
+        keyPoints,
+        userAnswer: sanitizedAnswer,
+      });
+
+      return NextResponse.json({
+        ...localResult,
+        rateLimitInfo: {
+          remaining: 0,
+          limit: rateLimitResult.limit,
+          isLimited: true,
+          notice:
+            rateLimitResult.reason ||
+            "Günlük ücretsiz yapay zeka analiz kotanız doldu (3/3). Analiz yerel simülatör ile tamamlandı.",
+        },
+      });
+    }
+
+    const apiKey = customApiKey?.trim() || process.env.GEMINI_API_KEY;
 
     if (apiKey) {
       try {
@@ -39,13 +88,21 @@ export async function POST(req: Request) {
           questionText,
           idealAnswer,
           keyPoints,
-          userAnswer,
+          userAnswer: sanitizedAnswer,
         });
+
         if (geminiResult) {
-          return NextResponse.json(geminiResult);
+          return NextResponse.json({
+            ...geminiResult,
+            rateLimitInfo: {
+              remaining: rateLimitResult.remaining,
+              limit: rateLimitResult.limit,
+              isLimited: false,
+            },
+          });
         }
       } catch (geminiErr) {
-        console.warn("Gemini API çağrısı sırasında hata oluştu, yerel AI motoruna geçiliyor:", geminiErr);
+        console.warn("Gemini API çağrısı başarısız oldu, yerel AI motoruna geçiliyor:", geminiErr);
       }
     }
 
@@ -55,10 +112,17 @@ export async function POST(req: Request) {
       questionText,
       idealAnswer,
       keyPoints,
-      userAnswer,
+      userAnswer: sanitizedAnswer,
     });
 
-    return NextResponse.json(localResult);
+    return NextResponse.json({
+      ...localResult,
+      rateLimitInfo: {
+        remaining: rateLimitResult.remaining,
+        limit: rateLimitResult.limit,
+        isLimited: false,
+      },
+    });
   } catch (error: any) {
     return NextResponse.json(
       { error: "Değerlendirme yapılamadı: " + (error?.message || "Bilinmeyen hata") },
@@ -132,7 +196,7 @@ LÜTFEN SADECE VE SADECE GEÇERLİ BİR JSON YANITI DÖNDÜR, markdown blokları
     strengths: Array.isArray(parsed.strengths) ? parsed.strengths : ["Teknik yaklaşım anlaşılır."],
     improvements: Array.isArray(parsed.improvements) ? parsed.improvements : ["Detaylar artırılabilir."],
     suggestedAnswer: parsed.suggestedAnswer || data.idealAnswer,
-    followUpQuestion: parsed.followUpQuestion || "Bu yaklaşımın yüksek yük altındaki ölçeklenebilirlik kısıtları neler olurdu?",
+    followUpQuestion: parsed.followUpQuestion || "Bu yaklaşımın yüksek yük altındaki kısıtları neler olurdu?",
     provider: "gemini-flash",
   };
 }
@@ -149,7 +213,6 @@ function evaluateLocally(data: {
   let matchedPoints: string[] = [];
   let missedPoints: string[] = [];
 
-  // Key point ve anahtar kelime eşleşmesi analizi
   for (const point of data.keyPoints) {
     const pointWords = point.toLowerCase().split(/\s+/).filter((w) => w.length > 3);
     const hasMatch = pointWords.some((w) => answerLower.includes(w));
@@ -160,7 +223,6 @@ function evaluateLocally(data: {
     }
   }
 
-  // Metin uzunluğu ve derinlik skoru
   const lengthScore = Math.min(30, Math.floor(data.userAnswer.trim().split(/\s+/).length * 1.5));
   const keywordScore = data.keyPoints.length > 0 
     ? Math.floor((matchedPoints.length / data.keyPoints.length) * 50) 
@@ -169,7 +231,7 @@ function evaluateLocally(data: {
   const finalScore = Math.min(95, Math.max(45, baseScore + lengthScore + keywordScore));
 
   const strengths = matchedPoints.length > 0
-    ? matchedPoints.map((p) => `"${p}" konusuna ve prensiplerine doğru şekilde temas edilmiş.`)
+    ? matchedPoints.map((p) => `"${p}" konusuna ve mimari prensiplere doğru şekilde temas edilmiş.`)
     : [
         "Temel konsepti kendi cümlelerinizle özetleme çabası başarılı.",
         "Soruya verilen yanıt akıcı ve mülakat ortamına uygun.",
@@ -179,7 +241,7 @@ function evaluateLocally(data: {
     ? missedPoints.map((p) => `"${p}" başlığına ve performans/güvenlik etkilerine daha detaylı değinilebilir.`)
     : [
         "Mimarideki uç senaryolar (edge cases) ve hata yakalama stratejileri örneklendirilebilir.",
-        "Endüstri standardı gerçek bir üretim tecrübesiyle argüman güçlendirilebilir.",
+        "Endüstri standardı gerçek bir üretim tecrübesiyle argüman pekiştirilebilir.",
       ];
 
   const followUpQuestion = data.questionTitle.toLowerCase().includes("swift") || data.questionTitle.toLowerCase().includes("compose")

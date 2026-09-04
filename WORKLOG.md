@@ -78,4 +78,29 @@ Bu dosya, Interview App projesinde gerçekleştirilen tüm mimari kararları, te
   - `python3 -m unittest discover -s tests`: 3/3 tests passed in 0.000s.
   - `npm test` (web): 3/3 tests passed with 100% success.
 
+### [2026-09-05 00:49] Dış Kullanıcılar İçin Sıkı AI Sınırlandırması (Rate Limiting) ve Vercel Prodüksiyon Dağıtımı
+- **Görev ve Amaç**: Harici kullanıcıların Umut'un Gemini API kredisini tüketmesini engellemek için IP tabanlı katı kota sınırlandırması getirilmesi, Vercel üzerinde canlıya alınması ve GitHub reposu ile bağlanması.
+- **Teknik Kararlar ve Mimari Değişiklikler**:
+  1. **Katı Rate Limiter (`web/src/lib/rate-limiter.ts`):** 
+     - Dış kullanıcılar için IP başına 24 saatte maksimum 3 Gemini AI analiz hakkı tanımlandı (`MAX_REQUESTS_PER_WINDOW = 3`).
+     - Bot/spam isteklerini engellemek için ardışık istekler arasına minimum 20 saniye aralık şartı getirildi.
+     - Giriş metni maksimum 2000 karakterle sınırlandırılarak token şişirmesi önlendi.
+     - Kendi `customApiKey`'ini getiren kullanıcılara sınırsız erişim tanındı.
+     - Kotası dolan harici kullanıcılar için Umut'un Gemini API kredisi harcanmadan otomatik olarak akıllı yerel simülatör (`smart-local-ai`) devreye alınarak kesintisiz hizmet sağlandı.
+  2. **Simülatör UI Kota Bildirimi (`InterviewSimulator.tsx`):** Kullanıcıya kalan günlük AI hakkı gösterildi ve kota aşıldığında bilgilendirici uyarı kartı eklendi.
+  3. **Next.js Güvenlik Güncellemesi:** Vercel dağıtım güvenlik denetimini karşılamak amacıyla Next.js sürümü güvenli ve yamalanmış `^15.5.25` sürümüne yükseltildi.
+  4. **Vercel Dağıtımı & GitHub Entegrasyonu:**
+     - `web/vercel.json` güvenlik başlıkları (X-Content-Type-Options, X-Frame-Options, XSS koruması) ile yapılandırıldı.
+     - Vercel CLI ile `umutocgdrs-projects/interview-master-ai` projesi oluşturuldu ve doğrudan `https://github.com/umutocguder/interview-app` GitHub reposuna bağlandı.
+     - Prodüksiyon dağıtımı tamamlandı ve `https://interview-master-pro.vercel.app` ile `https://interview-master-ai-ten.vercel.app` domainleri canlıya alındı.
+- **Etkilenen Dosyalar**:
+  - `web/src/lib/rate-limiter.ts` [NEW]
+  - `web/vercel.json` [NEW]
+  - `web/src/app/api/interview/evaluate/route.ts` [MODIFY]
+  - `web/src/components/InterviewSimulator.tsx` [MODIFY]
+  - `web/package.json` [MODIFY]
+  - `WORKLOG.md` [MODIFY]
+- **Mevcut Durum**: Web uygulaması Vercel üzerinde canlıda, sıkı AI kota koruması altında ve GitHub reposuna tam bağlı şekilde çalışmaktadır.
+
+
 
