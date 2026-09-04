@@ -20,6 +20,23 @@ data class Question(
     val questionText: String,
     val idealAnswer: String,
     val difficulty: DifficultyLevel,
+    val keyPoints: List<String> = emptyList(),
     val tags: List<String> = emptyList(),
     val isBookmarked: Boolean = false
+)
+
+data class AuthUser(
+    val id: String,
+    val email: String,
+    val fullName: String? = null,
+    val isDemo: Boolean = false
+)
+
+data class AIEvaluation(
+    val score: Int,
+    val strengths: List<String>,
+    val improvements: List<String>,
+    val suggestedAnswer: String,
+    val followUpQuestion: String,
+    val provider: String
 )

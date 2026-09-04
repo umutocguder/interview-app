@@ -8,15 +8,20 @@ import {
   Database, 
   Layers, 
   Play, 
-  Clock, 
   CheckCircle2, 
-  Lightbulb, 
   Eye, 
   Bookmark,
   Sparkles,
-  ChevronRight
+  User,
+  LogOut,
+  LogIn,
+  BrainCircuit,
+  Volume2
 } from "lucide-react";
 import { Category, Question } from "@/lib/types";
+import { useAuth } from "@/context/AuthContext";
+import AuthModal from "@/components/AuthModal";
+import InterviewSimulator from "@/components/InterviewSimulator";
 
 const INITIAL_CATEGORIES: Category[] = [
   { id: "1", name: "iOS & Swift", slug: "ios-swift", icon: "Smartphone", description: "SwiftUI, Concurrency, ARC ve iOS 17+ Mimarisi.", display_order: 1 },
@@ -71,18 +76,45 @@ const INITIAL_QUESTIONS: Question[] = [
     q_type: "technical",
     tags: ["Next.js", "React", "TypeScript"],
   },
+  {
+    id: "q5",
+    title: "PostgreSQL: İndeksleme ve Row Level Security (RLS) Performansı",
+    question_text: "Supabase ve PostgreSQL üzerinde RLS politikaları uygularken sorguların yavaşlamasını engellemek için nelere dikkat edilmelidir?",
+    ideal_answer: "auth.uid() gibi fonksiyon çağrıları SELECT sorgularında tekrarlanmamalıdır (STABLE / IMMUTABLE sarmalama veya alt sorgu kullanımı). İlgili yabancı anahtar ve kullanıcı ID sütunlarına B-Tree indeksler eklenmelidir.",
+    hints: ["auth.uid() sarmalaması", "Indexleme stratejisi"],
+    key_points: ["B-Tree indeksleme", "Subquery optimizasyonu", "Cache mekanizmaları"],
+    difficulty: "senior",
+    q_type: "technical",
+    tags: ["PostgreSQL", "Supabase", "RLS"],
+  }
 ];
 
 export default function Home() {
+  const { user, signOut, isDemoUser } = useAuth();
   const [selectedCategory, setSelectedCategory] = useState<string>("all");
-  const [expandedQuestionId, setExpandedQuestionId] = useState<string | null>(null);
   const [revealedAnswers, setRevealedAnswers] = useState<Record<string, boolean>>({});
+  const [bookmarkedIds, setBookmarkedIds] = useState<Record<string, boolean>>({});
   const [showSimulator, setShowSimulator] = useState(false);
-  const [simulatorTime, setSimulatorTime] = useState(300);
+  const [showAuthModal, setShowAuthModal] = useState(false);
 
   const toggleAnswer = (id: string) => {
     setRevealedAnswers(prev => ({ ...prev, [id]: !prev[id] }));
   };
+
+  const toggleBookmark = (id: string) => {
+    setBookmarkedIds(prev => ({ ...prev, [id]: !prev[id] }));
+  };
+
+  // Kategoriye göre filtrele
+  const filteredQuestions = selectedCategory === "all" 
+    ? INITIAL_QUESTIONS 
+    : INITIAL_QUESTIONS.filter(q => {
+        if (selectedCategory === "ios-swift") return q.tags.includes("Swift") || q.tags.includes("iOS 17");
+        if (selectedCategory === "android-kotlin") return q.tags.includes("Android") || q.tags.includes("Kotlin");
+        if (selectedCategory === "web-frontend") return q.tags.includes("Next.js") || q.tags.includes("React");
+        if (selectedCategory === "backend-database") return q.tags.includes("PostgreSQL") || q.tags.includes("Supabase");
+        return true;
+      });
 
   return (
     <main className="max-w-6xl mx-auto px-4 py-8">
@@ -96,16 +128,50 @@ export default function Home() {
             <h1 className="text-2xl font-bold tracking-tight">Interview Master</h1>
           </div>
           <p className="text-slate-500 dark:text-slate-400 mt-1 text-sm">
-            iOS, Android ve Web için Supabase Destekli Mülakat Platformu
+            iOS, Android ve Web için Supabase & Gemini Destekli Mülakat Platformu
           </p>
         </div>
+
         <div className="flex items-center gap-3">
+          {user ? (
+            <div className="flex items-center gap-3">
+              <div className="flex items-center gap-2 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 py-1.5 px-3 rounded-xl shadow-xs">
+                <div className="w-7 h-7 rounded-full bg-blue-100 dark:bg-blue-950 text-blue-600 flex items-center justify-center font-bold text-xs">
+                  {user.email?.[0].toUpperCase() || "U"}
+                </div>
+                <div className="text-left">
+                  <div className="text-xs font-bold text-slate-800 dark:text-slate-200">
+                    {user.user_metadata?.full_name || user.email?.split("@")[0]}
+                  </div>
+                  <div className="text-[10px] text-slate-400">
+                    {isDemoUser ? "Demo Hesabı" : "Aktif Kullanıcı"}
+                  </div>
+                </div>
+              </div>
+              <button
+                onClick={() => signOut()}
+                className="p-2.5 rounded-xl border border-slate-200 dark:border-slate-800 text-slate-500 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-950/30 transition-colors"
+                title="Çıkış Yap"
+              >
+                <LogOut className="w-4 h-4" />
+              </button>
+            </div>
+          ) : (
+            <button
+              onClick={() => setShowAuthModal(true)}
+              className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 font-semibold text-xs text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
+            >
+              <LogIn className="w-4 h-4" />
+              Giriş Yap / Kaydol
+            </button>
+          )}
+
           <button 
             onClick={() => setShowSimulator(true)}
             className="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-5 py-2.5 rounded-xl font-medium shadow-sm transition-all"
           >
             <Play className="w-4 h-4 fill-white" />
-            Mülakat Simülasyonu Başlat
+            Canlı Simülasyon Başlat
           </button>
         </div>
       </header>
@@ -114,21 +180,25 @@ export default function Home() {
       <div className="mt-8 bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 rounded-2xl p-8 text-white shadow-lg relative overflow-hidden">
         <div className="relative z-10 max-w-2xl">
           <span className="inline-flex items-center gap-1.5 bg-white/20 backdrop-blur-md px-3 py-1 rounded-full text-xs font-semibold uppercase tracking-wider mb-4">
-            <Sparkles className="w-3.5 h-3.5" /> Çok Platformlu Ortak Altyapı
+            <Sparkles className="w-3.5 h-3.5" /> Gemini AI & Ses Destekli Canlı Simülatör
           </span>
           <h2 className="text-3xl font-extrabold tracking-tight mb-3">
             Mülakatlarda Bir Adım Öne Geçin
           </h2>
           <p className="text-blue-100 text-base leading-relaxed mb-6">
-            iOS 17+ SwiftUI, Android Jetpack Compose ve Next.js 15 için hazırlanmış en güncel teknik sorular, mimari çözümler ve canlı mülakat simülatörü.
+            iOS 17+ SwiftUI, Android Jetpack Compose ve Next.js 15 için hazırlanmış en güncel teknik sorular, sesli simülasyon ve Gemini 1.5 Flash ile anında yapay zeka geri bildirimi.
           </p>
           <div className="flex flex-wrap gap-4">
             <button 
               onClick={() => setShowSimulator(true)}
-              className="bg-white text-blue-600 hover:bg-blue-50 px-5 py-2.5 rounded-xl font-bold shadow transition-colors"
+              className="inline-flex items-center gap-2 bg-white text-blue-600 hover:bg-blue-50 px-5 py-2.5 rounded-xl font-bold shadow transition-colors"
             >
-              Hemen Başla (5 Soru)
+              <Play className="w-4 h-4 fill-blue-600" />
+              Sesli Simülasyona Başla ({filteredQuestions.length} Soru)
             </button>
+            <div className="inline-flex items-center gap-2 px-3.5 py-2 rounded-xl bg-white/10 backdrop-blur-sm text-xs font-medium">
+              <Volume2 className="w-4 h-4" /> Web Speech TTS & STT Aktif
+            </div>
           </div>
         </div>
       </div>
@@ -136,7 +206,7 @@ export default function Home() {
       {/* Categories Bar */}
       <section className="mt-10">
         <h3 className="text-lg font-bold mb-4">Kategoriler</h3>
-        <div className="grid grid-cols-2 md:grid-cols-5 gap-3">
+        <div className="grid grid-cols-2 md:grid-cols-6 gap-3">
           <button 
             onClick={() => setSelectedCategory("all")}
             className={`p-4 rounded-xl border text-left transition-all ${
@@ -145,8 +215,8 @@ export default function Home() {
                 : "border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 hover:border-slate-300"
             }`}
           >
-            <div className="font-bold text-sm">Tüm Kategoriler</div>
-            <div className="text-xs text-slate-500 mt-1">Teknik & Mimari</div>
+            <div className="font-bold text-sm">Tümü</div>
+            <div className="text-xs text-slate-500 mt-1">Tüm Sorular</div>
           </button>
           {INITIAL_CATEGORIES.map(cat => (
             <button
@@ -168,17 +238,23 @@ export default function Home() {
       {/* Questions List */}
       <section className="mt-10">
         <div className="flex items-center justify-between mb-4">
-          <h3 className="text-lg font-bold">Günün Mülakat Soruları</h3>
-          <span className="text-xs text-slate-500">{INITIAL_QUESTIONS.length} soru listeleniyor</span>
+          <div className="flex items-center gap-2">
+            <h3 className="text-lg font-bold">Teknik Mülakat Soruları</h3>
+            <span className="text-xs px-2.5 py-0.5 rounded-full bg-slate-200 dark:bg-slate-800 font-semibold">
+              {filteredQuestions.length}
+            </span>
+          </div>
+          <span className="text-xs text-slate-500">Kategoriye Göre Listeleniyor</span>
         </div>
 
         <div className="space-y-4">
-          {INITIAL_QUESTIONS.map(q => {
+          {filteredQuestions.map(q => {
             const isRevealed = revealedAnswers[q.id];
+            const isBookmarked = bookmarkedIds[q.id];
             return (
               <div 
                 key={q.id}
-                className="border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 rounded-xl p-6 shadow-sm transition-all"
+                className="border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 rounded-xl p-6 shadow-sm transition-all hover:border-slate-300 dark:hover:border-slate-700"
               >
                 <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-3">
                   <div className="flex items-center gap-2">
@@ -195,8 +271,13 @@ export default function Home() {
                       </span>
                     ))}
                   </div>
-                  <button className="text-slate-400 hover:text-blue-600">
-                    <Bookmark className="w-4 h-4" />
+                  <button 
+                    onClick={() => toggleBookmark(q.id)}
+                    className={`p-1.5 rounded-lg transition-colors ${
+                      isBookmarked ? "text-blue-600 bg-blue-50 dark:bg-blue-950" : "text-slate-400 hover:text-blue-600"
+                    }`}
+                  >
+                    <Bookmark className={`w-4 h-4 ${isBookmarked ? "fill-blue-600" : ""}`} />
                   </button>
                 </div>
 
@@ -248,63 +329,18 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Simulator Modal */}
-      {showSimulator && (
-        <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4 z-50">
-          <div className="bg-white dark:bg-slate-900 rounded-2xl max-w-xl w-full p-6 shadow-2xl border border-slate-200 dark:border-slate-800">
-            <div className="flex items-center justify-between border-b pb-4 mb-4 dark:border-slate-800">
-              <div className="flex items-center gap-2">
-                <Clock className="w-5 h-5 text-blue-600" />
-                <span className="font-bold">Canlı Mülakat Simülatörü</span>
-              </div>
-              <button 
-                onClick={() => setShowSimulator(false)}
-                className="text-slate-400 hover:text-slate-600 text-sm font-bold"
-              >
-                ✕
-              </button>
-            </div>
+      {/* Auth Modal */}
+      <AuthModal 
+        isOpen={showAuthModal} 
+        onClose={() => setShowAuthModal(false)} 
+      />
 
-            <div className="space-y-4">
-              <div className="bg-blue-50 dark:bg-blue-950/50 p-4 rounded-xl">
-                <div className="text-xs text-blue-600 font-bold uppercase mb-1">Mülakatçı Sorusu (Soru 1/5)</div>
-                <div className="text-sm font-semibold">
-                  "Büyük ölçekli bir mobil veya web uygulamasında state yönetimini nasıl kurgularsınız? Hangi kriterlere göre kütüphane seçersiniz?"
-                </div>
-              </div>
-
-              <div>
-                <label className="block text-xs font-bold text-slate-500 uppercase mb-1">
-                  Cevap Taslağınız / Açıklamanız
-                </label>
-                <textarea 
-                  rows={4}
-                  placeholder="Kendi cümlelerinizle yanıtınızı yazın veya ana başlıkları not edin..."
-                  className="w-full p-3 text-sm rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-800/50 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                />
-              </div>
-
-              <div className="flex justify-end gap-3 pt-2">
-                <button
-                  onClick={() => setShowSimulator(false)}
-                  className="px-4 py-2 text-sm rounded-xl border border-slate-200 dark:border-slate-800 hover:bg-slate-50 dark:hover:bg-slate-800"
-                >
-                  İptal
-                </button>
-                <button
-                  onClick={() => {
-                    alert("Tebrikler! Mülakat oturumu tamamlandı. Supabase veritabanına kaydedildi.");
-                    setShowSimulator(false);
-                  }}
-                  className="px-5 py-2 text-sm rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-semibold"
-                >
-                  Cevabı Kaydet & İlerle
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
+      {/* Live Gemini Interview Simulator Modal */}
+      <InterviewSimulator
+        questions={filteredQuestions}
+        isOpen={showSimulator}
+        onClose={() => setShowSimulator(false)}
+      />
     </main>
   );
 }
