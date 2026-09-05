@@ -102,5 +102,33 @@ Bu dosya, Interview App projesinde gerçekleştirilen tüm mimari kararları, te
   - `WORKLOG.md` [MODIFY]
 - **Mevcut Durum**: Web uygulaması Vercel üzerinde canlıda, sıkı AI kota koruması altında ve GitHub reposuna tam bağlı şekilde çalışmaktadır.
 
+### [2026-09-05 13:24] Umut'un Şahsi Notlarından Kapsamlı Swift & iOS Master Soru Bankası ve Çalışma Modülü
+- **Görev ve Amaç**: Kullanıcının Apple Notu ("SWIFT") ve yerel `All_Organized_Interview_Questions.docx` dokümanlarındaki tüm teknik notların, tuzakların ve mülakat sorularının sisteme entegre edilmesi; kişiselleştirilmiş arama ve çalışma modülü oluşturulması.
+- **Teknik Kararlar ve Mimari Değişiklikler**:
+  1. **Kapsamlı Swift Soru Havuzu (`web/src/data/swift-questions.ts`):** 
+     - 35 adet derinlemesine teknik soru ve ideal cevap üretildi.
+     - **SwiftUI:** @State, @StateObject, @ObservedObject, @EnvironmentObject, ViewTree render döngüsü, @ViewBuilder, some View, Timer render performans sorunları ve çözümleri.
+     - **Concurrency & GCD:** async/await, Task, Actors, Actor Reentrancy, @MainActor, nonisolated, Swift 6 Strict Concurrency & Sendable, DispatchQueue (Serial vs Concurrent, Main Queue), DispatchWorkItem (cancel, notify, wait), DispatchSemaphore (throttling), DispatchGroup, QoS öncelikleri, Deadlock ve Race Condition.
+     - **ARC & Bellek:** Stack vs Heap, [weak self] vs [unowned self], retain cycles, guard let self kalıbı, Copy-on-Write (COW), Retain vs Assign.
+     - **Swift Dili:** self vs Self, final (dynamic vs static/direct dispatch, inlining), mutating fonksiyonlar, required init vs convenience init, indirect enum, @autoclosure, Higher Order Functions (map, compactMap, flatMap, reduce, filter).
+     - **Mimari & Tasarım Desenleri:** VIPER (5 bileşen), MVVM vs MVP vs MVC, Coordinator Pattern, Dependency Injection (Constructor Injection & Mocking), Singleton riskleri.
+     - **UIKit & Layout:** UIViewController Lifecycle, Frame vs Bounds, Auto Layout Content Hugging vs Compression Resistance, awakeFromNib, xib vs nib farkı.
+     - **Güvenlik & Test:** Keychain vs UserDefaults, Keychain Access Groups, SSL Pinning (TrustKit, MitM), XCTest asenkron testler, Instruments (Time Profiler, Leaks, Scroll Jank tespiti).
+  2. **Gelişmiş Arama ve Filtreleme (`web/src/app/page.tsx`):**
+     - Gerçek zamanlı arama motoru (başlık, soru metni, etiketler ve anahtar kavramlar üzerinde arama).
+     - 8 farklı Swift alt kategori sekmesi + çok platformlu sekmeler.
+     - Zorluk seviyesi (junior, mid, senior) filtresi.
+     - "⭐️ Sadece Yıldızlılar (Bookmark)" filtresi ile Umut'un kendi çalışma listesini oluşturma imkanı.
+     - Mülakat Simülatörünün doğrudan filtrelenen/seçilen Swift sorularıyla canlı sesli çalışma desteği.
+  3. **Vercel Prodüksiyon Güncellemesi:**
+     - `npm run build` ile 5/5 statik sayfa başarıyla derlendi.
+     - Vercel prodüksiyon dağıtımı tamamlandı ve `https://interview-master-ai-ten.vercel.app` üzerinden canlıya alındı.
+- **Etkilenen Dosyalar**:
+  - `web/src/data/swift-questions.ts` [NEW]
+  - `web/src/app/page.tsx` [MODIFY]
+  - `WORKLOG.md` [MODIFY]
+- **Mevcut Durum**: Umut'un şahsi Swift & iOS mülakat notları eksiksiz bir şekilde canlıya alınmış, aranabilir ve sesli simülatörle çalışılabilir hale getirilmiştir.
+
+
 
 
