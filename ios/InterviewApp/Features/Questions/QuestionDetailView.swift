@@ -2,13 +2,18 @@ import SwiftUI
 
 public struct QuestionDetailView: View {
     public let question: Question
+    @State private var languageManager = LanguageManager.shared
     @State private var isAnswerRevealed = false
     @State private var showHint = false
     @State private var isBookmarked = false
     
     public init(question: Question) {
         self.question = question
-        _isBookmarked = State(initialValue: question.isBookmarked ?? false)
+        _isBookmarked = State(initialValue: question.isBookmarked)
+    }
+    
+    private var content: LocalizedQuestionContent {
+        question.content(for: languageManager.currentLanguage)
     }
     
     public var body: some View {
@@ -16,7 +21,7 @@ public struct QuestionDetailView: View {
             VStack(alignment: .leading, spacing: 20) {
                 // Header & Badges
                 HStack {
-                    Text(question.difficulty.title)
+                    Text(question.difficulty.localizedTitle(for: languageManager.currentLanguage))
                         .font(.caption.bold())
                         .padding(.horizontal, 10)
                         .padding(.vertical, 5)
@@ -35,16 +40,16 @@ public struct QuestionDetailView: View {
                     Button {
                         isBookmarked.toggle()
                     } label: {
-                        Image(systemName: isBookmarked ? "bookmark.fill" : "bookmark")
-                            .foregroundStyle(isBookmarked ? .blue : .secondary)
+                        Image(systemName: isBookmarked ? "star.fill" : "star")
+                            .foregroundStyle(isBookmarked ? .orange : .secondary)
                     }
                 }
                 
-                // Soru Metni
-                Text(question.title)
+                // Question Text
+                Text(content.title)
                     .font(.title2.bold())
                 
-                Text(question.questionText)
+                Text(content.questionText)
                     .font(.body)
                     .foregroundStyle(.primary)
                     .padding()
@@ -52,8 +57,8 @@ public struct QuestionDetailView: View {
                     .background(Color(.secondarySystemBackground))
                     .clipShape(RoundedRectangle(cornerRadius: 12))
                 
-                // İpuçları (Hints)
-                if !question.hints.isEmpty {
+                // Hints
+                if !content.hints.isEmpty {
                     VStack(alignment: .leading, spacing: 8) {
                         Button {
                             withAnimation { showHint.toggle() }
@@ -61,13 +66,13 @@ public struct QuestionDetailView: View {
                             HStack {
                                 Image(systemName: "lightbulb.fill")
                                     .foregroundStyle(.yellow)
-                                Text(showHint ? "İpucunu Gizle" : "İpucu Göster")
+                                Text(showHint ? "Hide Hint" : "Show Hint")
                                     .font(.subheadline.bold())
                             }
                         }
                         
                         if showHint {
-                            ForEach(question.hints, id: \.self) { hint in
+                            ForEach(content.hints, id: \.self) { hint in
                                 Text("💡 \(hint)")
                                     .font(.subheadline)
                                     .foregroundStyle(.secondary)
@@ -79,55 +84,63 @@ public struct QuestionDetailView: View {
                 
                 Divider()
                 
-                // Cevap Açma Butonu ve İdeal Cevap
+                // Ideal Answer and Key points
                 VStack(alignment: .leading, spacing: 12) {
                     if isAnswerRevealed {
-                        Text("🎯 İdeal Cevap & Mimari Çözüm")
+                        Text("🎯 \(languageManager.idealAnswerTitle)")
                             .font(.headline)
                         
-                        Text(question.idealAnswer)
+                        Text(content.idealAnswer)
                             .font(.body)
                             .padding()
                             .frame(maxWidth: .infinity, alignment: .leading)
                             .background(Color.blue.opacity(0.08))
                             .clipShape(RoundedRectangle(cornerRadius: 12))
                         
-                        Text("📌 Kritik Noktalar (Key Points):")
-                            .font(.subheadline.bold())
-                            .padding(.top, 6)
-                        
-                        ForEach(question.keyPoints, id: \.self) { point in
-                            HStack(alignment: .top) {
-                                Image(systemName: "checkmark.circle.fill")
-                                    .foregroundStyle(.green)
-                                    .font(.caption)
-                                Text(point)
-                                    .font(.subheadline)
+                        if !content.keyPoints.isEmpty {
+                            Text("📌 \(languageManager.keyPointsTitle):")
+                                .font(.subheadline.bold())
+                                .padding(.top, 6)
+                            
+                            ForEach(content.keyPoints, id: \.self) { point in
+                                HStack(alignment: .top) {
+                                    Image(systemName: "checkmark.circle.fill")
+                                        .foregroundStyle(.green)
+                                    Text(point)
+                                        .font(.subheadline)
+                                }
                             }
                         }
+                        
+                        Button {
+                            isAnswerRevealed = false
+                        } label: {
+                            Text(languageManager.hideAnswer)
+                                .font(.subheadline)
+                                .foregroundStyle(.secondary)
+                        }
+                        .padding(.top, 4)
                     } else {
                         Button {
-                            withAnimation(.spring()) {
-                                isAnswerRevealed = true
-                            }
+                            isAnswerRevealed = true
                         } label: {
                             HStack {
                                 Image(systemName: "eye.fill")
-                                Text("İdeal Cevabı Görüntüle")
+                                Text(languageManager.showAnswer)
                             }
                             .font(.headline)
                             .frame(maxWidth: .infinity)
                             .padding()
                             .background(Color.blue)
                             .foregroundStyle(.white)
-                            .clipShape(RoundedRectangle(cornerRadius: 12))
+                            .clipShape(RoundedRectangle(cornerRadius: 14))
                         }
                     }
                 }
             }
             .padding()
         }
-        .navigationTitle("Soru Detayı")
+        .navigationTitle(languageManager.appName)
         .navigationBarTitleDisplayMode(.inline)
     }
     

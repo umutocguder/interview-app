@@ -1,7 +1,8 @@
 "use client";
 
 import React, { useState, useEffect, useRef } from "react";
-import { Question } from "@/lib/types";
+import { Question, Language, getQuestionContent } from "@/lib/types";
+import { getTranslation } from "@/lib/i18n";
 import { useAuth } from "@/context/AuthContext";
 import { 
   X, 
@@ -38,10 +39,17 @@ interface InterviewSimulatorProps {
   questions: Question[];
   isOpen: boolean;
   onClose: () => void;
+  lang?: Language;
 }
 
-export default function InterviewSimulator({ questions, isOpen, onClose }: InterviewSimulatorProps) {
+export default function InterviewSimulator({ 
+  questions, 
+  isOpen, 
+  onClose,
+  lang = "tr" 
+}: InterviewSimulatorProps) {
   const { user } = useAuth();
+  const t = getTranslation(lang);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [userAnswer, setUserAnswer] = useState("");
   const [isEvaluating, setIsEvaluating] = useState(false);
@@ -58,6 +66,7 @@ export default function InterviewSimulator({ questions, isOpen, onClose }: Inter
   const recognitionRef = useRef<any>(null);
 
   const currentQuestion = questions[currentIndex] || questions[0];
+  const questionContent = currentQuestion ? getQuestionContent(currentQuestion, lang) : null;
 
   // Timer effect
   useEffect(() => {
@@ -84,13 +93,17 @@ export default function InterviewSimulator({ questions, isOpen, onClose }: Inter
       (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
 
     if (!SpeechRecognition) {
-      alert("Tarayıcınız ses tanıma özelliğini (Web Speech API) desteklemiyor. Lütfen klavye ile yazarak devam edin.");
+      alert(
+        lang === "en"
+          ? "Your browser does not support Web Speech Recognition. Please type your answer using the keyboard."
+          : "Tarayıcınız ses tanıma özelliğini (Web Speech API) desteklemiyor. Lütfen klavye ile yazarak devam edin."
+      );
       return;
     }
 
     try {
       const recognition = new SpeechRecognition();
-      recognition.lang = "tr-TR";
+      recognition.lang = lang === "en" ? "en-US" : "tr-TR";
       recognition.continuous = true;
       recognition.interimResults = true;
 
@@ -133,7 +146,11 @@ export default function InterviewSimulator({ questions, isOpen, onClose }: Inter
   // Text-to-Speech (TTS)
   const speakQuestion = () => {
     if (!("speechSynthesis" in window)) {
-      alert("Tarayıcınız metin seslendirmeyi desteklemiyor.");
+      alert(
+        lang === "en"
+          ? "Your browser does not support speech synthesis."
+          : "Tarayıcınız metin seslendirmeyi desteklemiyor."
+      );
       return;
     }
 
@@ -143,9 +160,11 @@ export default function InterviewSimulator({ questions, isOpen, onClose }: Inter
       return;
     }
 
-    const textToSpeak = `${currentQuestion.title}. ${currentQuestion.question_text}`;
+    if (!questionContent) return;
+
+    const textToSpeak = `${questionContent.title}. ${questionContent.question_text}`;
     const utterance = new SpeechSynthesisUtterance(textToSpeak);
-    utterance.lang = "tr-TR";
+    utterance.lang = lang === "en" ? "en-US" : "tr-TR";
     utterance.rate = 0.95;
 
     utterance.onstart = () => setIsSpeaking(true);
@@ -164,8 +183,14 @@ export default function InterviewSimulator({ questions, isOpen, onClose }: Inter
 
   // Evaluate Answer with Gemini AI
   const handleEvaluate = async () => {
+    if (!questionContent) return;
+
     if (!userAnswer.trim()) {
-      alert("Lütfen değerlendirmeden önce bir yanıt yazın veya mikrofonla seslendirin.");
+      alert(
+        lang === "en"
+          ? "Please provide an answer before requesting an AI evaluation."
+          : "Lütfen değerlendirmeden önce bir yanıt yazın veya mikrofonla seslendirin."
+      );
       return;
     }
 
@@ -177,23 +202,24 @@ export default function InterviewSimulator({ questions, isOpen, onClose }: Inter
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          questionTitle: currentQuestion.title,
-          questionText: currentQuestion.question_text,
-          idealAnswer: currentQuestion.ideal_answer,
-          keyPoints: currentQuestion.key_points || [],
+          questionTitle: questionContent.title,
+          questionText: questionContent.question_text,
+          idealAnswer: questionContent.ideal_answer,
+          keyPoints: questionContent.key_points || [],
           userAnswer: userAnswer.trim(),
           customApiKey: customKey.trim() || undefined,
+          language: lang,
         }),
       });
 
       const data = await response.json();
       if (!response.ok) {
-        throw new Error(data.error || "Değerlendirme başarısız");
+        throw new Error(data.error || (lang === "en" ? "Evaluation failed" : "Değerlendirme başarısız"));
       }
 
       setEvaluation(data);
     } catch (err: any) {
-      alert("Hata: " + err.message);
+      alert((lang === "en" ? "Error: " : "Hata: ") + err.message);
     } finally {
       setIsEvaluating(false);
     }
@@ -203,7 +229,11 @@ export default function InterviewSimulator({ questions, isOpen, onClose }: Inter
     if (currentIndex < questions.length - 1) {
       setCurrentIndex((prev) => prev + 1);
     } else {
-      alert("Tebrikler! Mülakat simülasyon oturumu tamamlandı.");
+      alert(
+        lang === "en"
+          ? "Congratulations! The interview simulation session is completed."
+          : "Tebrikler! Mülakat simülasyon oturumu tamamlandı."
+      );
       onClose();
     }
   };
@@ -214,7 +244,7 @@ export default function InterviewSimulator({ questions, isOpen, onClose }: Inter
     return `${mins}:${secs < 10 ? "0" : ""}${secs}`;
   };
 
-  if (!isOpen) return null;
+  if (!isOpen || !questionContent) return null;
 
   return (
     <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center p-3 sm:p-4 z-50 animate-in fade-in duration-200">
@@ -228,12 +258,14 @@ export default function InterviewSimulator({ questions, isOpen, onClose }: Inter
             </span>
             <div>
               <div className="font-bold text-base text-slate-900 dark:text-slate-100 flex items-center gap-2">
-                Canlı Mülakat Simülatörü
+                {lang === "en" ? "Live Interview Simulator" : "Canlı Mülakat Simülatörü"}
                 <span className="text-xs px-2 py-0.5 rounded-full bg-blue-100 dark:bg-blue-950 text-blue-700 dark:text-blue-300 font-semibold">
-                  Soru {currentIndex + 1}/{questions.length}
+                  {t.questionNumber(currentIndex + 1, questions.length)}
                 </span>
               </div>
-              <p className="text-xs text-slate-500">Gemini AI & Ses Destekli Değerlendirme Motoru</p>
+              <p className="text-xs text-slate-500">
+                {lang === "en" ? "Gemini AI & Voice-Assisted Evaluation Engine" : "Gemini AI & Ses Destekli Değerlendirme Motoru"}
+              </p>
             </div>
           </div>
 
@@ -267,21 +299,21 @@ export default function InterviewSimulator({ questions, isOpen, onClose }: Inter
           <div className="bg-gradient-to-br from-blue-50/70 to-indigo-50/50 dark:from-blue-950/30 dark:to-indigo-950/20 p-5 rounded-2xl border border-blue-100 dark:border-blue-900/40 relative">
             <div className="flex items-center justify-between mb-2">
               <span className="text-xs font-bold text-blue-600 dark:text-blue-400 uppercase tracking-wider">
-                Mülakatçı Sorusu
+                {t.interviewerQuestion}
               </span>
               <button
                 onClick={speakQuestion}
                 className="inline-flex items-center gap-1.5 text-xs text-blue-600 hover:text-blue-700 bg-white/80 dark:bg-slate-800/80 px-2.5 py-1 rounded-lg border border-blue-200/50 shadow-xs font-medium transition-all"
               >
                 {isSpeaking ? <VolumeX className="w-3.5 h-3.5 text-red-500" /> : <Volume2 className="w-3.5 h-3.5" />}
-                {isSpeaking ? "Durdur" : "Soruyu Dinle"}
+                {isSpeaking ? t.stopSpeaking : t.listenQuestion}
               </button>
             </div>
             <h3 className="font-bold text-slate-900 dark:text-slate-100 text-base mb-1">
-              {currentQuestion.title}
+              {questionContent.title}
             </h3>
             <p className="text-sm text-slate-700 dark:text-slate-300 leading-relaxed">
-              {currentQuestion.question_text}
+              {questionContent.question_text}
             </p>
           </div>
 
@@ -289,14 +321,16 @@ export default function InterviewSimulator({ questions, isOpen, onClose }: Inter
           <div className="space-y-2">
             <div className="flex items-center justify-between">
               <label className="text-xs font-bold text-slate-500 uppercase tracking-wider">
-                Yanıtınız
+                {t.yourAnswer}
               </label>
               <div className="flex items-center gap-2">
                 <button
                   onClick={() => setShowKeyInput(!showKeyInput)}
                   className="text-[11px] text-slate-400 hover:text-blue-600 underline"
                 >
-                  {showKeyInput ? "API Key Kapat" : "Gemini API Key Gir (Opsiyonel)"}
+                  {showKeyInput 
+                    ? (lang === "en" ? "Close API Key" : "API Key Kapat") 
+                    : (lang === "en" ? "Enter Gemini API Key (Optional)" : "Gemini API Key Gir (Opsiyonel)")}
                 </button>
                 <button
                   type="button"
@@ -308,7 +342,7 @@ export default function InterviewSimulator({ questions, isOpen, onClose }: Inter
                   }`}
                 >
                   {isListening ? <MicOff className="w-3.5 h-3.5" /> : <Mic className="w-3.5 h-3.5 text-blue-600" />}
-                  {isListening ? "Dinlemeyi Durdur" : "Sesli Yanıtla"}
+                  {isListening ? t.stopListening : t.voiceAnswer}
                 </button>
               </div>
             </div>
@@ -316,7 +350,9 @@ export default function InterviewSimulator({ questions, isOpen, onClose }: Inter
             {showKeyInput && (
               <div className="p-3 bg-slate-50 dark:bg-slate-800/50 rounded-xl border border-slate-200 dark:border-slate-800 space-y-1">
                 <div className="text-[11px] text-slate-500">
-                  Kişisel Google Gemini API anahtarınızı girerseniz doğrudan kendi kotanızla en güncel model çalıştırılır. Boş bırakılırsa akıllı simülasyon motoru kullanılır.
+                  {lang === "en"
+                    ? "If you enter your personal Google Gemini API key, evaluation runs directly with your quota on the latest model. Otherwise, the smart local evaluation engine is used."
+                    : "Kişisel Google Gemini API anahtarınızı girerseniz doğrudan kendi kotanızla en güncel model çalıştırılır. Boş bırakılırsa akıllı simülasyon motoru kullanılır."}
                 </div>
                 <input
                   type="password"
@@ -332,7 +368,11 @@ export default function InterviewSimulator({ questions, isOpen, onClose }: Inter
               rows={4}
               value={userAnswer}
               onChange={(e) => setUserAnswer(e.target.value)}
-              placeholder="Cevabınızı kendi cümlelerinizle yazın veya 'Sesli Yanıtla' butonuna tıklayarak mikrofona konuşun..."
+              placeholder={
+                lang === "en"
+                  ? "Type your answer in your own words, or click 'Answer with Voice' to speak into the microphone..."
+                  : "Cevabınızı kendi cümlelerinizle yazın veya 'Sesli Yanıtla' butonuna tıklayarak mikrofona konuşun..."
+              }
               className="w-full p-3.5 text-sm rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-800/50 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all"
             />
           </div>
@@ -347,7 +387,7 @@ export default function InterviewSimulator({ questions, isOpen, onClose }: Inter
                     <Award className="w-6 h-6" />
                   </div>
                   <div>
-                    <div className="text-xs font-bold text-slate-500 uppercase">Mülakat Değerlendirme Skoru</div>
+                    <div className="text-xs font-bold text-slate-500 uppercase">{t.evalScoreTitle}</div>
                     <div className="text-xl font-extrabold text-slate-900 dark:text-slate-100">
                       {evaluation.score} <span className="text-xs text-slate-400 font-normal">/ 100</span>
                     </div>
@@ -359,7 +399,7 @@ export default function InterviewSimulator({ questions, isOpen, onClose }: Inter
                   </span>
                   {evaluation.rateLimitInfo && (
                     <div className="text-[10px] text-slate-500">
-                      Kalan Günlük AI Hakkı: {evaluation.rateLimitInfo.remaining}/{evaluation.rateLimitInfo.limit}
+                      {t.quotaRemainingNotice(evaluation.rateLimitInfo.remaining, evaluation.rateLimitInfo.limit)}
                     </div>
                   )}
                 </div>
@@ -370,10 +410,12 @@ export default function InterviewSimulator({ questions, isOpen, onClose }: Inter
                 <div className="p-3 bg-amber-50 dark:bg-amber-950/40 border border-amber-200 dark:border-amber-800 rounded-xl text-xs text-amber-800 dark:text-amber-200 flex items-start gap-2">
                   <AlertTriangle className="w-4 h-4 shrink-0 text-amber-600 mt-0.5" />
                   <div>
-                    <div className="font-semibold">AI Kotası Sınırlandırıldı</div>
+                    <div className="font-semibold">{t.rateLimitNoticeTitle}</div>
                     <p className="mt-0.5 text-[11px] text-amber-700 dark:text-amber-300">
-                      {evaluation.rateLimitInfo.notice} Analiziniz kesintiye uğramadan yerel akıllı motorla tamamlandı.
-                      Sınırsız Gemini analizi için yukarıdan kendi API anahtarınızı girebilirsiniz.
+                      {evaluation.rateLimitInfo.notice}{" "}
+                      {lang === "en"
+                        ? "Your analysis completed seamlessly via the local intelligent engine. Enter your API key above for unlimited Gemini evaluations."
+                        : "Analiziniz kesintiye uğramadan yerel akıllı motorla tamamlandı. Sınırsız Gemini analizi için yukarıdan kendi API anahtarınızı girebilirsiniz."}
                     </p>
                   </div>
                 </div>
@@ -382,7 +424,7 @@ export default function InterviewSimulator({ questions, isOpen, onClose }: Inter
               {/* Güçlü Yönler */}
               <div className="space-y-2">
                 <div className="text-xs font-bold text-emerald-600 dark:text-emerald-400 uppercase tracking-wider flex items-center gap-1.5">
-                  <CheckCircle2 className="w-4 h-4" /> Güçlü Yönler
+                  <CheckCircle2 className="w-4 h-4" /> {t.strengthsTitle}
                 </div>
                 <div className="space-y-1.5">
                   {evaluation.strengths.map((str, i) => (
@@ -396,7 +438,7 @@ export default function InterviewSimulator({ questions, isOpen, onClose }: Inter
               {/* Geliştirilmesi Gereken Noktalar */}
               <div className="space-y-2">
                 <div className="text-xs font-bold text-amber-600 dark:text-amber-400 uppercase tracking-wider flex items-center gap-1.5">
-                  <AlertTriangle className="w-4 h-4" /> Geliştirilmesi Gereken Yönler
+                  <AlertTriangle className="w-4 h-4" /> {t.improvementsTitle}
                 </div>
                 <div className="space-y-1.5">
                   {evaluation.improvements.map((imp, i) => (
@@ -411,7 +453,7 @@ export default function InterviewSimulator({ questions, isOpen, onClose }: Inter
               {evaluation.followUpQuestion && (
                 <div className="p-3.5 bg-purple-50/70 dark:bg-purple-950/30 border border-purple-200/60 dark:border-purple-900/40 rounded-xl">
                   <div className="text-xs font-bold text-purple-700 dark:text-purple-300 uppercase tracking-wider mb-1 flex items-center gap-1.5">
-                    <HelpCircle className="w-3.5 h-3.5" /> Mülakatçı Derinleşme Sorusu (Follow-up)
+                    <HelpCircle className="w-3.5 h-3.5" /> {t.followUpTitle}
                   </div>
                   <p className="text-xs text-slate-800 dark:text-slate-200 italic">
                     "{evaluation.followUpQuestion}"
@@ -433,7 +475,7 @@ export default function InterviewSimulator({ questions, isOpen, onClose }: Inter
             }}
             className="px-4 py-2 text-xs font-semibold rounded-xl border border-slate-200 dark:border-slate-800 hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-600 dark:text-slate-300 transition-colors"
           >
-            Simülasyonu Kapat
+            {t.closeSimulation}
           </button>
 
           <div className="flex items-center gap-3">
@@ -446,12 +488,12 @@ export default function InterviewSimulator({ questions, isOpen, onClose }: Inter
                 {isEvaluating ? (
                   <>
                     <RefreshCw className="w-4 h-4 animate-spin" />
-                    Gemini AI Analiz Ediyor...
+                    {t.aiEvaluating}
                   </>
                 ) : (
                   <>
                     <Sparkles className="w-4 h-4" />
-                    Yapay Zeka ile Değerlendir
+                    {t.evaluateWithAI}
                   </>
                 )}
               </button>
@@ -460,7 +502,7 @@ export default function InterviewSimulator({ questions, isOpen, onClose }: Inter
                 onClick={handleNextQuestion}
                 className="inline-flex items-center gap-2 px-5 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-xs font-bold shadow transition-all"
               >
-                {currentIndex < questions.length - 1 ? "Sıradaki Soruya Geç" : "Mülakatı Tamamla"}
+                {currentIndex < questions.length - 1 ? t.nextQuestion : t.finishSimulation}
                 <ArrowRight className="w-4 h-4" />
               </button>
             )}

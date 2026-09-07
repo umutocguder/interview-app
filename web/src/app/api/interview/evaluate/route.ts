@@ -8,6 +8,7 @@ export interface EvaluationRequest {
   keyPoints: string[];
   userAnswer: string;
   customApiKey?: string;
+  language?: "tr" | "en";
 }
 
 export interface EvaluationResponse {
@@ -28,11 +29,22 @@ export interface EvaluationResponse {
 export async function POST(req: Request) {
   try {
     const body: EvaluationRequest = await req.json();
-    const { questionTitle, questionText, idealAnswer, keyPoints = [], userAnswer, customApiKey } = body;
+    const { 
+      questionTitle, 
+      questionText, 
+      idealAnswer, 
+      keyPoints = [], 
+      userAnswer, 
+      customApiKey,
+      language = "tr" 
+    } = body;
 
     if (!userAnswer || userAnswer.trim().length < 5) {
+      const errMsg = language === "en"
+        ? "Please provide a meaningful interview answer (at least 5 characters)."
+        : "Lütfen değerlendirme için anlamlı bir mülakat cevabı girin (en az 5 karakter).";
       return NextResponse.json(
-        { error: "Lütfen değerlendirme için anlamlı bir mülakat cevabı girin (en az 5 karakter)." },
+        { error: errMsg },
         { status: 400 }
       );
     }
@@ -64,6 +76,7 @@ export async function POST(req: Request) {
         idealAnswer,
         keyPoints,
         userAnswer: sanitizedAnswer,
+        language,
       });
 
       return NextResponse.json({
@@ -89,6 +102,7 @@ export async function POST(req: Request) {
           idealAnswer,
           keyPoints,
           userAnswer: sanitizedAnswer,
+          language,
         });
 
         if (geminiResult) {
@@ -113,6 +127,7 @@ export async function POST(req: Request) {
       idealAnswer,
       keyPoints,
       userAnswer: sanitizedAnswer,
+      language,
     });
 
     return NextResponse.json({
@@ -140,9 +155,38 @@ async function evaluateWithGemini(
     idealAnswer: string;
     keyPoints: string[];
     userAnswer: string;
+    language?: "tr" | "en";
   }
 ): Promise<EvaluationResponse | null> {
-  const prompt = `
+  const isEn = data.language === "en";
+  const prompt = isEn
+    ? `
+You are a senior software architect and technical interviewer. Evaluate the candidate's answer to the technical question below.
+Question Title: ${data.questionTitle}
+Question Text: ${data.questionText}
+Reference Ideal Answer: ${data.idealAnswer}
+Key Technical Points Expected: ${data.keyPoints.join(", ")}
+
+Candidate's Answer:
+"${data.userAnswer}"
+
+Your task:
+1. Score the answer from 0 to 100 (score: integer).
+2. List strengths accurately covered by the candidate (strengths: array of strings).
+3. List missing or improvable points (improvements: array of strings).
+4. Provide a refined exemplary answer (suggestedAnswer: string).
+5. Generate a deep technical follow-up interview question (followUpQuestion: string).
+
+RESPOND ONLY WITH VALID JSON, without markdown formatting or additional explanation:
+{
+  "score": 85,
+  "strengths": ["...", "..."],
+  "improvements": ["...", "..."],
+  "suggestedAnswer": "...",
+  "followUpQuestion": "..."
+}
+`
+    : `
 Sen kıdemli bir yazılım mimarı ve mülakatçısın. Aşağıdaki teknik soruya adayın verdiği cevabı değerlendir.
 Soru Başlığı: ${data.questionTitle}
 Soru Metni: ${data.questionText}
@@ -193,10 +237,10 @@ LÜTFEN SADECE VE SADECE GEÇERLİ BİR JSON YANITI DÖNDÜR, markdown blokları
   const parsed = JSON.parse(text);
   return {
     score: Math.min(100, Math.max(0, Number(parsed.score) || 75)),
-    strengths: Array.isArray(parsed.strengths) ? parsed.strengths : ["Teknik yaklaşım anlaşılır."],
-    improvements: Array.isArray(parsed.improvements) ? parsed.improvements : ["Detaylar artırılabilir."],
+    strengths: Array.isArray(parsed.strengths) ? parsed.strengths : [isEn ? "Sound technical approach." : "Teknik yaklaşım anlaşılır."],
+    improvements: Array.isArray(parsed.improvements) ? parsed.improvements : [isEn ? "Could provide more in-depth edge cases." : "Detaylar artırılabilir."],
     suggestedAnswer: parsed.suggestedAnswer || data.idealAnswer,
-    followUpQuestion: parsed.followUpQuestion || "Bu yaklaşımın yüksek yük altındaki kısıtları neler olurdu?",
+    followUpQuestion: parsed.followUpQuestion || (isEn ? "What are the scalability constraints under high concurrency?" : "Bu yaklaşımın yüksek yük altındaki kısıtları neler olurdu?"),
     provider: "gemini-flash",
   };
 }
@@ -208,7 +252,9 @@ function evaluateLocally(data: {
   idealAnswer: string;
   keyPoints: string[];
   userAnswer: string;
+  language?: "tr" | "en";
 }): EvaluationResponse {
+  const isEn = data.language === "en";
   const answerLower = data.userAnswer.toLowerCase();
   let matchedPoints: string[] = [];
   let missedPoints: string[] = [];
@@ -231,22 +277,26 @@ function evaluateLocally(data: {
   const finalScore = Math.min(95, Math.max(45, baseScore + lengthScore + keywordScore));
 
   const strengths = matchedPoints.length > 0
-    ? matchedPoints.map((p) => `"${p}" konusuna ve mimari prensiplere doğru şekilde temas edilmiş.`)
+    ? matchedPoints.map((p) => isEn 
+        ? `Accurately touched upon "${p}" and core architectural principles.` 
+        : `"${p}" konusuna ve mimari prensiplere doğru şekilde temas edilmiş.`)
     : [
-        "Temel konsepti kendi cümlelerinizle özetleme çabası başarılı.",
-        "Soruya verilen yanıt akıcı ve mülakat ortamına uygun.",
+        isEn ? "Clear effort to formulate technical concepts in your own words." : "Temel konsepti kendi cümlelerinizle özetleme çabası başarılı.",
+        isEn ? "Fluent delivery suitable for a technical interview environment." : "Soruya verilen yanıt akıcı ve mülakat ortamına uygun.",
       ];
 
   const improvements = missedPoints.length > 0
-    ? missedPoints.map((p) => `"${p}" başlığına ve performans/güvenlik etkilerine daha detaylı değinilebilir.`)
+    ? missedPoints.map((p) => isEn 
+        ? `Could expand deeper into "${p}" with respect to performance and safety trade-offs.` 
+        : `"${p}" başlığına ve performans/güvenlik etkilerine daha detaylı değinilebilir.`)
     : [
-        "Mimarideki uç senaryolar (edge cases) ve hata yakalama stratejileri örneklendirilebilir.",
-        "Endüstri standardı gerçek bir üretim tecrübesiyle argüman pekiştirilebilir.",
+        isEn ? "Could illustrate edge cases, thread safety, or error recovery strategies." : "Mimarideki uç senaryolar (edge cases) ve hata yakalama stratejileri örneklendirilebilir.",
+        isEn ? "Could reinforce the argument with actual production experience lessons." : "Endüstri standardı gerçek bir üretim tecrübesiyle argüman pekiştirilebilir.",
       ];
 
   const followUpQuestion = data.questionTitle.toLowerCase().includes("swift") || data.questionTitle.toLowerCase().includes("compose")
-    ? "Bu mimaride bellek yönetimi ve retain cycle/memory leak risklerini önlemek için hangi araçları kullanırsınız?"
-    : "Bunu dağıtık ve asenkron bir ortamda ölçeklerken yaşanabilecek concurrency kısıtlarını nasıl çözersiniz?";
+    ? (isEn ? "Which profiling tools would you utilize to detect retain cycles or memory leaks in this design?" : "Bu mimaride bellek yönetimi ve retain cycle/memory leak risklerini önlemek için hangi araçları kullanırsınız?")
+    : (isEn ? "How would you address concurrency boundaries and race conditions when scaling this asynchronously?" : "Bunu dağıtık ve asenkron bir ortamda ölçeklerken yaşanabilecek concurrency kısıtlarını nasıl çözersiniz?");
 
   return {
     score: finalScore,

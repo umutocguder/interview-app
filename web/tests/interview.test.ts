@@ -1,13 +1,8 @@
 import test from 'node:test';
 import assert from 'node:assert';
-
-interface Question {
-  id: string;
-  categoryId: string;
-  title: string;
-  difficulty: 'junior' | 'mid' | 'senior';
-  tags: string[];
-}
+import { translations, getTranslation } from '../src/lib/i18n.ts';
+import { SWIFT_MASTER_QUESTIONS } from '../src/data/swift-questions.ts';
+import { getQuestionContent, Language, Question } from '../src/lib/types.ts';
 
 interface SessionAnswer {
   questionId: string;
@@ -57,12 +52,67 @@ test('Interview summary for empty answers', () => {
 
 test('Question difficulty filter', () => {
   const questions: Question[] = [
-    { id: '1', categoryId: 'ios', title: 'SwiftUI', difficulty: 'mid', tags: ['swift'] },
-    { id: '2', categoryId: 'ios', title: 'Actors', difficulty: 'senior', tags: ['concurrency'] },
-    { id: '3', categoryId: 'android', title: 'Compose', difficulty: 'mid', tags: ['kotlin'] },
+    {
+      id: '1',
+      difficulty: 'mid',
+      q_type: 'technical',
+      tags: ['swift'],
+      tr: { title: 'SwiftUI', question_text: 'Soru', ideal_answer: 'Cevap', hints: [], key_points: [] },
+      en: { title: 'SwiftUI EN', question_text: 'Question', ideal_answer: 'Answer', hints: [], key_points: [] }
+    },
+    {
+      id: '2',
+      difficulty: 'senior',
+      q_type: 'technical',
+      tags: ['concurrency'],
+      tr: { title: 'Actors', question_text: 'Soru 2', ideal_answer: 'Cevap 2', hints: [], key_points: [] },
+      en: { title: 'Actors EN', question_text: 'Question 2', ideal_answer: 'Answer 2', hints: [], key_points: [] }
+    }
   ];
 
   const seniorOnly = questions.filter(q => q.difficulty === 'senior');
   assert.strictEqual(seniorOnly.length, 1);
-  assert.strictEqual(seniorOnly[0].title, 'Actors');
+  assert.strictEqual(seniorOnly[0].tr.title, 'Actors');
+  assert.strictEqual(seniorOnly[0].en.title, 'Actors EN');
+});
+
+test('i18n dictionary completeness for TR and EN', () => {
+  const tr = getTranslation('tr');
+  const en = getTranslation('en');
+
+  assert.ok(tr.appName.length > 0);
+  assert.ok(en.appName.length > 0);
+  assert.strictEqual(tr.onlyBookmarks, 'Yıldızlılar');
+  assert.strictEqual(en.onlyBookmarks, 'Starred');
+  assert.strictEqual(tr.allDifficulties, 'Tümü');
+  assert.strictEqual(en.allDifficulties, 'All');
+
+  // Verify function keys work
+  assert.strictEqual(tr.questionsCount(5), '5 soru');
+  assert.strictEqual(en.questionsCount(5), '5 questions');
+  assert.strictEqual(tr.questionNumber(1, 10), 'Soru 1/10');
+  assert.strictEqual(en.questionNumber(1, 10), 'Question 1/10');
+});
+
+test('Swift Master Questions bilingual dataset completeness', () => {
+  assert.ok(SWIFT_MASTER_QUESTIONS.length >= 30, `Expected at least 30 questions, found ${SWIFT_MASTER_QUESTIONS.length}`);
+
+  for (const q of SWIFT_MASTER_QUESTIONS) {
+    // Turkish validations
+    const tr = getQuestionContent(q, 'tr');
+    assert.ok(tr.title.length > 0, `Missing TR title for question ${q.id}`);
+    assert.ok(tr.question_text.length > 10, `TR question_text too short for question ${q.id}`);
+    assert.ok(tr.ideal_answer.length > 10, `TR ideal_answer too short for question ${q.id}`);
+    assert.ok(Array.isArray(tr.key_points) && tr.key_points.length > 0, `TR key_points empty for question ${q.id}`);
+
+    // English validations
+    const en = getQuestionContent(q, 'en');
+    assert.ok(en.title.length > 0, `Missing EN title for question ${q.id}`);
+    assert.ok(en.question_text.length > 10, `EN question_text too short for question ${q.id}`);
+    assert.ok(en.ideal_answer.length > 10, `EN ideal_answer too short for question ${q.id}`);
+    assert.ok(Array.isArray(en.key_points) && en.key_points.length > 0, `EN key_points empty for question ${q.id}`);
+
+    // Titles must be localized
+    assert.notStrictEqual(tr.title, en.title, `TR and EN titles should be distinct localized strings for question ${q.id}`);
+  }
 });

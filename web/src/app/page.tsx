@@ -26,7 +26,8 @@ import {
   Zap,
   Volume2
 } from "lucide-react";
-import { Category, Question } from "@/lib/types";
+import { Category, Question, Language, getQuestionContent } from "@/lib/types";
+import { getTranslation } from "@/lib/i18n";
 import { useAuth } from "@/context/AuthContext";
 import AuthModal from "@/components/AuthModal";
 import InterviewSimulator from "@/components/InterviewSimulator";
@@ -35,36 +36,63 @@ import { SWIFT_MASTER_QUESTIONS } from "@/data/swift-questions";
 const BASE_OTHER_QUESTIONS: Question[] = [
   {
     id: "and-1",
-    title: "Jetpack Compose: Recomposition ve State Hoisting",
-    question_text: "Compose'da Recomposition nedir? State Hoisting prensibi neden uygulanmalıdır ve performansa etkisi nedir?",
-    ideal_answer: "Recomposition, state değiştiğinde composable fonksiyonun yeniden çalışmasıdır. State Hoisting ile bileşen stateless yapılır; bu da test edilebilirliği, tekrar kullanımı ve önizleme kolaylığını maksimize eder.",
-    hints: ["Stateless bileşenlerin avantajlarını düşünün."],
-    key_points: ["Stateless bileşenler", "Tek yönlü veri akışı (UDF)", "Test edilebilirlik"],
     difficulty: "mid",
     q_type: "technical",
     tags: ["Android", "Kotlin", "Compose"],
+    tr: {
+      title: "Jetpack Compose: Recomposition ve State Hoisting",
+      question_text: "Compose'da Recomposition nedir? State Hoisting prensibi neden uygulanmalıdır ve performansa etkisi nedir?",
+      ideal_answer: "Recomposition, state değiştiğinde composable fonksiyonun yeniden çalışmasıdır. State Hoisting ile bileşen stateless yapılır; bu da test edilebilirliği, tekrar kullanımı ve önizleme kolaylığını maksimize eder.",
+      hints: ["Stateless bileşenlerin avantajlarını düşünün."],
+      key_points: ["Stateless bileşenler", "Tek yönlü veri akışı (UDF)", "Test edilebilirlik"],
+    },
+    en: {
+      title: "Jetpack Compose: Recomposition and State Hoisting",
+      question_text: "What is Recomposition in Jetpack Compose? Why should State Hoisting be strictly applied, and what is its performance impact?",
+      ideal_answer: "Recomposition is the execution cycle where composable functions re-run when state changes. State hoisting separates state ownership from presentation, creating stateless components that maximize testability and avoid redundant recompositions.",
+      hints: ["Consider the benefits of stateless composables."],
+      key_points: ["Stateless composables", "Unidirectional Data Flow (UDF)", "Testability & Reusability"],
+    }
   },
   {
     id: "web-1",
-    title: "Next.js 15: Server Components vs Client Components",
-    question_text: "Server Components (RSC) ile Client Components arasındaki farklar nelerdir? 'use client' ne zaman gereklidir?",
-    ideal_answer: "Server Components istemciye sıfır JS bundle boyutu gönderir ve doğrudan sunucu kaynaklarına erişir. Client Components ise tarayıcı etkileşimi (onClick, useState vb.) gerektiğinde kullanılır.",
-    hints: ["Sıfır bundle boyutunu ve sunucu erişimini vurgulayın."],
-    key_points: ["Sıfır JS bundle katkısı", "use client ile etkileşim ayrıştırma", "SEO avantajı"],
     difficulty: "mid",
     q_type: "technical",
     tags: ["Next.js", "React", "TypeScript"],
+    tr: {
+      title: "Next.js 15: Server Components vs Client Components",
+      question_text: "Server Components (RSC) ile Client Components arasındaki farklar nelerdir? 'use client' ne zaman gereklidir?",
+      ideal_answer: "Server Components istemciye sıfır JS bundle boyutu gönderir ve doğrudan sunucu kaynaklarına erişir. Client Components ise tarayıcı etkileşimi (onClick, useState vb.) gerektiğinde kullanılır.",
+      hints: ["Sıfır bundle boyutunu ve sunucu erişimini vurgulayın."],
+      key_points: ["Sıfır JS bundle katkısı", "use client ile etkileşim ayrıştırma", "SEO avantajı"],
+    },
+    en: {
+      title: "Next.js 15: Server Components vs Client Components",
+      question_text: "What are the core architectural differences between React Server Components (RSC) and Client Components in Next.js 15? When is 'use client' mandatory?",
+      ideal_answer: "Server Components produce zero client JavaScript bundle overhead and have direct backend access. Client Components introduce browser interactivity (hooks, state, listeners) via the explicit 'use client' boundary.",
+      hints: ["Highlight zero bundle size and server resource locality."],
+      key_points: ["Zero client JS bundle overhead", "Client boundary separation with 'use client'", "SEO and streaming SSR"],
+    }
   },
   {
     id: "db-1",
-    title: "PostgreSQL: İndeksleme ve Row Level Security (RLS) Performansı",
-    question_text: "Supabase ve PostgreSQL üzerinde RLS politikaları uygularken sorguların yavaşlamasını engellemek için nelere dikkat edilmelidir?",
-    ideal_answer: "auth.uid() gibi fonksiyon çağrıları SELECT sorgularında tekrarlanmamalıdır (STABLE / IMMUTABLE sarmalama veya alt sorgu kullanımı). İlgili yabancı anahtar ve kullanıcı ID sütunlarına B-Tree indeksler eklenmelidir.",
-    hints: ["auth.uid() sarmalaması", "Indexleme stratejisi"],
-    key_points: ["B-Tree indeksleme", "Subquery optimizasyonu", "Cache mekanizmaları"],
     difficulty: "senior",
     q_type: "technical",
     tags: ["PostgreSQL", "Supabase", "RLS"],
+    tr: {
+      title: "PostgreSQL: İndeksleme ve Row Level Security (RLS) Performansı",
+      question_text: "Supabase ve PostgreSQL üzerinde RLS politikaları uygularken sorguların yavaşlamasını engellemek için nelere dikkat edilmelidir?",
+      ideal_answer: "auth.uid() gibi fonksiyon çağrıları SELECT sorgularında tekrarlanmamalıdır (STABLE / IMMUTABLE sarmalama veya alt sorgu kullanımı). İlgili yabancı anahtar ve kullanıcı ID sütunlarına B-Tree indeksler eklenmelidir.",
+      hints: ["auth.uid() sarmalaması", "Indexleme stratejisi"],
+      key_points: ["B-Tree indeksleme", "Subquery optimizasyonu", "Cache mekanizmaları"],
+    },
+    en: {
+      title: "PostgreSQL: Indexing and Row Level Security (RLS) Performance",
+      question_text: "When implementing Row Level Security (RLS) policies in PostgreSQL and Supabase, what indexing and query architecture practices prevent severe slowdowns?",
+      ideal_answer: "Avoid per-row scalar execution of auth.uid() by caching it via `(select auth.uid())` subqueries or STABLE functions, and create B-Tree indexes on user foreign key columns referenced in RLS filter conditions.",
+      hints: ["Subquery evaluation of auth.uid()", "Index strategy on tenant columns"],
+      key_points: ["B-Tree indexing on tenant keys", "Subquery evaluation cache", "Avoiding full table scans in RLS"],
+    }
   }
 ];
 
@@ -72,25 +100,27 @@ const ALL_QUESTIONS: Question[] = [...SWIFT_MASTER_QUESTIONS, ...BASE_OTHER_QUES
 
 interface CategoryFilterItem {
   id: string;
-  name: string;
+  trName: string;
+  enName: string;
   icon: any;
   badge?: string;
-  description: string;
+  trDesc: string;
+  enDesc: string;
 }
 
 const CATEGORY_TABS: CategoryFilterItem[] = [
-  { id: "all", name: "Tüm Sorular", icon: Layers, description: "Tüm platformlar ve diller" },
-  { id: "swift-all", name: "🍏 Swift & iOS Master", icon: AppleIcon, badge: "Master", description: "Umut'un Özel Mülakat Notları" },
-  { id: "swift-ui", name: "SwiftUI & State", icon: Box, description: "StateObject, ViewTree, Render" },
-  { id: "swift-concurrency", name: "Concurrency & GCD", icon: Cpu, description: "Async/await, Actors, Queues, Semaphore" },
-  { id: "swift-arc", name: "ARC & Bellek", icon: Zap, description: "Stack/Heap, Weak/Unowned, COW" },
-  { id: "swift-arch", name: "Mimari & VIPER", icon: BookOpen, description: "VIPER, MVVM, Coordinator, DI" },
-  { id: "swift-uikit", name: "UIKit & Lifecycle", icon: Smartphone, description: "ViewController Lifecycle, AutoLayout" },
-  { id: "swift-sec", name: "Güvenlik & APNs", icon: ShieldCheck, description: "Keychain, SSL Pinning, Push" },
-  { id: "swift-test", name: "Test & Instruments", icon: Activity, description: "XCTest, Scroll Jank, Leaks" },
-  { id: "android", name: "Android & Kotlin", icon: Smartphone, description: "Compose & Coroutines" },
-  { id: "web", name: "Web & Next.js", icon: Globe, description: "Next.js 15 & React 19" },
-  { id: "backend", name: "Backend & DB", icon: Database, description: "Supabase & Postgres" },
+  { id: "all", trName: "Tüm Sorular", enName: "All Questions", icon: Layers, trDesc: "Tüm platformlar ve diller", enDesc: "All platforms and categories" },
+  { id: "swift-all", trName: "🍏 Swift & iOS Master", enName: "🍏 Swift & iOS Master", icon: AppleIcon, badge: "Master", trDesc: "Umut'un Özel Mülakat Notları", enDesc: "Umut's Master Apple Notes" },
+  { id: "swift-ui", trName: "SwiftUI & State", enName: "SwiftUI & State", icon: Box, trDesc: "StateObject, ViewTree, Render", enDesc: "StateObject, ViewTree, Render cycle" },
+  { id: "swift-concurrency", trName: "Concurrency & GCD", enName: "Concurrency & GCD", icon: Cpu, trDesc: "Async/await, Actors, Queues, Semaphore", enDesc: "Async/await, Actors, Queues, Semaphore" },
+  { id: "swift-arc", trName: "ARC & Bellek", enName: "ARC & Memory", icon: Zap, trDesc: "Stack/Heap, Weak/Unowned, COW", enDesc: "Stack/Heap, Weak/Unowned, COW" },
+  { id: "swift-arch", trName: "Mimari & VIPER", enName: "Architecture & VIPER", icon: BookOpen, trDesc: "VIPER, MVVM, Coordinator, DI", enDesc: "VIPER, MVVM, Coordinator, DI" },
+  { id: "swift-uikit", trName: "UIKit & Lifecycle", enName: "UIKit & Lifecycle", icon: Smartphone, trDesc: "ViewController Lifecycle, AutoLayout", enDesc: "ViewController Lifecycle, AutoLayout" },
+  { id: "swift-sec", trName: "Güvenlik & APNs", enName: "Security & APNs", icon: ShieldCheck, trDesc: "Keychain, SSL Pinning, Push", enDesc: "Keychain, SSL Pinning, Push" },
+  { id: "swift-test", trName: "Test & Instruments", enName: "Testing & Instruments", icon: Activity, trDesc: "XCTest, Scroll Jank, Leaks", enDesc: "XCTest, Scroll Jank, Leaks" },
+  { id: "android", trName: "Android & Kotlin", enName: "Android & Kotlin", icon: Smartphone, trDesc: "Compose & Coroutines", enDesc: "Compose & Coroutines" },
+  { id: "web", trName: "Web & Next.js", enName: "Web & Next.js", icon: Globe, trDesc: "Next.js 15 & React 19", enDesc: "Next.js 15 & React 19" },
+  { id: "backend", trName: "Backend & DB", enName: "Backend & DB", icon: Database, trDesc: "Supabase & Postgres", enDesc: "Supabase & Postgres" },
 ];
 
 function AppleIcon(props: any) {
@@ -103,6 +133,8 @@ function AppleIcon(props: any) {
 
 export default function Home() {
   const { user, signOut, isDemoUser } = useAuth();
+  const [lang, setLang] = useState<Language>("tr");
+  const t = getTranslation(lang);
   const [selectedCategory, setSelectedCategory] = useState<string>("swift-all");
   const [searchQuery, setSearchQuery] = useState<string>("");
   const [difficultyFilter, setDifficultyFilter] = useState<string>("all");
@@ -159,13 +191,14 @@ export default function Home() {
         return false;
       }
 
-      // 4. Arama Sorgusu
+      // 4. Arama Sorgusu (İki dilde de aranabilir)
       if (searchQuery.trim()) {
         const query = searchQuery.toLowerCase();
-        const inTitle = q.title.toLowerCase().includes(query);
-        const inText = q.question_text.toLowerCase().includes(query);
+        const content = getQuestionContent(q, lang);
+        const inTitle = content.title.toLowerCase().includes(query) || q.tr.title.toLowerCase().includes(query) || q.en.title.toLowerCase().includes(query);
+        const inText = content.question_text.toLowerCase().includes(query) || q.tr.question_text.toLowerCase().includes(query) || q.en.question_text.toLowerCase().includes(query);
         const inTags = q.tags.some(t => t.toLowerCase().includes(query));
-        const inKeys = q.key_points.some(k => k.toLowerCase().includes(query));
+        const inKeys = content.key_points.some(k => k.toLowerCase().includes(query));
         if (!inTitle && !inText && !inTags && !inKeys) {
           return false;
         }
@@ -173,7 +206,7 @@ export default function Home() {
 
       return true;
     });
-  }, [selectedCategory, difficultyFilter, onlyBookmarks, bookmarkedIds, searchQuery]);
+  }, [selectedCategory, difficultyFilter, onlyBookmarks, bookmarkedIds, searchQuery, lang]);
 
   return (
     <main className="max-w-6xl mx-auto px-4 py-8">
@@ -185,15 +218,39 @@ export default function Home() {
               <Terminal className="w-6 h-6" />
             </span>
             <div>
-              <h1 className="text-2xl font-bold tracking-tight">Interview Master</h1>
+              <h1 className="text-2xl font-bold tracking-tight">{t.appName}</h1>
               <p className="text-slate-500 dark:text-slate-400 text-xs">
-                Kişiselleştirilmiş Swift, iOS & Çok Platformlu Mülakat Hazırlık Platformu
+                {t.appTagline}
               </p>
             </div>
           </div>
         </div>
 
-        <div className="flex items-center gap-3">
+        <div className="flex items-center flex-wrap gap-3">
+          {/* TR / EN Dil Seçici */}
+          <div className="flex items-center bg-slate-100 dark:bg-slate-800 rounded-xl p-0.5 border border-slate-200 dark:border-slate-700">
+            <button
+              onClick={() => setLang("tr")}
+              className={`px-3 py-1 text-xs rounded-lg font-bold transition-all ${
+                lang === "tr" 
+                  ? "bg-white dark:bg-slate-900 text-blue-600 shadow-xs" 
+                  : "text-slate-500 hover:text-slate-800 dark:hover:text-slate-200"
+              }`}
+            >
+              🇹🇷 TR
+            </button>
+            <button
+              onClick={() => setLang("en")}
+              className={`px-3 py-1 text-xs rounded-lg font-bold transition-all ${
+                lang === "en" 
+                  ? "bg-white dark:bg-slate-900 text-blue-600 shadow-xs" 
+                  : "text-slate-500 hover:text-slate-800 dark:hover:text-slate-200"
+              }`}
+            >
+              🇬🇧 EN
+            </button>
+          </div>
+
           {user ? (
             <div className="flex items-center gap-3">
               <div className="flex items-center gap-2 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 py-1.5 px-3 rounded-xl shadow-xs">
@@ -205,14 +262,14 @@ export default function Home() {
                     {user.user_metadata?.full_name || user.email?.split("@")[0]}
                   </div>
                   <div className="text-[10px] text-slate-400">
-                    {isDemoUser ? "Demo Hesabı" : "Aktif Kullanıcı"}
+                    {isDemoUser ? t.demoAccountBadge : t.activeUserBadge}
                   </div>
                 </div>
               </div>
               <button
                 onClick={() => signOut()}
                 className="p-2.5 rounded-xl border border-slate-200 dark:border-slate-800 text-slate-500 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-950/30 transition-colors"
-                title="Çıkış Yap"
+                title={t.signOut}
               >
                 <LogOut className="w-4 h-4" />
               </button>
@@ -223,16 +280,16 @@ export default function Home() {
               className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 font-semibold text-xs text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
             >
               <LogIn className="w-4 h-4" />
-              Giriş Yap / Kaydol
+              {t.loginSignUp}
             </button>
           )}
 
           <button 
             onClick={() => setShowSimulator(true)}
-            className="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-5 py-2.5 rounded-xl font-medium shadow-sm transition-all"
+            className="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-5 py-2.5 rounded-xl font-medium shadow-sm transition-all text-xs"
           >
             <Play className="w-4 h-4 fill-white" />
-            Seçili Sorularla Simülasyon ({filteredQuestions.length})
+            {t.startSimulationWithSelected(filteredQuestions.length)}
           </button>
         </div>
       </header>
@@ -242,17 +299,17 @@ export default function Home() {
         <div className="relative z-10 max-w-2xl">
           <div className="flex items-center gap-2 mb-3">
             <span className="inline-flex items-center gap-1.5 bg-white/20 backdrop-blur-md px-3 py-1 rounded-full text-xs font-semibold uppercase tracking-wider">
-              <Sparkles className="w-3.5 h-3.5" /> Umut'un Özel Swift & iOS Notları
+              <Sparkles className="w-3.5 h-3.5" /> {lang === "en" ? "Umut's Master Swift & iOS Notes" : "Umut'un Özel Swift & iOS Notları"}
             </span>
             <span className="bg-emerald-500/30 border border-emerald-400/40 text-emerald-100 text-xs px-2.5 py-0.5 rounded-full font-medium">
-              35+ Derin Teknik Soru
+              {lang === "en" ? "35+ Deep Technical Questions" : "35+ Derin Teknik Soru"}
             </span>
           </div>
           <h2 className="text-2xl sm:text-3xl font-extrabold tracking-tight mb-2">
-            Kıdemli iOS Mülakatlarına Eksiksiz Hazırlık
+            {t.masterPoolTitle}
           </h2>
           <p className="text-blue-100 text-sm leading-relaxed mb-5">
-            SwiftUI State & ViewTree, Swift 6 Actors & Concurrency, GCD (Semaphore/WorkItem), ARC & Memory Graph, VIPER/Coordinator Mimarileri, AutoLayout ve Instruments pratiklerini tek merkezden çalışın.
+            {t.masterPoolDesc}
           </p>
           <div className="flex flex-wrap gap-3">
             <button 
@@ -263,10 +320,10 @@ export default function Home() {
               className="inline-flex items-center gap-2 bg-white text-blue-700 hover:bg-blue-50 px-4 py-2 rounded-xl font-bold shadow transition-colors text-xs"
             >
               <Play className="w-3.5 h-3.5 fill-blue-700" />
-              Swift Mülakat Simülasyonunu Başlat
+              {t.startSwiftSim}
             </button>
             <div className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-white/10 backdrop-blur-sm text-xs font-medium">
-              <Volume2 className="w-3.5 h-3.5" /> Sesli Soru & Mikrofon Yanıtı Aktif
+              <Volume2 className="w-3.5 h-3.5" /> {t.speechEnabled}
             </div>
           </div>
         </div>
@@ -282,7 +339,7 @@ export default function Home() {
               type="text"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              placeholder="Sorularda ara... (örn: semaphore, actor, weak self, hugging, keychain, viper)"
+              placeholder={t.searchPlaceholder}
               className="w-full pl-10 pr-4 py-2 text-xs rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 focus:outline-none focus:ring-2 focus:ring-blue-500 shadow-xs"
             />
             {searchQuery && (
@@ -306,7 +363,7 @@ export default function Home() {
               }`}
             >
               <Star className={`w-3.5 h-3.5 ${onlyBookmarks ? "fill-amber-500 text-amber-500" : ""}`} />
-              Yıldızlılar
+              {t.onlyBookmarks}
             </button>
 
             {/* Zorluk Düzeyi */}
@@ -321,7 +378,7 @@ export default function Home() {
                       : "text-slate-600 dark:text-slate-300 hover:text-blue-600"
                   }`}
                 >
-                  {lvl === "all" ? "Tümü" : lvl}
+                  {lvl === "all" ? t.allDifficulties : lvl}
                 </button>
               ))}
             </div>
@@ -333,6 +390,8 @@ export default function Home() {
           {CATEGORY_TABS.map(tab => {
             const Icon = tab.icon;
             const isSelected = selectedCategory === tab.id;
+            const name = lang === "en" ? tab.enName : tab.trName;
+            const desc = lang === "en" ? tab.enDesc : tab.trDesc;
             return (
               <button
                 key={tab.id}
@@ -351,8 +410,8 @@ export default function Home() {
                     </span>
                   )}
                 </div>
-                <div className="font-bold text-xs truncate">{tab.name}</div>
-                <div className="text-[10px] text-slate-400 dark:text-slate-500 mt-0.5 truncate">{tab.description}</div>
+                <div className="font-bold text-xs truncate">{name}</div>
+                <div className="text-[10px] text-slate-400 dark:text-slate-500 mt-0.5 truncate">{desc}</div>
               </button>
             );
           })}
@@ -364,26 +423,29 @@ export default function Home() {
         <div className="flex items-center justify-between mb-4">
           <div className="flex items-center gap-2">
             <h3 className="text-base font-bold text-slate-900 dark:text-slate-100">
-              Mülakat Soruları
+              {t.allQuestions}
             </h3>
             <span className="text-xs px-2.5 py-0.5 rounded-full bg-slate-100 dark:bg-slate-800 font-semibold text-slate-600 dark:text-slate-300">
-              {filteredQuestions.length} soru
+              {t.questionsCount(filteredQuestions.length)}
             </span>
           </div>
           <span className="text-xs text-slate-400">
-            {selectedCategory === "swift-all" ? "🍏 Swift & iOS Master Havuzu" : "Kategoriye Göre Filtreleniyor"}
+            {selectedCategory === "swift-all" 
+              ? (lang === "en" ? "🍏 Swift & iOS Master Pool" : "🍏 Swift & iOS Master Havuzu") 
+              : t.categoryFilterNotice}
           </span>
         </div>
 
         {filteredQuestions.length === 0 ? (
           <div className="p-12 text-center border border-dashed border-slate-200 dark:border-slate-800 rounded-2xl bg-white dark:bg-slate-900">
             <BookOpen className="w-8 h-8 text-slate-400 mx-auto mb-2" />
-            <div className="text-sm font-bold text-slate-700 dark:text-slate-200">Aradığınız kriterlere uygun soru bulunamadı.</div>
-            <p className="text-xs text-slate-400 mt-1">Filtreleri veya arama kelimenizi değiştirerek tekrar deneyin.</p>
+            <div className="text-sm font-bold text-slate-700 dark:text-slate-200">{t.noQuestionsFound}</div>
+            <p className="text-xs text-slate-400 mt-1">{t.noQuestionsDesc}</p>
           </div>
         ) : (
           <div className="space-y-4">
             {filteredQuestions.map(q => {
+              const content = getQuestionContent(q, lang);
               const isRevealed = revealedAnswers[q.id];
               const isBookmarked = bookmarkedIds[q.id];
               return (
@@ -413,38 +475,38 @@ export default function Home() {
                       className={`p-1.5 rounded-lg transition-colors ${
                         isBookmarked ? "text-amber-500 bg-amber-50 dark:bg-amber-950/40" : "text-slate-400 hover:text-amber-500"
                       }`}
-                      title={isBookmarked ? "Yıldızı Kaldır" : "Yıldızla"}
+                      title={isBookmarked ? "Unstar" : "Star"}
                     >
                       <Star className={`w-4 h-4 ${isBookmarked ? "fill-amber-500" : ""}`} />
                     </button>
                   </div>
 
                   <h4 className="text-base font-bold text-slate-900 dark:text-slate-100 mb-2">
-                    {q.title}
+                    {content.title}
                   </h4>
 
                   <p className="text-xs sm:text-sm text-slate-700 dark:text-slate-300 mb-3 bg-slate-50 dark:bg-slate-800/50 p-3.5 rounded-xl border border-slate-100 dark:border-slate-800 leading-relaxed">
-                    {q.question_text}
+                    {content.question_text}
                   </p>
 
                   {isRevealed ? (
                     <div className="mt-4 pt-4 border-t border-slate-100 dark:border-slate-800 space-y-3 animate-in fade-in duration-200">
                       <div className="bg-blue-50/60 dark:bg-blue-950/30 p-4 rounded-xl border border-blue-200/70 dark:border-blue-900/40">
                         <div className="text-[11px] font-bold text-blue-700 dark:text-blue-300 uppercase tracking-wider mb-1 flex items-center gap-1.5">
-                          <CheckCircle2 className="w-3.5 h-3.5 text-blue-600" /> İdeal Kıdemli Yanıt & Mimari Çözüm
+                          <CheckCircle2 className="w-3.5 h-3.5 text-blue-600" /> {t.idealAnswerTitle}
                         </div>
                         <p className="text-xs sm:text-sm text-slate-800 dark:text-slate-200 leading-relaxed whitespace-pre-line">
-                          {q.ideal_answer}
+                          {content.ideal_answer}
                         </p>
                       </div>
 
-                      {q.key_points && q.key_points.length > 0 && (
+                      {content.key_points && content.key_points.length > 0 && (
                         <div>
                           <div className="text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-2">
-                            📌 Mülakatçının Beklediği Kritik Noktalar (Key Points)
+                            📌 {t.keyPointsTitle}
                           </div>
                           <div className="grid grid-cols-1 sm:grid-cols-2 gap-1.5">
-                            {q.key_points.map((pt, i) => (
+                            {content.key_points.map((pt, i) => (
                               <div key={i} className="flex items-center gap-2 text-xs text-slate-600 dark:text-slate-300 bg-white dark:bg-slate-800 p-2 rounded-lg border border-slate-100 dark:border-slate-700">
                                 <CheckCircle2 className="w-3.5 h-3.5 text-emerald-500 shrink-0" />
                                 <span>{pt}</span>
@@ -459,7 +521,7 @@ export default function Home() {
                           onClick={() => toggleAnswer(q.id)}
                           className="text-xs text-slate-500 hover:text-slate-700 underline"
                         >
-                          Cevabı Gizle
+                          {t.hideAnswer}
                         </button>
                       </div>
                     </div>
@@ -469,7 +531,7 @@ export default function Home() {
                       className="inline-flex items-center gap-1.5 text-xs font-semibold text-blue-600 hover:text-blue-700 mt-1"
                     >
                       <Eye className="w-3.5 h-3.5" />
-                      İdeal Cevabı ve Kritik Başlıkları İncele
+                      {t.showAnswer}
                     </button>
                   )}
                 </div>
@@ -490,6 +552,7 @@ export default function Home() {
         questions={filteredQuestions}
         isOpen={showSimulator}
         onClose={() => setShowSimulator(false)}
+        lang={lang}
       />
     </main>
   );
