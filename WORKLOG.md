@@ -177,3 +177,11 @@ Bu dosya, Interview App projesinde gerçekleştirilen tüm mimari kararları, te
   - `android/app/build.gradle.kts` [MODIFY]
   - `WORKLOG.md` [MODIFY]
 - **Mevcut Durum**: Web, iOS ve Android platformlarının tümünde tam TR / ENG çift dilli deneyim aktif, testler başarılı, Vercel prodüksiyon dağıtımı canlıdadır.
+
+
+---
+
+## 2026-09-28 08:33 - Zorunlu Marka Kimliği ve Logo Standardı
+- **Görev ve Amaç**: Interview App simülatörüne özgün vektör logo (`assets/logo.svg`, `web/public/logo.svg`, `web/public/favicon.svg`) eklenmesi ve marka kimliği standardının sağlanması.
+- **Doğrulama**: 11 adet test (Python ve TSX web testleri) çalıştırıldı (All Passed).
+- **Etkilenen Dosyalar**: `assets/logo.svg`, `web/public/logo.svg`, `web/public/favicon.svg`, `WORKLOG.md`.
