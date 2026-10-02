@@ -1,0 +1,17 @@
+{
+  "version": "1.0.0",
+  "platform": "Swift & iOS Interview Simulator",
+  "timestamp": "2026-10-02T21:36:15.308Z",
+  "datasets": {
+    "supabaseSeed": {
+      "available": true,
+      "length": 7081,
+      "sha256": "643fd05a390c19ec363710a028e72ee6d13ce2ce762e2e6c9399af344227f5af"
+    },
+    "swiftQuestions": {
+      "available": true,
+      "length": 91232,
+      "sha256": "9c13953f49a78b5ab9b6c29a368b57df934da703d29b13449a197c03497d75f6"
+    }
+  }
+}

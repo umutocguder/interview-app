@@ -4,6 +4,34 @@ Bu dosya, Interview App projesinde gerçekleştirilen tüm mimari kararları, te
 
 ---
 
+### [2026-10-03 00:36] Zorunlu Otonom Backend ve Veri Yedekleme Standardı Uygulaması
+- **Görev ve Amaç**:
+  - Global kural standardı (Madde 17) uyarınca mülakat soruları veri seti ve Supabase backend veritabanı şemasının otonom yedekleme altyapısının kurulması.
+  - Sistemin kullanıcı müdahalesi olmadan derleme öncesi (`prebuild`), test öncesi ve betik tetikleyicisiyle otomatik snapshot oluşturması.
+- **Teknik Kararlar ve Mimari Değişiklikler**:
+  1. **Yedekleme Servisi (`backend/services/backupService.mjs`)**:
+     - `createInterviewBackup()`, `verifyInterviewBackupIntegrity()`, `restoreInterviewFromBackup()` fonksiyonları eklendi.
+     - SHA-256 bütünlük kontrolü ve `interview_checksums.json` denetim kaydı oluşturuldu (maks. 30 kayıt döngüsü).
+     - Zaman damgalı anlık görüntüler (`interview_backup_*.json`) ve `interview_latest_backup.json` üretimi sağlandı.
+  2. **Otomasyon Betiği ve Kanca (`backend/scripts/backupBackend.mjs`)**:
+     - `npm run backup` ve `prebuild` hook'ları ile Next.js derlemesi öncesinde otomatik veri yedekleme sağlandı.
+  3. **Git ve Dizin Hijyeni (`.gitignore`)**:
+     - Zaman damgalı yedekler `.gitignore`'a eklendi; en güncel yedek ve denetim logu repoda güvenceye alındı.
+  4. **Otomatik Testler (`web/tests/backup.test.ts`)**:
+     - Snapshot üretimi, SHA-256 doğrulama, bütünlük kontrolü ve yedekten geri yükleme testleri yazıldı.
+- **Etkilenen Dosyalar**:
+  - [backend/services/backupService.mjs](file:///Users/umut/mycodespaces/interview-app/backend/services/backupService.mjs)
+  - [backend/scripts/backupBackend.mjs](file:///Users/umut/mycodespaces/interview-app/backend/scripts/backupBackend.mjs)
+  - [web/tests/backup.test.ts](file:///Users/umut/mycodespaces/interview-app/web/tests/backup.test.ts)
+  - [web/package.json](file:///Users/umut/mycodespaces/interview-app/web/package.json)
+  - [.gitignore](file:///Users/umut/mycodespaces/interview-app/.gitignore)
+- **Mevcut Durum ve Doğrulama**:
+  - `npm test`: 11/11 web testi %100 BAŞARILI.
+  - `python3 test`: 3/3 python testi %100 BAŞARILI.
+  - Yedekleme bütünlüğü ve SHA-256 hash doğrulaması teyit edildi.
+
+---
+
 ### [2026-09-04 11:50] Projenin Başlatılması ve Çok Platformlu Mimarinin Kurulması
 - **Görev ve Amaç**: iOS (SwiftUI iOS 17+), Android (Jetpack Compose), Web (Next.js 15) ve paylaşılan Supabase backend'inden oluşan Mülakat Hazırlık platformunun monorepo olarak kurulması.
 - **Teknik Kararlar ve Mimari**:

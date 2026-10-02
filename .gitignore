@@ -39,3 +39,7 @@ local.properties
 .DS_Store
 *.swp
 *.lock
+
+# Backups
+backend/data/backups/*_backup_*.json
+data/backups/*_backup_*.json

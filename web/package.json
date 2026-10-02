@@ -8,6 +8,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
+    "backup": "node ../backend/scripts/backupBackend.mjs",
+    "prebuild": "node ../backend/scripts/backupBackend.mjs",
     "test": "tsx --test 'tests/**/*.test.ts'"
   },
   "dependencies": {
