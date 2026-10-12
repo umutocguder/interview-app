@@ -8,7 +8,7 @@ export const metadata: Metadata = {
   description:
     "Yazılım geliştiriciler, mühendisler ve profesyoneller için AI destekli interaktif mülakat simülatörü. Swift, Python, React ve Sistem Mimarisi sorularıyla kendinizi test edin.",
   keywords: ["interview master", "ai interview", "mülakat hazırlık", "teknik mülakat simülatörü", "swift mülakat soruları", "yazılım mülakatı"],
-  authors: [{ name: "11hopem Software Ltd. Şti.", url: "https://11hopem-software.vercel.app" }],
+  authors: [{ name: "11Hopem", url: "https://11hopem-software.vercel.app" }],
   alternates: {
     canonical: "/",
   },
