@@ -1,5 +1,15 @@
 [
   {
+    "timestamp": "2026-10-14T07:15:21.542Z",
+    "platform": "Swift & iOS Interview Simulator",
+    "seedSize": 7081,
+    "questionsSize": 91232,
+    "sha256": "ef72641236fa62bbb0492367040ba11db8c6d05c0c7074001a66754e20905c7c",
+    "fileSize": 457,
+    "backupFile": "interview_backup_2026-10-14T07-15-21-542Z.json",
+    "latestBackupFile": "interview_latest_backup.json"
+  },
+  {
     "timestamp": "2026-10-12T10:36:49.639Z",
     "platform": "Swift & iOS Interview Simulator",
     "seedSize": 7081,

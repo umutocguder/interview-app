@@ -10,7 +10,7 @@
     "lint": "next lint",
     "backup": "node ../backend/scripts/backupBackend.mjs",
     "prebuild": "node ../backend/scripts/backupBackend.mjs",
-    "test": "tsx --test 'tests/**/*.test.ts'"
+    "test": "tsx --test tests/*.test.ts"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.49.1",
