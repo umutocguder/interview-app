@@ -554,6 +554,21 @@ export default function Home() {
         onClose={() => setShowSimulator(false)}
         lang={lang}
       />
+
+      {/* Footer */}
+      <footer className="mt-16 border-t border-slate-200 dark:border-slate-800 py-8 text-center text-xs text-slate-500">
+        <p>
+          Created by{" "}
+          <a
+            href="https://11hopem.com"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="font-semibold text-slate-700 dark:text-slate-300 hover:text-blue-600 underline transition-colors"
+          >
+            11Hopem
+          </a>
+        </p>
+      </footer>
     </main>
   );
 }
