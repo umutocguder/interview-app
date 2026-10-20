@@ -62,7 +62,7 @@ public struct AuthView: View {
                             .foregroundStyle(.blue)
                             .padding(.top, 20)
                         
-                        Text(viewModel.isSignUp ? "Hesap Oluştur" : "Interview App'e Giriş")
+                        Text(viewModel.isSignUp ? "Hesap Oluştur" : "11 Interview'a Giriş")
                             .font(.title2.bold())
                         
                         Text(viewModel.isSignUp 

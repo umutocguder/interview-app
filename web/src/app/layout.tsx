@@ -4,10 +4,10 @@ import { AuthProvider } from "@/context/AuthContext";
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://interview-master-ai-umutocgdrs-projects.vercel.app"),
-  title: "Interview Master AI — Yapay Zeka Destekli Teknik & Davranışsal Mülakat Simülatörü",
+  title: "11 Interview — Yapay Zeka Destekli Teknik & Davranışsal Mülakat Simülatörü",
   description:
     "Yazılım geliştiriciler, mühendisler ve profesyoneller için AI destekli interaktif mülakat simülatörü. Swift, Python, React ve Sistem Mimarisi sorularıyla kendinizi test edin.",
-  keywords: ["interview master", "ai interview", "mülakat hazırlık", "teknik mülakat simülatörü", "swift mülakat soruları", "yazılım mülakatı"],
+  keywords: ["11 interview", "ai interview", "mülakat hazırlık", "teknik mülakat simülatörü", "swift mülakat soruları", "yazılım mülakatı"],
   authors: [{ name: "11Hopem", url: "https://11hopem-software.vercel.app" }],
   alternates: {
     canonical: "/",
@@ -22,16 +22,16 @@ export const metadata: Metadata = {
   },
   openGraph: {
     type: "website",
-    siteName: "Interview Master AI",
-    title: "Interview Master AI — Mülakat Hazırlık ve Simülasyon",
+    siteName: "11 Interview",
+    title: "11 Interview — Mülakat Hazırlık ve Simülasyon",
     description: "Yapay zeka ile interaktif teknik mülakat hazırlığı yapın.",
     url: "https://interview-master-ai-umutocgdrs-projects.vercel.app",
-    images: [{ url: "/og-image.png", width: 512, height: 512, alt: "Interview Master AI Logo" }],
+    images: [{ url: "/og-image.png", width: 512, height: 512, alt: "11 Interview Logo" }],
     locale: "tr_TR",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Interview Master AI — Mülakat Simülatörü",
+    title: "11 Interview — Mülakat Simülatörü",
     description: "AI destekli teknik ve davranışsal mülakat simülatörü.",
     images: ["/og-image.png"],
   },
@@ -49,7 +49,7 @@ export default function RootLayout({
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "SoftwareApplication",
-    "name": "Interview Master AI",
+    "name": "11 Interview",
     "applicationCategory": "EducationalApplication",
     "description": "Yapay zeka destekli interaktif teknik mülakat simülatörü ve kariyer hazırlık platformu.",
     "url": "https://interview-master-ai-umutocgdrs-projects.vercel.app",

@@ -1,6 +1,31 @@
-# Interview App Proje Günlüğü (Worklog & AI Context Handoff)
+# 11 Interview Proje Günlüğü (Worklog & AI Context Handoff)
 
-Bu dosya, Interview App projesinde gerçekleştirilen tüm mimari kararları, teknik değişiklikleri ve sistem durumunu sonraki geliştiriciler veya yapay zeka modelleri için belgeler.
+Bu dosya, 11 Interview projesinde gerçekleştirilen tüm mimari kararları, teknik değişiklikleri ve sistem durumunu sonraki geliştiriciler veya yapay zeka modelleri için belgeler.
+
+---
+
+### [2026-10-20 09:45] Ürün İsminin Tüm Platformlarda "11 Interview" Olarak Yeniden Markalanması (Rebranding)
+- **Görev ve Amaç**:
+  - Kullanıcı isteği doğrultusunda ürünün adı tüm platformlarda (Web, iOS, Android), CI/CD akışında ve dokümantasyonda "11 Interview" olarak güncellendi.
+- **Teknik Değişiklikler**:
+  1. **Web (`web/`)**:
+     - `web/src/lib/i18n.ts`: `appName` hem Türkçe hem İngilizce sözlükte "11 Interview" yapıldı.
+     - `web/src/app/layout.tsx`: `title`, `openGraph.siteName`, `openGraph.title`, `twitter.title`, OpenGraph görsel `alt` metni, `keywords` ve schema.org JSON-LD `SoftwareApplication.name` "11 Interview" olarak güncellendi.
+     - `web/src/components/AuthModal.tsx`: Giriş başlığı "11 Interview'a Giriş Yap" olarak düzenlendi.
+  2. **iOS (`ios/`)**:
+     - `ios/InterviewApp/Core/AppConfig.swift`: `AppConfig.appName = "11 Interview"`.
+     - `ios/InterviewApp/Core/LanguageManager.swift`: `appName = "11 Interview"`.
+     - `ios/InterviewApp/Features/Auth/AuthView.swift`: Giriş başlığı "11 Interview'a Giriş" yapıldı.
+     - `ios/InterviewApp.xcodeproj/project.pbxproj`: `INFOPLIST_KEY_CFBundleDisplayName = "11 Interview"`.
+     - `ios/InterviewAppTests/InterviewAppTests.swift`: Birim testi beklentisi "11 Interview" olarak güncellendi.
+  3. **Android (`android/`)**:
+     - `android/app/src/main/AndroidManifest.xml`: `android:label="11 Interview"`.
+     - `android/app/src/main/java/com/umutocguder/interview/ui/screens/DashboardScreen.kt`: TopAppBar başlığı "11 Interview" yapıldı.
+  4. **CI/CD & Dokümantasyon**:
+     - `.github/workflows/ci-cd.yml`: Otomatik release adı `Release v1.0.${{ github.run_number }} - 11 Interview` yapıldı.
+     - `README.md`, `AGENTS.md`: Proje başlığı "11 Interview" olarak güncellendi.
+- **Git Branch Modeli**:
+  - Tüm değişiklikler `dev` dalında yapıldı, testler ve derlemeler doğrulandıktan sonra Vercel production dağıtımı tetiklenecek ve `master` dalına aktarılacak.
 
 ---
 

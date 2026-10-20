@@ -87,7 +87,7 @@ fun DashboardScreen() {
             TopAppBar(
                 title = {
                     Text(
-                        "Interview Master",
+                        "11 Interview",
                         fontWeight = FontWeight.Bold,
                         fontSize = 18.sp
                     )

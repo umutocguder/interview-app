@@ -33,7 +33,7 @@ public final class LanguageManager {
     }
     
     // UI Strings
-    public var appName: String { "Interview Master" }
+    public var appName: String { "11 Interview" }
     
     public var appTagline: String {
         currentLanguage == .en

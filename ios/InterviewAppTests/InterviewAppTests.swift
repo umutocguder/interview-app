@@ -14,7 +14,7 @@ final class InterviewAppTests: XCTestCase {
         XCTAssertEqual(lang, .en)
         
         let appName = await manager.appName
-        XCTAssertEqual(appName, "Interview Master")
+        XCTAssertEqual(appName, "11 Interview")
         
         let starredLabel = await manager.starredFilter
         XCTAssertEqual(starredLabel, "Starred")
