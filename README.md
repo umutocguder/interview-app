@@ -1,4 +1,4 @@
-# Interview App — Çok Platformlu Mülakat Hazırlık & Simülasyon Platformu
+# 11 Interview — Çok Platformlu Mülakat Hazırlık & Simülasyon Platformu
 
 Modern yazılım geliştiricileri ve adaylar için tasarlanmış; iOS, Android ve Web üzerinde çalışan, ortak **Supabase** bulut altyapısına bağlı uçtan uca mülakat hazırlık uygulaması.
 

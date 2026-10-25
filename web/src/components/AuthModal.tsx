@@ -64,7 +64,7 @@ export default function AuthModal({ isOpen, onClose }: AuthModalProps) {
             <Lock className="w-5 h-5" />
           </div>
           <h2 className="text-xl font-bold text-slate-900 dark:text-slate-100">
-            {isSignUp ? "Yeni Hesap Oluştur" : "Interview App'e Giriş Yap"}
+            {isSignUp ? "Yeni Hesap Oluştur" : "11 Interview'a Giriş Yap"}
           </h2>
           <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
             {isSignUp

@@ -48,7 +48,7 @@ export interface Translations {
 
 export const translations: Record<Language, Translations> = {
   tr: {
-    appName: "Interview Master",
+    appName: "11 Interview",
     appTagline: "Kişiselleştirilmiş Swift, iOS & Çok Platformlu Mülakat Hazırlık Platformu",
     searchPlaceholder: "Sorularda ara... (örn: semaphore, actor, weak self, hugging, keychain, viper)",
     startSimulation: "Canlı Simülasyon Başlat",
@@ -93,7 +93,7 @@ export const translations: Record<Language, Translations> = {
     questionNumber: (current: number, total: number) => `Soru ${current}/${total}`,
   },
   en: {
-    appName: "Interview Master",
+    appName: "11 Interview",
     appTagline: "Personalized Swift, iOS & Multi-Platform Interview Preparation Platform",
     searchPlaceholder: "Search questions... (e.g. semaphore, actor, weak self, hugging, keychain, viper)",
     startSimulation: "Start Live Simulation",

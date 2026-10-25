@@ -1,4 +1,4 @@
-# Interview App (Mülakat Hazırlık ve Simülasyon) Mimarisi ve Kuralları
+# 11 Interview (Mülakat Hazırlık ve Simülasyon) Mimarisi ve Kuralları
 
 Bu proje; iOS, Android ve Web platformlarında çalışan, paylaşılan **Supabase** backend mimarisine sahip modern bir **Mülakat Hazırlık ve Simülasyon** uygulamasıdır.
 

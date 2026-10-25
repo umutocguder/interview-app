@@ -42,7 +42,7 @@ jobs:
       - uses: softprops/action-gh-release@v2
         with:
           tag_name: v1.0.${{ github.run_number }}
-          name: "Release v1.0.${{ github.run_number }} - Interview App"
+          name: "Release v1.0.${{ github.run_number }} - 11 Interview"
           generate_release_notes: true
           make_latest: true
         env:
