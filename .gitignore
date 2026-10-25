@@ -64,3 +64,8 @@ local.properties
 # Backups
 backend/data/backups/*_backup_*.json
 data/backups/*_backup_*.json
+
+# AI Internal Context & Workflow Files (Local Only)
+AGENTS.md
+CLAUDE.md
+WORKLOG.md

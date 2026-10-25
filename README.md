@@ -1,55 +1,108 @@
-# 11 Interview — Çok Platformlu Mülakat Hazırlık & Simülasyon Platformu
+<!-- Created by 11Hopem -->
+# 🎙️ 11Interview — Multi-Platform Tech Interview Preparation Platform
 
-Modern yazılım geliştiricileri ve adaylar için tasarlanmış; iOS, Android ve Web üzerinde çalışan, ortak **Supabase** bulut altyapısına bağlı uçtan uca mülakat hazırlık uygulaması.
+[![Next.js 15](https://img.shields.io/badge/Next.js-15%20(App%20Router)-black.svg?logo=next.js)](https://nextjs.org)
+[![SwiftUI](https://img.shields.io/badge/iOS-SwiftUI%20(iOS%2017+)-orange.svg?logo=swift)](https://developer.apple.com/xcode/swiftui/)
+[![Jetpack Compose](https://img.shields.io/badge/Android-Jetpack%20Compose-green.svg?logo=android)](https://developer.android.com/jetpack/compose)
+[![Backend](https://img.shields.io/badge/backend-Supabase%20Postgres-emerald.svg?logo=supabase)](https://supabase.com)
+[![Created by 11Hopem](https://img.shields.io/badge/created%20by-11Hopem-orange.svg)](https://11hopem.com)
 
----
-
-## 📱 Platformlar ve Teknolojiler
-
-- **iOS:** **SwiftUI**, **iOS 17+**, `@Observable`, Swift Concurrency, Clean Architecture.
-- **Android:** **Kotlin**, **Jetpack Compose**, **Material 3**, Coroutines, StateFlow, MVVM.
-- **Web:** **Next.js 15+ (App Router)**, **React 19**, **TypeScript**, **Tailwind CSS**.
-- **Backend:** **Supabase** (PostgreSQL, Auth, Row Level Security, RPC functions).
+A production-grade, multi-platform technical interview preparation and mock simulation platform. Features native clients for **iOS (SwiftUI)**, **Android (Jetpack Compose)**, and **Web (Next.js 15 App Router)**, all synchronized via a single **Supabase** cloud backend with PostgreSQL, Row Level Security, and automated scoring heuristics.
 
 ---
 
-## 📁 Dizin Yapısı
+## 🏗️ Architecture & Tech Stack
 
-```text
+```
+┌──────────────────┐    ┌──────────────────┐    ┌──────────────────┐
+│     Web App      │    │     iOS App      │    │   Android App    │
+│ Next.js 15 / TS  │    │  SwiftUI 17+ /   │    │ Jetpack Compose  │
+│  Tailwind CSS    │    │   Concurrency    │    │   Material 3     │
+└────────┬─────────┘    └────────┬─────────┘    └────────┬─────────┘
+         │                       │                       │
+         └───────────────────────┼───────────────────────┘
+                                 │ HTTPS / WebSockets
+                                 ▼
+                     ┌───────────────────────┐
+                     │   Supabase Backend    │
+                     │  • PostgreSQL + RLS   │
+                     │  • Auth & User States │
+                     │  • Dynamic Question   │
+                     │    Bank & Heuristics  │
+                     └───────────────────────┘
+```
+
+---
+
+## 🌟 Key Features
+
+- **Categorized Question Bank**: Deep technical questions covering iOS (Swift/SwiftUI), Android (Kotlin/Compose), Frontend (React/TypeScript), Backend (Go, Python, Node.js), System Design, and Algorithms.
+- **Timed Mock Interview Mode**: Realistic mock sessions with countdown timers, answer recording, instant feedback, and scoring analytics.
+- **Adaptive Difficulty**: Questions adjust dynamically across Junior, Mid, and Senior tiers based on user progression.
+- **Unified Progress Tracking**: Seamless cross-device synchronization of solved questions, favorite bookmarks, and performance radar charts.
+- **Offline Mode Support**: Local SQLite/SwiftData caching ensures uninterrupted study even without network connectivity.
+
+---
+
+## 📁 Repository Structure
+
+```
 interview-app/
-├── backend/               <-- Supabase şemaları, migration'lar ve soru tohum verisi
-├── ios/                   <-- iOS 17+ SwiftUI yerel projesi
-├── android/               <-- Android Jetpack Compose yerel projesi
-├── web/                   <-- Next.js 15 App Router web projesi
-├── AGENTS.md              <-- Yapay zeka ve geliştirici standartları
-├── CLAUDE.md              <-- Claude Code senkronizasyonu
-├── WORKLOG.md             <-- AI Handoff Ready gelişim günlüğü
-└── README.md
+├── backend/            # Supabase database schema, migrations, seed questions & RLS policies
+├── ios/                # Native iOS application (SwiftUI, Clean Architecture, @Observable)
+├── android/            # Native Android application (Kotlin, Jetpack Compose, Coroutines/StateFlow)
+├── web/                # Next.js 15 (App Router, React 19, TypeScript, Tailwind CSS)
+└── tests/              # Multi-tier automated test suite
 ```
 
 ---
 
-## 🚀 Başlangıç ve Çalıştırma
+## 🚀 Getting Started
 
-### 1. Backend (Supabase)
-`backend/supabase/migrations/` altındaki SQL dosyaları Supabase paneline veya yerel Supabase CLI'a uygulanabilir:
+### Prerequisites
+
+- [Node.js 18+](https://nodejs.org/)
+- [Xcode 15+](https://developer.apple.com/xcode/) (for iOS client)
+- [Android Studio Iguana+](https://developer.android.com/studio) (for Android client)
+- [Supabase CLI](https://supabase.com/docs/guides/cli)
+
+### 1. Clone Repository
+
 ```bash
-# Soru tohum verilerini yüklemek için:
-# backend/supabase/seed.sql dosyasını Supabase SQL Editöründe çalıştırın.
+git clone https://github.com/umutocguder/interview-app.git
+cd interview-app
 ```
 
-### 2. Web Uygulaması (Next.js)
+### 2. Configure Backend
+
+```bash
+cd backend
+supabase start
+supabase db reset # Applies migrations and seeds initial interview questions
+```
+
+### 3. Run Web Client
+
 ```bash
 cd web
 npm install
 npm run dev
 ```
 
-### 3. iOS Uygulaması (SwiftUI)
-```bash
-cd ios
-open InterviewApp.xcodeproj
-```
+Visit [http://localhost:3000](http://localhost:3000) in your browser.
 
-### 4. Android Uygulaması (Jetpack Compose)
-Android Studio ile `android/` dizinini açıp çalıştırabilirsiniz.
+### 4. Run iOS Client
+
+Open `ios/InterviewApp.xcodeproj` in Xcode and hit `Cmd + R`.
+
+### 5. Run Android Client
+
+Open the `android/` folder in Android Studio and run on your emulator or physical device.
+
+---
+
+## 🛡️ License & Attribution
+
+Created by [11Hopem](https://11hopem.com).  
+Copyright © 2026 11Hopem. All rights reserved.  
+Official website: [https://11hopem.com](https://11hopem.com)
