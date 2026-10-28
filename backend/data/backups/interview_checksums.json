@@ -1,5 +1,35 @@
 [
   {
+    "timestamp": "2026-10-28T22:59:50.051Z",
+    "platform": "Swift & iOS Interview Simulator",
+    "seedSize": 7081,
+    "questionsSize": 91232,
+    "sha256": "236d030c4990c5fce73cd298722c05a165677e35a5def704989e8a326ee611cc",
+    "fileSize": 457,
+    "backupFile": "interview_backup_2026-10-28T22-59-50-050Z.json",
+    "latestBackupFile": "interview_latest_backup.json"
+  },
+  {
+    "timestamp": "2026-10-28T22:58:30.054Z",
+    "platform": "Swift & iOS Interview Simulator",
+    "seedSize": 7081,
+    "questionsSize": 91232,
+    "sha256": "c5eb1e7f095e50cf1f78a9bfdb62061e9066efae7f647a6f4610289ff581afaf",
+    "fileSize": 457,
+    "backupFile": "interview_backup_2026-10-28T22-58-30-054Z.json",
+    "latestBackupFile": "interview_latest_backup.json"
+  },
+  {
+    "timestamp": "2026-10-28T22:54:41.548Z",
+    "platform": "Swift & iOS Interview Simulator",
+    "seedSize": 7081,
+    "questionsSize": 91232,
+    "sha256": "5fef924a81974aa029701836b63ab61956bacc812a19570583064bf13cb70edb",
+    "fileSize": 457,
+    "backupFile": "interview_backup_2026-10-28T22-54-41-548Z.json",
+    "latestBackupFile": "interview_latest_backup.json"
+  },
+  {
     "timestamp": "2026-10-28T21:26:05.783Z",
     "platform": "Swift & iOS Interview Simulator",
     "seedSize": 7081,

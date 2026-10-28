@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useMemo } from "react";
+import Link from "next/link";
 import { 
   Terminal, 
   Smartphone, 
@@ -24,7 +25,8 @@ import {
   Activity, 
   Box, 
   Zap,
-  Volume2
+  Volume2,
+  FileText
 } from "lucide-react";
 import { Category, Question, Language, getQuestionContent } from "@/lib/types";
 import { getTranslation } from "@/lib/i18n";
@@ -284,6 +286,15 @@ export default function Home() {
             </button>
           )}
 
+          <Link
+            href="/notes"
+            className="inline-flex items-center gap-2 px-3.5 py-2.5 rounded-xl border border-indigo-200 dark:border-indigo-800 bg-indigo-50/70 dark:bg-indigo-950/40 text-indigo-700 dark:text-indigo-300 hover:bg-indigo-100 dark:hover:bg-indigo-900/50 font-bold text-xs transition-colors shadow-xs"
+            title="Düz Metin Çalışma Not Defteri"
+          >
+            <FileText className="w-4 h-4 text-indigo-600 dark:text-indigo-400" />
+            <span>{lang === "en" ? "📓 Notebook" : "📓 Not Defterim"}</span>
+          </Link>
+
           <button 
             onClick={() => setShowSimulator(true)}
             className="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-5 py-2.5 rounded-xl font-medium shadow-sm transition-all text-xs"
@@ -322,6 +333,13 @@ export default function Home() {
               <Play className="w-3.5 h-3.5 fill-blue-700" />
               {t.startSwiftSim}
             </button>
+            <Link
+              href="/notes"
+              className="inline-flex items-center gap-2 bg-white/20 hover:bg-white/30 text-white px-4 py-2 rounded-xl font-bold backdrop-blur-md shadow transition-colors text-xs"
+            >
+              <FileText className="w-3.5 h-3.5" />
+              {lang === "en" ? "📓 Notebook (Plain Text)" : "📓 Not Defterim (Düz Metin)"}
+            </Link>
             <div className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-white/10 backdrop-blur-sm text-xs font-medium">
               <Volume2 className="w-3.5 h-3.5" /> {t.speechEnabled}
             </div>

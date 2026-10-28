@@ -1,0 +1,1460 @@
+SWIFT
+
+Async await 
+———
+State object baştan oluşturur -> viewmodel
+Obsorved object viewmodelda gelen 
+Environment user defaults gibi ama genelde dark mode mi
+Viewbuilders
+Some demek bu viewı kkullğnn
+Awaiti nasıl kullanılırım Task
+State ufak çaplı saklama -
+Asstosioted type 
+Decorated pattern-> 
+
+Published kombidenden gelir bir veri değişti viewa haber verir 
+
+Bir sürü if else var bunu nasıl iyileştirebilirim
+Bir yerde implemntm ettiğimşey değişiyor her yere nasıl yayarım bunu
+
+@EnvironmentObject, bir ObservableObject'in uygulamanın belirli bir view hiyerarşisi (view tree) içinde paylaşımlı olarak erişilebilir olmasını sağlayan bir property wrapper'dır.
+struct CounterView: View { @State private var count = 0 // Sadece bu View'a özel burda kullanılabilir var body: some View { Button("Artır: \(count)") { count += 1 } } }
+class UserViewModel: ObservableObject { @Published var users: [String] = [] // Değiştiği an View'lara haber verir }
+@StateObject / @ObservedObject: Veriyi bir view'dan bir sonrakine manuel olarak paslaman gerekir (Explicit DI).
+@EnvironmentObject: Veri hiyerarşi boyunca "görünmez" bir şekilde akar (Implicit DI). Veriyi enjekte ettiğin view'ın tüm çocukları (ve çocuklarının çocukları) bu nesneye tek satırla erişebilir.
+
+Swift ui basic questions 
+State published farkı nedir
+Environment object nedir
+Environment object aslında nasıl taşınır -> Ekranlar arasında gidiyor ama nav.barın üstüne ekleyerek gönderiyor
+Viewtree nedir nasıl render oluyor viewlar
+SwiftUI builder nasıl çalışır
+Bir published değiştiğinde nasıl davranmasını bekliyorsun
+Timer her saniye refresh oluyor performans problemine sebep oluyor. Bunu nasıl bulursun swift uida
+
+“self mevcut instance’ı temsil ederken, Self conforming type’ın kendisini temsil eder ve özellikle protocol’lerde type safety ve doğru return type sağlamak için kullanılır.”
+
+Network katmanında response geliyor bu response içine bussines logic koymak mantıklı mı -> hayır değil
+
+Coordinatorda 5 ekranı birbirine nasıl bağlarsın
+Coordinatorda bağladığın verilerin logicini nerde tutuyorsun
+
+@mainactor
+—
+
+
+Defined modülede çalışan internal public her yerde çalışır open override edilebilir
+
+
+Life cycle
+
+ 1. loadViewIfNeeded can be called any time according to structural design
+ 2. Rotta operations trigger transition callbacks
+
+ Can subclass (unless final class)    Cant extend or subclass (unless using protocol)
+     Thread safety
+
+Rxswift
+
+ Bounds and frame
+
+ - Frame -> position of the view according to super view
+ - Bouns -> What portion of the view are showing
+
+ Serial and parallel queues
+ Main queue is parallel
+
+ yeni queue açıldığında yeni thread açılır mı, eğer pool da yer varsa orayı kullanır yoksa açar os karar veriyor
+ queue labeling, queue ya verdiğin isim
+
+ Serial queue multiple thread write shared memory,
+ Concorent queue, single for loop automatically splits to
+
+ Stack memory -> Value type        ->
+ Heap Memory -> Reference type ->
+
+ ——— implicit self references ———
+ [weak self] _ in
+  guard let self else { return }
+
+ Generics
+ Veri yapılarının ve fonksiyonların tip bağımsız bir şekilde tanımlanmasını sağlayan bir özelliktir. Bu, bir tür veya veri yapısını belirtmek yerine, kodun daha geniş bir yelpazedeki türlerle çalışmasına olanak tanır.
+ Genericler, kodun daha modüler, esnek ve yeniden kullanılabilir olmasını sağlar. Ayrıca, tür güvenliği sağlar ve hata ayıklamayı kolaylaştırır.
+
+One to one communication protocol
+Async await concoruncydir isteklerde kullanılır
+Actor race conditionları önler
+
+
+Observed object değişen datalarda kullanılır dinamik değişir
+Enviriment object bu da aynı ama birden çok ekranda kullanılıyorsa mesela dark mode
+State object Created object ve ekranda değiştirirsek oluşturduğumuz olmalı
+Enviriment mesela dark mode sadece erişir ayarlara
+Observable
+
+Dependecy injection mainde oluştur childa pasla childda objeyi yeniden oluşturma networkü fon
+Bunu bir çok yapma yolu var combine testi kolaylaştırır 
+
+
+Escaping Memory leaks önüne geçmek için network callarda kullanılır bekler kod burda
+
+
+ QoS (Quality of Service) -> GCD ->
+
+ bir işlemin veya bir hizmetin öncelik düzeyini belirleyen bir kavramdır.
+ Genellikle, sistem kaynaklarının kullanımını yönetmek ve farklı türdeki işlemlere öncelik atamak için kullanılır.
+ Öncelik, bir işlemin ne kadar hızlı, güvenilir veya verimli bir şekilde gerçekleştirileceğini belirler.
+
+ * userInteractive: Used for animations, or updating UI.
+ * userInitiated: Used for tasks like loading data from API, preventing the user from making interactions.
+ * utility: Used for tasks that do not need to be tracked by the user.
+ * background: Used for tasks like saving data in the local database or any maintenance code which is not on high priority.
+
+ Content Hugging (İçeriğe Sarılma):
+ Bir görünümün içeriğine ne kadar sıkıca sarılacağını belirler. Yani, içeriğin görünümün boyutunu belirleme eğilimi varsa, o zaman görünüm içeriğine sıkıca sarılır. Bu, görünümün küçük boyutlara sıkıştırılmasını ve içeriğin boğulmasını önler.
+ Compression Resistance (Sıkıştırma Direnci):
+ Bir görünümün sıkıştırılmaya (compression) karşı ne kadar dirençli olduğunu belirler. Yani, bir görünümün içeriğinin veya boyutunun sıkıştırılma eğilimi varsa, o zaman görünüm sıkıştırmaya karşı dirençlidir ve boyutunu korumaya çalışır.
+
+ async ve await Anahtar Kelimelerinin İşlevleri
+ * async: Bir fonksiyonun asenkron olduğunu belirtir ve bu fonksiyonun, bekleyebileceği (awaitable) bir işlem içerdiğini gösterir.
+ * await: Asenkron bir fonksiyonun sonucunu beklemek için kullanılır. await, mevcut iş parçacığının bloke olmadan fonksiyonun tamamlanmasını beklemesini sağlar.
+ Asenkron Programlama için En İyi Uygulamalar
+ * UI Güncellemeleri Ana Thread’de: Asenkron işlemler sonucunda UI güncellemeleri yapılacaksa, bu güncellemelerin ana thread’de (main thread) yapılmasına dikkat edilmelidir.
+ * Hata Yönetimi: Asenkron fonksiyonlar hata fırlatabiliyorsa, uygun hata yönetimi mekanizmalarının kullanılması.
+ * Race Conditions ve Deadlocks’dan Kaçınma: Paylaşılan kaynaklara erişimde race conditions ve deadlocks oluşmasını önlemek için dikkatli olunmalıdır.
+ * Performans ve Kaynak Kullanımı: Asenkron çağrıların performansını ve kaynak kullanımını izlemek, gereksiz beklemeleri ve ağır işlemleri önlemek.
+ Swift’teki async ve await kullanımı, asenkron programlamayı daha okunabilir ve yönetilebilir hale getirir. Ancak, bu yaklaşımın da kendi zorlukları ve dikkat edilmesi gereken hususları vardır.
+
+
+
+ Soru 10: “Notifications” ve “Delegates” arasındaki farklar nelerdir ve her biri ne zaman tercih edilir? iOS’ta bu iki iletişim yöntemi nasıl kullanılır?
+ iOS’ta “Notifications” ve “Delegates” iki farklı iletişim mekanizmasıdır ve farklı durumlarda tercih edilirler:
+ Notifications
+ * Kullanımı: Genellikle birçok farklı nesneye aynı anda bilgi göndermek gerektiğinde tercih edilir.
+ * Nasıl Kullanılır: NotificationCenter aracılığıyla kullanılır. Bir nesne, belirli bir olay için bir notification gönderir ve diğer nesneler bu notification’ı dinleyebilir.
+ * Özellikleri: Geniş kapsamlı iletişim için uygundur. Nesneler arası gevşek bağlantı sağlar.
+ Delegates
+ * Kullanımı: Genellikle tek bir nesne ile başka bir nesne arasında daha spesifik, kontrol edilen bir iletişim gerektiğinde kullanılır.
+ * Nasıl Kullanılır: Protokoller aracılığıyla tanımlanır. Bir nesne, belirli işlevleri yerine getirmek için başka bir nesneyi (delegate) atar.
+ * Özellikleri: Daha spesifik ve kontrol edilen iletişim için uygundur. Nesneler arasında sıkı bir bağlantı gerektirir.
+ Genel olarak, geniş kapsamlı ve birçok nesneyi etkileyen durumlarda “Notifications” tercih edilirken, daha spesifik ve kontrol edilen etkileşimler için “Delegates” kullanılır. Her iki yöntem de iOS’ta farklı senaryolar için önemli iletişim araçlarıdır.
+
+ Soru 4: iOS uygulama geliştirmede “Delegation Pattern” (Delegasyon Modeli) nedir ve bu modelin yaygın kullanım senaryoları nelerdir?
+ Delegasyon Modelinin Temel Özellikleri
+ * İki Nesne Arasındaki İlişki: Delegasyon, bir nesnenin (delegate) başka bir nesnenin (delegator) belirli görevleri veya kararları üstlenmesini sağlar.
+ * Protokoller Aracılığıyla Tanımlanır: Delegasyon genellikle protokoller aracılığıyla tanımlanır. Delegator sınıfı, delegate’in uygulaması gereken yöntemleri tanımlayan bir protokol içerir.
+ * Esneklik ve Yeniden Kullanım: Bu model, kodun yeniden kullanımını ve esnekliğini artırır, çünkü delegator, delegate’in nasıl çalıştığını bilmek zorunda değildir; sadece protokolde tanımlanan yöntemlerin uygulanacağını bilir.
+ Yaygın Kullanım Senaryoları
+ * Kullanıcı Arayüzü Etkileşimleri: Örneğin, bir UITableView nesnesi, hangi hücrelerin gösterileceğini, nasıl gösterileceğini ve kullanıcı etkileşimlerine nasıl yanıt verileceğini belirlemek için bir delegate kullanır.
+ * Veri Aktarımı: Bir ekrandan (view controller) diğerine veri aktarımı sırasında delegasyon kullanılabilir. Bu, özellikle kullanıcı girdilerini veya seçimlerini bir arayüzden diğerine taşımak için kullanışlıdır.
+ * Uygulama Durum Değişikliklerine Yanıt Verme: Örneğin, UIApplicationDelegate protokolü, uygulama yaşam döngüsü olaylarına (uygulamanın arka plana geçmesi, ön plana gelmesi vb.) yanıt vermek için kullanılır.
+ Delegasyon modeli, modüler ve esnek kod yapısını teşvik eder ve iOS uygulama geliştirmede oldukça yaygın bir desendir.
+
+
+
+closures:
+ closure'lar hızlı, basit ve inline kullanımlar için daha uygunken, fonksiyonlar tekrar kullanılabilirlik ve okunabilirlik açısından daha iyidir. landalardır javadaki
+ data aktarırken iyiler
+ anonim fonksiyonlar olarak kullanılır ve genellikle şu durumlarda tercih edilir:
+ * Asenkron İşlemler: Ağ çağrıları veya veri yükleme gibi asenkron işlemlerin tamamlanmasından sonra bir callback olarak.
+ * Fonksiyon Parametreleri: Fonksiyonlara parametre olarak geçirilerek, özelleştirilmiş işlevsellik sağlarlar.
+ * Kısa Kod Blokları: Tekrar eden veya kısa kod bloklarını daha okunabilir ve kompakt hale getirmek için.
+ Closures, kodu daha esnek ve yeniden kullanılabilir yapar.
+Closureler metotları var gibi yapıp kullanılabilen şeylerdir
+
+ Retain  - assign
+ Retain; tutmanın, atamanın ardından nesnede çağrılması gerektiğini belirtir.
+
+ Assign; ayarlayıcının basit atama kullandığını belirtir. Float, int gibi türde kullanılır.
+
+ DispatchWorkItem, DispatchSemaphore, DispatchGroup, Dispatch multithreating, GCD
+
+
+     GCD paralel ve asenkron programlamayı destekleyen bir teknolojidir
+     GCD  çoklu iş parçacığı kullanarak işlemleri yönetir ve dağıtır, bu da performansı artırır ve sistem kaynaklarını daha etkin bir şekilde kullanır.
+ Quality of network  = Grand Central Dispatch (GCD)  kullanarak asenkron işlemleri yönetmek için kullanabileceğimiz fonksiyonları içermektedir.
+
+ Ui main threat olur
+ Background threat işlermleri yaptıktan sonra dipatchmain iyi background threatte yaptığım işin uinın handle ederim
+
+
+ dispatchWorkItem,  bir işlemin iptal etme ve geciktirmek ihtiyacımızda kullanılan bir thread api'dir, tabi iptal edilebilen iş işleme alınmamış olması gerekmektedir cancel metodu yapılan bir işi bitirmek istendiğinde kullanılan bir metoddur notify yapılan bir kuyruk tamamlanınca sıradakine geçmesine imkan sağlayan bir metoddur wait ise verilen bir işin bitmeden başkasına geçmesine engel olan metoddur.
+
+ DispatchSemaphore, ise” belli sayıda belli görevleri çalıştırmak için kullanılan bir thraed fonsiyonudur”, “belli bir countu vardır” ve signalilebu count atrılır wait ile count azalır ve notifyile verilen görevi tamamlıyoruz, mesela internetten belirli sayıda bir resim indirmek için kullanılabilir
+
+ DispacthGroup, Bu, bir dizi işlemi gruplandırmak için kullanılabilir. Örneğin, arka planda çalışan bir dizi işlemi tamamlandığında belirli bir işlemi yürütmek istiyorsak kullanabiliriz. burda 4 metod vardır enter ve leave görevin başlangıç ve bititminden sorumludur wait görevin belirli sürede bitip bitmediğini kontrol edebiliriz notify ise kuyruğa sokulan işlemlerin bitip bitmediğini kontrol edebiliriz
+
+ "Dispatch multithreading", iş parçacığı (thread) tabanlı çoklu işlem yapısının Grand Central Dispatch (GCD) çerçevesi kullanılarak gerçekleştirilmesidir. Dispatch multithreading, uygulamanın farklı işlemleri aynı anda yürütmesini ve paralel olarak çalışmasını sağlayarak performansı artırabilir ve kullanıcı deneyimini iyileştirebilir.
+ GCD’nin Temel Özellikleri
+ * Asenkron Görevler: GCD, işlemleri (tasks) asenkron bir şekilde yürütmenizi sağlar, böylece ana iş parçacığı (main thread) bloke olmadan arka planda görevler gerçekleştirilebilir.
+ * Kuyruklar (Queues): GCD, görevleri yürütmek için kuyruklar kullanır. Görevler, bir kuyruğa sırayla eklenir ve sistem tarafından yönetilir.
+ * Ana Kuyruk ve Arka Plan Kuyrukları: Ana kuyruk (main queue), kullanıcı arayüzü ile ilgili görevler için kullanılırken, arka plan kuyrukları (background queues) yoğun işleme görevleri için kullanılır.
+ * Thread Safety ve Performans: GCD, thread safety sağlar ve çoklu iş parçacığı işlemlerini optimize eder, böylece performans artar.
+ Çoklu İş Parçacığı Yönetiminde Kullanımı
+ * Arka Plan İşlemleri: Ağ istekleri, veritabanı işlemleri veya yoğun hesaplama gerektiren görevler arka planda yürütülür.
+ * Ana İş Parçacığına Güncellemeler: Arka planda tamamlanan işlemlerin sonuçları, kullanıcı arayüzünü güncellemek için ana iş parçacığına (main thread) geri gönderilir.
+ GCD, iOS uygulamalarında performansı artırmak ve kullanıcı arayüzünün akıcı bir şekilde çalışmasını sağlamak için kritik bir rol oynar.
+
+ iOS Swift’te “Concurrency” (Eşzamanlılık) yönetimi, birden fazla işlemin aynı anda yürütülmesini sağlamak için kullanılır. İşte temel araçlar ve kullanımları:
+ Araçlar ve Farkları
+ DispatchQueue
+ * Kullanım: Görevleri senkron veya asenkron olarak yürütme.
+ * Özellikler: Serial (sıralı) veya concurrent (eş zamanlı) kuyruklar oluşturabilir.
+ * GCD’ye Bağlı: Grand Central Dispatch’in bir parçası.
+ OperationQueues:
+ * Kullanım: Daha karmaşık, bağımlılıkları olan ve iptal edilebilir görevler için.
+ * Özellikler: Görevleri (Operation nesneleri) yönetir, görevler arasında bağımlılık ekleyebilir.
+ * GCD’den Farklı: Daha yüksek seviye ve nesne yönelimlidir.
+ GCD (Grand Central Dispatch):
+ * Kullanım: Düşük seviye, eşzamanlı işlemler ve asenkron görevler için.
+ * Özellikler: DispatchQueues’yi ve diğer eşzamanlılık araçlarını içerir.
+ Yaygın Zorluklar ve En İyi Uygulamalar
+ * Deadlock Riski: Dikkatsiz kullanımda deadlock’lara (karşılıklı kilitlenme) yol açabilir.
+ * Race Conditions: Eşzamanlı erişimde veri yarış koşulları oluşabilir.
+ * Performans ve Kaynak Yönetimi: Aşırı eşzamanlılık, performans sorunlarına ve kaynak tüketimine yol açabilir.
+ En İyi Uygulamalar:
+ * Asenkron Görevlerin Ana Kuyrukta Yürütülmesi: Kullanıcı arayüzü güncellemeleri için.
+ * Bağımlılıkları Yönetme: OperationQueues kullanarak.
+ * Gereksiz Eşzamanlılıktan Kaçınma: Kaynak kullanımını ve performansı optimize etmek için.
+ Eşzamanlılık yönetimi, uygulamanın verimli ve sorunsuz çalışmasını sağlamak için kritik öneme sahiptir.
+
+ propertyler
+ Computed Property
+ getter ve setter metodlarını kullanrak bir değeri hesaplayan ve değişken gibi kullanabilen bir özelliktir metotlara benzer
+
+ struct Circle {
+     var radius: Double
+
+     // Computed Property: Çemberin alanını hesaplar
+     var area: Double {
+         return Double.pi * radius * radius
+     }
+ }
+
+ var myCircle = Circle(radius: 3.0)
+ print(myCircle.area) // Çıktı: 28.274333882308138
+
+ Stored Property
+
+ bir sınıf, yapı veya evrensel nitelik içinde depolanan ve erişilebilir bir değişken olarak kullanılan bir özelliktir. Bu özellikler, sınıf, yapı veya evrensel nitelik tanımı içinde tanımlanır ve bu özelliklerin değerleri doğrudan atanabilir veya okunabilir.
+
+ class Person {
+     var name: String  // Değiştirilebilir stored property
+     let age: Int      // Sabit stored property
+
+     init(name: String, age: Int) {
+         self.name = name
+         self.age = age
+     }
+ }
+
+ property wrapper
+ değeri saklar ve onunüzerine bazı aksiyonlar alır
+
+ @propertyWrapper
+ struct TwelveOrLess {
+     private var number: Int
+
+     init() {
+         self.number = 0
+     }
+
+     var wrappedValue: Int {
+         get { return number }
+         set { number = min(newValue, 12) }
+     }
+ }
+
+ struct MyStruct {
+     @TwelveOrLess var number: Int
+ }
+
+ var myStruct = MyStruct()
+
+ myStruct.number = 10
+ print(myStruct.number) // Çıktı: 10
+
+ myStruct.number = 20
+ print(myStruct.number)
+
+
+ IBDesignable
+ storyboard preview için kullanılır
+
+ Deinit - defer
+ deinit bir sınıfın bellekten silinirken çağrılan bir metod iken,
+
+ defer ise belirli bir kodun belirli bir zaman aralığında çalıştırılmasını sağlayan bir kontrol yapısıdır.
+
+ defer ifadesi, bir işlemi ertelemek ve bir işlevin sonunda garanti altına almak için kullanılır. metot bitmeden çalışır
+ Defer sondan başa okutur kodu
+
+ Generic
+ A major feature of Swift is generics, and much of the Swift standard library is written in generic code. Swift's 'Array' and 'Dictionary' types, for example, constitute generic collections. Generic code allows you to create flexible, reusable functions and types that work with any data type. You can create code that does not get too specific about underlying data types, resulting in cleaner code.
+
+ “istediğimiz ismi verebildiğimiz tipdir.Array Dictionary. flexible cleaner”
+ Generics, tip güvenliği sağlarken esnek kod yazmayı mümkün kılar. Bir fonksiyonun veya tipin, herhangi bir tip ile çalışabilmesini sağlar. Bu, kod tekrarını azaltır ve tip bağımsız işlevsellik sağlar.
+
+ protocol-oriented programming
+ daha modüler, esnek ve test edilebilir olmasını sağlar. Ayrıca, daha düşük bağımlılıklı, yeniden kullanılabilir ve ölçeklenebilir bir kod tabanı oluşturmak için yardımcı olabilir.
+
+ POP'de kalıtım mekanizması bulunmadığından, bazı durumlarda kalıtımın sağladığı avantajlardan yoksun kalabilirsiniz.
+
+ Modülerlik
+
+
+ POP is a Swift buzzword, but don’t get carried away with the hype here: focus on why it’s different from OOP, and what benefits you think it has. You might want talk about horizontal vs vertical architectures here – larger codebases are likely to have sizable class hierarchies – but you could also talk about how POP is able to work with structs and enums as well as classes.
+
+ iOS App Protection
+ Data Protection API
+ iOS 4'ten sonraki tüm iOS sürümlerinde Veri Koruma adı verilen yerleşik bir güvenlik özelliği bulunur. Bir uygulamanın, uygulama dizininde depolanan dosyaları şifrelemesine ve şifresini çözmesine olanak tanır. Şifreleme ve şifre çözme süreçleri otomatik ve donanım hızlandırmalı. Veri Koruma, NSFileManager, CoreData, NSData ve SQLite dahil olmak üzere dosya ve veritabanı API'leri için kullanılabilir.
+
+ Bu özellik varsayılan olarak etkindir ancak güvenliği artırmak için dosya bazında yapılandırılabilir. Her dosya, mevcut 4 koruma seviyesinden birini kullanacak şekilde yapılandırılabilir. Varsayılan olarak, tüm dosyalar ilk kullanıcı kimlik doğrulamasına kadar şifrelenir, ancak belirli veriler için koruma düzeyini artırmak mantıklı olabilir.
+
+ Koruma yok: Dosyaya her zaman erişilebilir ve hiç şifrelenmemiş
+ İlk kullanıcı kimlik doğrulamasına kadar tamamla: Bu, varsayılan olarak etkindir ve kullanıcı cihazının kilidini ilk kez açtıktan sonra dosyanın şifresini çözer. Daha sonra, cihaz yeniden başlatılıncaya kadar dosyanın şifresi çözülmüş halde kalır. Cihazı kilitlemek verileri tekrar şifrelemez.
+ Açılmadıkça tamamla: Dosya, uygulama dosyayı ilk kez açana kadar şifrelenir. Cihaz kullanıcı tarafından kilitlendiğinde bile şifre çözme canlı kalır.
+ Tamamen Şifreli: Dosyaya yalnızca cihazın kilidi açıldığında erişilebilir.
+
+ Keychain
+
+ "Keyssschain", küçük veri parçalarını depolamak için güvenli yerinizdir. Tüm içeriğini şifreleyen, donanım hızlandırmalı güvenli bir veri deposudur. Sistem tarafından şifreler ve sertifikalar gibi verileri depolamak için kullanılır, ancak bir uygulama geliştiricisi olarak sizin de bu veri deposuna erişiminiz vardır.
+
+ Uygulamanızın veya uygulama grubunuzun "keyssschain" içinde kendi alanı vardır ve başka hiçbir uygulamanın buna erişimi yoktur. Bu şekilde, uygulamanızda şifreleme anahtarlarını saklamanız gerekmez ve en yüksek düzeyde güvenlik sağlamak için sisteme güvenebilirsiniz.
+
+ "Keyssschain", NSUserDefaults için güvenli anahtar/değer deposunun değiştirilmesidir. NSUserDefaults hiçbir şekilde şifrelenmez ve hassas veriler için bundan kaçınılmalıdır.
+
+ Her "keyssschain" öğesi için erişilebilirlik ve kimlik doğrulama için belirli erişim ilkeleri tanımlayabilirsiniz. Kullanıcının bulunmasını (Face ID veya Touch ID kilidinin açılmasını talep ederek) veya öğe "keyssschain"e eklendiğinden beri biyometrik kimlik kaydının değişmemesini talep edebilirsiniz.
+
+ iOS "keyssschain"in ek bir özelliği olarak, bilgileri yalnızca bu belirli aygıtta bulunan yerel "keyssschain"de mi yoksa tüm Apple aygıtlarında senkronize edilen iCloud "keyssschain"de mi depolamak isteyip istemediğinize karar verebilirsiniz. . Bu size iPhone, iPad ve Mac benzerleriniz arasında bilgi paylaşma yeteneği verir.
+
+ Her ne kadar Keychain Services API'si mümkünse kullanılmalıdır, ancak arayüzü Swift'de tam olarak hoş değildir. Bu tür işlevleri kod tabanınızda daha sık kullanmayı planlıyorsanız, onu daha iyi bir Swift API ile sarmayı düşünün.
+
+ Final nedir
+ alt sınıflar tarafından kalıtıma kapantılır
+ bir sınıf, yöntem veya özellik tanımlamasının üzerine eklenen bir anahtar sözcüktür ve bu tanımlamanın alt sınıflar tarafından "kalıtım yoluyla yeniden uygulanmasını engeller."
+
+ class Vehicle {
+     final var wheels: Int = 4
+
+     final func startEngine() {
+         print("Engine started.")
+     }
+ }
+
+ class Car: Vehicle {
+     // wheels özelliğini veya startEngine() yöntemini override etmek mümkün değildir.
+ }
+
+ singleton
+ Managerdır. Globaldir.
+
+ test edilebilirlik zor
+
+ Float Double CGFloat
+ : Float is always 32-bit, Double is always 64-bit, and CGFloat is either 32-bit or 64-bit depending on the device it runs on, but realistically it’s just 64-bit all the time.
+
+ mutating: değerin içeriğini değiştiren yöntemin tanımlandığını göstermeye yarayan örnektir.
+
+ struct SimpleCounter {
+     var count = 0
+
+     // Sayacı bir arttıran metot
+     mutating func increment() {
+         count += 1 (count etkiliyorum ondan kullandım)
+     }
+ }
+
+ var counter = SimpleCounter()
+ print(counter.count) // Çıktı: 0
+
+ counter.increment()
+ print(counter.count) // Çıktı: 1
+
+ counter.increment()
+ print(counter.count) // Çıktı: 2
+
+ Set array
+ Set sıraya bakmaz bir kere oluşturur bir değeri
+
+ Swift required init nedir?
+ class ParentClass {
+     var name: String
+
+     // Zorunlu başlatıcı
+     required init(name: String) {
+         self.name = name
+     }
+ }
+
+ class ChildClass: ParentClass {
+     var age: Int
+
+     // Üst sınıfın zorunlu başlatıcısını uygula zorunludur bu
+     required init(name: String) {
+         self.age = 0
+         super.init(name: name)
+     }
+ }
+
+ app ID’ ile ‘bundle ID’ farkını açıklayın.
+ app ID, tek bir geliştirme ekibinden bir veya daha fazla uygulamayı tanımlamak için kullanılan iki parçalı bir dizedir. Dize, iki parçayı ayıran bir nokta (.) İle bir Takım Kimliği ve bir paket kimliği arama dizesinden oluşur. Ekip Kimliği Apple tarafından sağlanır ve belirli bir geliştirme ekibine özeldir; paket kimliği arama dizesi ise geliştirici tarafından tek bir uygulamanın paket kimliğiyle veya bir uygulama grubu için bir dizi paket kimliğiyle eşleşecek şekilde sağlanır.
+ "com.arcelik"
+
+ bundle ID, her uygulamayı tanımlar ve Xcode’da belirtilir. Tek bir Xcode projesinin birden çok hedefi olabilir ve bu nedenle birden çok uygulama çıktı alabilir. Yaygın bir kullanım örneği, hem lite / free hem de pro / tam sürümleri olan veya birden çok şekilde markalanmış bir uygulamadır.
+ “Bundleid”
+
+ Indirect enum
+ Indirect enum, enumun başka bir enum tarafından referans almasını sağlar bu sayede "ağaçlanmış bir enum yapısı yapbliriz"
+
+ awakefornib
+ bir uı nesnesinin uyandığında yani başladığında yapılacak olan işleri yazabileceğimiz bit metoddur.
+ Ben bunu arçelikte viewdidloadla tecrübe ettim
+
+ Navigation controller
+ Navigation controllerı bir stack gibi düşüne biliriz bir sayfa eklediğimizde üstüne veya bir sayfaya tamamen iptal edip onu tek stack yapaniliriz
+
+ 1 pushViewController: Bir navigation controller kullanılıyorsa, geçiş yapılmak istenen yeni bir ekranı navigation controller'ın "stack" üzerine ekler. Bu ekran, geri dönüldüğünde "stack" üzerinden çıkarılır.
+ "stacke ekler"
+ 1 popViewController: Bir navigation controller kullanılıyorsa, navigation controller'ın "stack" üzerindeki en üstteki ekranı çıkarır. Bu ekran, geri dönüldüğünde ekranın altındaki ekrana geçilir
+ "stackten çıkarır"
+ 1 popToViewController: Bir navigation controller kullanılıyorsa, navigation controller'ın "stack" üzerinde belirtilen ekrana gitmek için gerekli olan tüm ekranları çıkarır.
+ "belirlien ekrana kadar çıkarır"
+ 1 popToRootViewController: Bir navigation controller kullanılıyorsa, navigation controller'ın "stack" üzerindeki tüm ekranları çıkarır ve kök ekrana geri döner.
+ "roota kadar döner"
+ 1 present(_:animated:completion:): Bir ekranı modal olarak ekran üzerine yerleştirir. Bu ekran, geri dönüldüğünde ekranın altındaki ekrana geçilir
+ "modal olarak açar"
+ 1 dismiss(animated:completion:) : Bir ekranı modal olarak açılan ekranı kapatır ve ekranın altındaki ekrana geri döner.
+ "modal kapatır"
+ Managerlar bir flow için :
+
+ İbeacons
+ Bluetooth
+
+ AutoClousure
+ bir fonksiyonun paremetresidir, ve parametre gerektiren bir “kod bloğudu eğer ihtiyaç duyulursa çağırılır yoksa çağırılmaz”
+
+ func sayHello(to name: @autoclosure () -> String) {
+     print("Hello, \("buraya name gelecek")name)")
+ }
+
+ // Fonksiyon çağrısında kapatma ifadesi doğrudan geçilebilir.
+ sayHello(to: "World") // Çıktı: Hello, World!
+
+ anyobject
+ Anyobject, herhangi bir class gibi davranız mesela bir array anyobject tanımlarsak içine farklı classlar yerleştirebiliriz , ama bir integer veri tanımlayamayız çünkü o bir obje değildir.
+
+ typealias
+ "typealias" , mevcut bir türün başka bir isimle tanımlanmasını sağlar. Bu, uygulamanızda aynı türü farklı yerlerde kullanmanız gerektiğinde kod okunaklılığını ve anlaşılabilirliğini arttırmak için kullanılabilir.
+
+ Protokolde variable ve fonksiyonlar nasıl optional yapabiliriz
+ extention kullanarak yaparız
+
+ Associated objects
+ Objective-C'nin dinamik özelliklerini kullanarak bir nesneye özel verileri depolamanın bir yoludur
+
+ Login auth token mekanizası.
+ ullanıcı Girişi (Login): Kullanıcı, kullanıcı adı ve şifresini kullanarak uygulamaya giriş yapar.
+ Sunucu ile İletişim: Kullanıcı bilgileri sunucuya gönderilir ve sunucu tarafından kimlik doğrulama işlemi gerçekleştirilir.
+ Token Oluşturma: Başarılı bir kimlik doğrulama işleminden sonra, sunucu kullanıcı için bir auth token (kimlik doğrulama belirteci) oluşturur ve bu token'ı kullanıcıya geri gönderir.
+ Auth Token Kullanımı: Kullanıcı, uygulamada çeşitli işlemler gerçekleştirirken, her isteği sunucuya gönderirken bu auth token'ı kullanarak kimliğini doğrular.
+ Token Geçerliliğinin Yönetimi: Auth token'ların geçerlilik süreleri olabilir. Bu süre dolduğunda, kullanıcıyı sunucuya kimlik doğrulaması yapmak için yeniden oturum açmaya zorlayabilirsiniz.
+
+ Layoutifneeded
+ “belirli bir görünümün alt görünümlerinin düzenlenmesini zorlar ve gerektiği durumda yerleşim işlemlerini gerçekleştirir.”
+
+ "bir uiın alt gözünümlerinin düzenlenmesini zorlar”
+
+ Layoutsubviews
+ UIView sınıfının alt sınıflarında bulunan bir yöntemdir ve “alt görünümlerin düzenlenmesi için kullanılır.”
+
+ Setneeddisplay
+ UIView sınıfı yöntemidir ve" "görünümün yeniden çizilmesini istediğinizi" " işaret etmek için kullanılır.
+
+ Depolama olarak kullandığım
+ UserDefaults
+
+ CoreData
+
+ Firebase Firestorage
+
+ Keychain Access denedim. (Hazır kod bloğu ekledim)
+
+ UserDefaults
+ .plist
+ sqlite
+ keychain
+ coredata
+ filesystem
+
+ View Life Cycle
+
+ - init()   -> coder or nib
+ - LoadView
+
+ *ViewDidLoad -> Ekran gözükmeye başlamadan önce
+
+ *ViewWillAppear -> Ekran gözükmeye başladığında
+
+ - viewWillLayoutSubviews
+ - viewDidLayoutSubviews (view frame I belli olduğu yer)
+
+ *ViewDidAppear -> Ekran gözüktüğü an
+
+ *ViewWillDisAppear -> Ekran kapanmaya başladığında
+
+ *ViewDidDisAppear -> Ekran kapandığında
+
+ -deinit
+
+ Firebase
+ Firebase'den App ve proje identifier'ı verip, GoogleServices.plist indirilip dosyası projeye atılır.
+
+ Firebase Analytics
+
+ Firebase Crashlytics -> Crashlytics.crashlytics() AppDelegate'e yazılır.
+
+ Archive alınınca dosya içerisindeki DSYM dosyası Firebase'e gönderilir terminal komutuyla.
+
+
+
+ hata alınabilecek blokları önceden belirleyip bir hata senaryosu çıkarmak gerekmektedir. Bu hatalara göre de farklı akışlara yönlenilebilir. Örneğin kullanıcı şifresi yanlış bir şekilde login olmaya çalıştığında bu şekilde hata fırlatıp, kullanıcıya hatalı şifre pop up view gösterilebilir. Bu şekilde örnekler artırılabilir.
+
+ Depedency Injection
+ Dependency Injection bir class'ın veya nesnenin "bağımlılıklarından kurtulmasını amaçlayan bir programlama prensibidir". Unit test yazmayı hem kolaylaştırır hem de doğruluk payını artırır. Dependency Injection yazılım içerisindeki componentlerin “loosely coupled” gevşek bağlı olmasını sağlayan önemli prensiplerden biridir. Böylece sınıflar birbirinden bağımsız olur ve tek başlarına test edilebilir.
+ "bir bileşenin, gereksinim duyduğu diğer bileşenleri dışarıdan alması ve doğrudan oluşturmaması demektir. "
+
+ Nasıl kullanırız?
+ . Initiliaze methodu Content protocol bekliyor. İşte bu şekilde Dependency Injection’ın Initializer Injection prensibini uygulamış oluyoruz.
+
+ Örnek:
+ Childda bir obje oluşturmaktansa parentta oluşturup childlara paslamak
+
+ Unit Test
+ Sınıfların işlevlerini protokol üzerinden yazdığımız durumda kolay test yazılabilir bir ortam oluştururuz.
+
+ testable yazılınca internal class lara erişilebilir
+ Async unittest 
+ override func setUp() {
+         super.setUp()
+         // Put setup code here. This method is called before the invocation of each test method in the class.
+
+ Bu yöntem, sınıftaki her test yönteminin çağrılmasından önce çağrılır.
+     }
+
+     override func tearDown() {
+         // Put teardown code here. This method is called after the invocation of each test method in the class.
+ Bu yöntem, sınıftaki her test yönteminin çağrılmasından sonra çağrılır.
+         super.tearDown()
+     }
+
+
+ expectation.fulfill
+ ()
+
+         }
+ XCAssert
+ null
+ notNull
+ True
+ False
+
+ // Wait for the expectation to be fullfilled, or time out
+
+         // after 5 seconds. This is where the test runner will pause.
+
+
+ waitForExpectations(timeout: 5, handler: nil)
+
+ VIPER
+ VIPER Mimarisi
+ View - Görünüm: Kullanıcı tarafından gerçekleştirilen eylemleri sunucuya gönderir ve sunum yapan kişinin yönlendirdiği şekilde şeyleri görüntülemekten sorumludur.
+
+ Interactor - Etkileşimci: İş mantığını içerir ve bir uygulamanın bel kemiği görevi görür.
+
+ Presenter - Sunucu: Kullanıcının isteği üzerine etkileşimciden veri alır ve görüntülenebilmesi için görünüme gönderir. Yönlendiriciden veya tel kafesten navigasyon ayrıntılarını almaktan da sorumludur.
+
+ Entity: Interactor tarafından kullanılan temel model nesnelerinden oluşur.
+
+ Router - Yönlendirici: Hangi ekranların gösterilmesi gerektiğini açıklamak için kullanılan navigasyon mantığını saklar ve genellikle tel kafes olarak yazılır.
+
+ VIPER Modelinin Avantajları
+ • Karmaşık projeleri basitleştirir, dolayısıyla onu büyük ekipler için ideal bir seçim haline getirir.
+ • Süreci ölçeklenebilir hale getirir ve geliştiricilerin bir proje üzerinde aynı anda çalışmasına olanak tanır.
+ • Kodları ayrıştırarak yeniden kullanılabilirliğini sağlar.
+ • Çeşitli uygulamaları rollerine göre bölümlere ayırır ve sorumlulukları dağıtır.
+ • Otomatik testler yazma gibi yeni özellikler kolayca eklenebilir.
+ VIPER Modelinin Dezavantajları
+ • VIPER tasarımını öğrenmek için kaynak eksikliği.
+ • İOS geliştiricilerinde hala yaygın değildir ve onu kullanmak için belirli bir düzeyde bilgi ve uzmanlık gerektirir.
+ • Çok sayıda dosyası ve dik bir öğrenme eğrisi var.
+ VIPER Modelini ne zaman kullanabiliriz?
+ • Tüm modülleri izole tutmak istediğinizde.
+ • İyi bir test ortamına ihtiyacınız olduğunda.
+ • Düşük kaplini korumak istediğinizde.
+ • Başvuru gereksinimleri iyi oluşturulduğunda.
+ • Yalnızca geliştiriciler projeyi tamamen anladığında kullanılmalıdır.
+
+ MVP clean swift
+ MVP Modelinin Avantajları
+ • Bu model ayrı bir uygulama modeline sahip olduğu için anlaşılması daha kolaydır.
+ • Uygulama bileşenleri arasında kavramsal bir ilişki yoktur.
+ • Bileşenlerin izole testi daha kolaydır.
+ MVP Modelinin Dezavantajları
+ • Sunucu ve görünüm arasında bire bir eşlemeye sahiptir.
+ • Arka uçta dağınıklığa neden olan veri modellerini işlemek için denetleyicileri kullanır.
+ • Bir model için kendi kontrolörlerinin olması gerekir. Bu nedenle, artırılmış modellere sahip bir uygulama, denetleyici sayısı da artırılmazsa MVP'ye dayanamaz.
+ MVP Modelini ne zaman kullanabiliriz?
+ • Ekranımız iki yönlü bir eylem akışına sahip olduğunda.
+ • Kullanıcı tarafından verilen talimatın sonucu UI'yi etkilediğinde.
+ • Sınırlı UI öğelerine sahip olduğumuzda.
+
+ MVVM
+ Neden geliştirildi?
+ • Geliştiriciler ve tasarımcılar arasında bir iş akışı oluşturmak.
+ • Uygulamanın test edilebilirliğini artırmak için.
+ MVVM Modelinin Avantajları
+ • Kullanıcıların bileşenleri değiştirmesini kolaylaştırır.
+ • Diğerlerini etkilemeden dahili uygulamada değişikliklere izin verir.
+ • Çalışmak için bağımsız bileşenler mevcuttur.
+ • Sınıfların izole olarak test edilebilme özelliğini sunar.
+ MVVM Modelinin Dezavantajları
+ • Çeşitli MVVM bileşenleri arasındaki iletişim karmaşıktır.
+ • Verileri bağlama süreci çok önemlidir.
+ • Kodların yeniden kullanılmasına kolayca izin vermez.
+ • Yeni başlayanların öğrenmesi ve çalışmaya başlaması oldukça zordur.
+ MVVM kullanımı hangi koşullar altında uygundur?
+
+ • Anlaması ve sorun gidermesi kolay bir kod oluşturmak istediğinizde.
+ • UI testi maliyetinden kaçınmak istediğinizde.
+ • Test odaklı bir geliştirme platformu oluşturmak.
+ • Görünümü ViewModel'den ayırmanız gerektiğinde.
+ • Ekranımız birçok görüşe sahip olduğunda.
+
+ MVC
+ The Decorator Design Pattern
+ Singelton
+ Facade
+ Delegation
+
+ MVC Modelinin Avantajları
+ • Eşzamanlı geliştirme sunar ve birden çok kullanıcının model, denetleyici ve görünümler üzerinde çalışmasına olanak tanır.
+ • Yüksek uyum sağlar ve ilgili eylemlerin tek bir denetleyici üzerinde gruplandırılmasını sağlar ve bu da çok mantıklı, ayrıca belirli bir modelin görünümlerini gruplandırır.
+ • ---Bu model, modeller, görünümler veya denetleyiciler arasında düşük bağlantıya yardımcı olan gevşek bağlantıya sahiptir.
+ • Tüm sorumluluklar ayrı olduğundan, gelecekteki geliştirme veya değişikliği basitleştiren değişiklik kolaylığı vardır.
+ • Bir modelin birden fazla görünüme sahip olmasını sağlar.
+ MVC Modelinin Dezavantajları
+ • Yeni soyutlama katmanlarının tanıtılması, çerçevenin gezinmesini karmaşık hale getirir ve kullanıcıların MVC'nin ayrıştırma kriterlerini benimsemesi gerekli hale gelir.
+ • Geliştiriciler, bir özelliği 3 yapıta ayrıştırırken, birden çok yapıyı temsil etmede saçılma ve tutarsızlık sorunuyla karşı karşıya kalır.
+ • Kullanıcının kullandığı ile gördüğü arasındaki etkileşim oldukça yoğundur ve bu da kümelenme şansını artırır.
+ • Kümeleme durumu, diğer parçaları ortak plaka şimlerine veya dayandığı koda dönüştürür.
+ • Geliştiricilerin çeşitli teknolojilerde uzman olmasını gerekli kılan birden fazla teknoloji hakkında kapsamlı bilgi gerektirir.
+ • UI bileşenleri genellikle, artımlı faydalar için kapsam bırakmayan bileşenlere dahil edilir.
+ MVC Modelini ne zaman kullanabiliriz?
+ • Daha hızlı bir geliştirme sürecine ihtiyacınız olduğunda.
+ • Birden çok görünüm sağlamak istediğinizde.
+ • Asenkron teknikler için bir destek sistemi oluşturmak istediğinizde.
+ • Değişikliğin tüm modeli rahatsız etmesini istemediğinizde.
+ • Biçimlendirme olmadan veri sonuçları istediğinizde.
+ • SEO dostu bir platform oluşturmak istediğinizde.
+ • Ekranımızda tek yönlü bir talimat akışı olduğunda.
+
+ Extension - Protokol
+ Extension yapısı Swift'te kodumuzda varolan sınıflara, protokollere veya yapılara yeni işlevler eklememizi sağlar. Extension kelime anlamı olarak “uzantı”, “genişletme”, “ekleme” veya “ilave” olarak dilimize çevrilebilir. Aslında yaptığı görevde bu kelimelerle açıklanabiliyor.
+
+
+ • Protokoller
+ Protokolü anlaşma veya iletişim kuralı olarak çevirebiliriz. Oluşturduğumuz protokoller içindeki değişken veya metodları, bu protokolü kabul eden (uygulayan, conform eden) struct, enum veya sınıf anlaşma gereği tanımlamak zorundadır.
+
+ Access Control
+ Private
+ • Sınıf harici erişim kesilir.
+ Fileprivate
+ • aynı dosyadaki tüm sınıflar erişebilir.
+ Internal
+ • default değerdir.
+ • Aynı target/modul içerisinde kullanılabilir.
+ • public'e göre daha kısıtlıdır.
+ Open - Public
+ • aynı modül içerisinde tüm sınıflardan erişilebilir.
+ • open override edilebilir
+ • public override edilemez.
+
+ Değer Tipi - Referans Tipi
+ Değer Tipi(Struct)
+ • Kalıtım almaz
+ • Kopyalandığında, oluşturulan nesnenin unique kopyası tutulur.
+ • == ile karşılaştırılır
+ • Struct, enum, tuple, dictionary, set  değer tipidir.
+ • ayrıca String, Array struct'tır.
+ • Network - Internetten veri çekerken tercih ederiz.
+ • Stack'te tutulur
+
+ Referans Tipi(class)
+ • oluşturulanın ortak kopyasını kullanırlar. (referansı)
+ • kalıtım alır
+ • Classlar referens tipidir. aynı zamanda Closure ve Fonksiyon Referans typetır
+ • === ile referansı karşılaştırılır.e
+ • Copy ihtiyacı duymazlar. referanstır.
+ • Hem stack ve Heap'te tutulur (yavaştır, heap'e de eriştiği için)
+ • ARC (Automatic Reference Counting) 'e dahildir.Her referansta count 1 artar.
+
+
+ Hangisini Kullanmalıyız? Reference Type mı? Value Type mı?
+ • Değer tipleri thread-safe’tir. Stack’te tutulurlar ve her birisi kendi alanına sahiptir. Başka bir thread direkt olarak value type alanına erişemez. Dolayısıyla herhangi bir senkronizasyona ihtiyaç duymazlar, ancak referans tipi kullanırken bir nesnede gerçekleştirdiğimiz değişikliklerin diğer nesnelerde de değişmesi için senkronize olması gerekmektedir.
+ • Değer tipleri Automatic Reference Counting ve dinamik bellek yönetimi gibi uygulama için yük teşkil eden operasyonlara ihtiyaç duymazlar, öte yandan referans tipleri bu iki operasyona da ihtiyaç duyar.
+ • Referans tipleri bellekte hem heap hem de stack kullanır ancak  değer tipleri sadece stack kullanır. Stack’e erişim heap’e göre daha hızlıdır, ayrıca referans tipleri bellekte iki farklı bölgede tutulduğu için daha fazla alan işgal etmiş olurlar.
+ Kısacası performans ve güvenlik açısından değer tipleri daha avantajlıdır ancak referans tiplerine de tabiki ihtiyacımız vardır. Bu durumda sadece ihtiyaç durumlarında referans tiplerine başvurmak uygulama performansını artıracaktır.
+ Struct - Classs
+ Struct
+ Inherit alamaz
+ Value typedır
+ Struct init fonksiyonuna ihtiyaç duymaz otomatik oluşturulur.
+
+ Farklar
+ Bazı özellikler sadece Classlarda bulunmaktadır ve structlarda bu işlemler yapılamaz. Bunlar:
+
+ • Inheritance
+ • Classlardan oluşturduğumuz nesnelerin eşit olup olmadıklarını kontrol edebiliriz.
+ • Classlardan oluşturduğumuz nesneleri deinit edebiliriz.
+ • ARC(Automatic Reference Counting) bir class nesnesine birden fazla referans verebilir.
+ •
+ Ortak Özellikler
+ Class ile aynı şekilde struct oluşturup, içine özellikler ve fonksiyonlar ekleyebiliyoruz.
+
+ • Özellikler tanımlayıp, bu özellikler vasıtasıyla değerleri depolayabiliriz. (örneğin: Film init ettiğimizde artık o filmin ismini ve süresini nesnemiz vasıtasıyla depolamış oluruz.)
+ • Metodlar tanımlayarak oluşturduğumuz nesnelere işlevsellik kazandırabiliriz. (filmin ismini nesnemiz ve changeMovieTitle() metodu vasıtasıyla değiştirebiliriz.)
+ • init() metodu sayesinde ilk değer ataması yapabiliriz.
+ • Her ikisi de extend edilebilirler. (Extensionskullanılarak)
+ • Belirli metodları tanımlamak için protokoller ile uyumlu çalışabilirler.
+ • Subscript yapısını kullanarak her ikisinin değerlerine erişilebilir.
+
+ Strong weak
+ Strong Değişken : Strong değişkenler eğer bir referans tipteyse reference count’u arttır.
+
+ Weak Değişken : Eğer bir değişken weak olarak tanımlanırsa reference count’u etkilemez. Optional durumları destekler, yani uygulamanın bir bölümünde refere ettiği nesne deallocate edilirse nil değer alabilir. İçerisinde oluşturulduğu parent class deallocate edilirse silinir.
+
+ Unowned Değişken : Eğer bir değişken unowned olarak tanımlanırsa reference count’u etkilemez. Unowned değişkenlere değer atamak zorunludur. Tuttuğu nesne deallocate edilse bile bu nesnenin adresini tutmaya devam eder, yani nil setlenmez bu durumda kullanılması uygulamayı crash eder.
+
+ Retain cycle iki nesnenin birbirini strong olarak çağırmasıyla oluşur,
+
+
+ Bir noktada tahsis edilen, ancak hiçbir zaman serbest bırakılmayan ve artık uygulamanız tarafından referans alınmayan belleğe memory leak denir.
+
+ Yani retain cyle oluşturan değişken uzayda duran şey memory leak
+
+ strong: reference count'ı 1 artırır.Default type'dır.
+ weak: reference count'ı etkilemez. Optional'dır. Parent class'ı deallocate olursa silinir.
+ unowned: weak ile aynı özellikleri taşır. non-optional'dır. nil edilirse crash'e neden olur.
+
+ Memory leak/ reatin cycle: İki strong referans'ın birbirine bağlanmasıyla oluşur. weak yada unowned kullanabiliriz.
+ solid
+
+ S (Single Responsibility Principle - Tek Sorumluluk Prensibi): Bir sınıfın veya modülün sadece bir sorumluluğu olmalıdır. Bu, her sınıfın sadece bir işlevi yerine getirmesi gerektiği anlamına gelir. Böylece, sınıfların daha az karmaşık ve daha kolay anlaşılır olması sağlanır.
+ " her method ve class’ın tek bir görevi ve sorumluluğu vardır."
+ * iOS Örneği: Bir ViewController sadece kullanıcı arayüzü ile ilgili değişikliklerden sorumlu olmalı, veri işleme veya ağ işlemleri başka sınıflara ayrılmalıdır.
+ O (Open/Closed Principle - Açık/Kapalı Prensibi): Bir sınıf veya modül, genişlemeye (extend) açık ancak değişikliğe (modify) kapalı olmalıdır. Yani, mevcut kodu değiştirmeden yeni özellikler eklemek mümkün olmalıdır. Bu, kodun daha az kırılgan olmasını ve daha kolay bakım sağlamasını sağlar.
+ "her class geliştirmeye açık olmalı fakat değişime kapalı olmadılır."
+ * iOS Örneği: Bir NetworkManager sınıfı, farklı API istekleri için genişletilebilir ama mevcut kodunun değiştirilmesi gerekmemelidir.
+ L (Liskov Substitution Principle - Liskov Yerine Koyma Prensibi): Alt sınıflar, üst sınıfların yerine kullanılabilir olmalıdır. Bu, bir üst sınıfın tüm yerlerine alt sınıfların geçirilebilmesi gerektiği anlamına gelir. Bu prensip, kodun daha genel ve daha esnek olmasını sağlar.
+ "Alt sınıflar, üst sınıfların yerine geçebilmelidir."
+ * iOS Örneği: Eğer bir Bird sınıfından FlyingBird ve NonFlyingBird türetilmişse, FlyingBird Bird’ün tüm fonksiyonlarını yerine getirebilmelidir.
+ I (Interface Segregation Principle - Arayüz Ayrımı Prensibi): Mümkün olduğunda, geniş arayüzler yerine daha özelleştirilmiş arayüzler tercih edilmelidir. Yani, bir arayüz, kullanılmayan metotlar içermemelidir. Bu, bir arayüzün daha belirgin ve daha az bağımlılık oluşturmasını sağlar.
+ bir interface’e gerekenden fazla sorumluluk eklemek yerine, daha özelleştirilmiş birden fazla interface oluşturulmalıdır. Nesneler, ihtiyacı olmayan özellik veya metotlar içeren interface’leri miras almaya zorlanmamalıdır. Sizinde farkettiğiniz üzere “Single Responsibility” ve “Interface Segregation” prensipleri birbirine oldukça benzemekte ve aynı amaca hizmet etmektedirler. Ancak burada gözden kaçırılmaması gereken en önemli husus şudur ki; ‘Interface Segregation’ prensibi interface’ler ile ilgilenirken, ‘Single Responsibility’ prensibi class’lar ile ilgilenmektedir.
+ "çok fazla sorumluluk vermek yerine birden fazla interface oluşturulmalıdır"
+ D (Dependency Inversion Principle - Bağımlılık Ters Çevirme Prensibi): Yüksek seviyeli modüller, düşük seviyeli modüllere bağlı olmamalıdır; her ikisi de soyuta bağlı olmalıdır. Bu, kodun daha esnek ve değişime daha açık olmasını sağlar. yani sınıflar arası bağımlılıklar olabildiğince az olmalıdır ve özellikle üst seviye sınıflar, alt seviye sınıflara bağımlı olmamalıdır.
+ "alt sınıflarda yapılan değişiklikler üst sınıfları etkilememelidir"
+ * iOS Örneği: Bir ContentDownloader sınıfı, doğrudan bir ağ kütüphanesine bağlı olmak yerine, ağ işlemleri için bir protokole (örneğin, Networkable) bağlı olmalıdır.
+ Bu prensipler, iOS uygulama geliştirmede sürdürülebilir, modüler ve bakımı kolay bir kod tabanı oluşturmak için kritik öneme sahiptir.
+
+
+ App status:
+ • Not running:
+ * Inactive: önyüzde ancak işlem yapmıyor
+ * Active:
+ * Background: app yürüyor ama önyüzde değil
+ * Suspended: devicenin memorysinde ancak bir şey yapmıyor
+
+ oop
+ • Artıları
+ • Nesne oluşturma bir sınıf içerisinde toplanır ve tüm projelerde kullanılabilirliğe olanak sağlar.
+ • Sınıfların 1 kez oluşturulması sayesinde uzun kodları tekrardan yazmak yerine kısa kodlamalar ile çalıştırılabilir.
+ • Uzun kodların tekrar yazılmasının engellenmesi sayesinde geliştirme süreci kısalır.
+ • Nesneler birbirinden bağımsız olduğundan bilgi gizliliği konusunda avantaj sağlar.
+ • Sınıflar sayesinde tüm projelerde değişiklik yapmak yerine tek bir sınıfta değişiklik yapılıp tüm projelerde çalışması sağlanır. Bu zaman kaybını büyük ölçüde azaltır.
+
+ Sınıf Nedir?
+ Değişkenleri ve methodları bir arada saklayan sistemdir.
+
+ Soyutlama (Abstraction)
+ Bir sınıfın özelliklerinin ve davranışlarının tanımlanmasına denir. Örneğin: Bir kişinin adı, soyadı, yaşı, boyu, kilosu, saç rengi gibi özellikleridir. Kişinin yetenekleri davranışları içerisinde yer alır ve metotlar ile saklanır.: Soyutlama, "bir nesnenin karmaşık iç detaylarını gizleyerek sadece gerekli olan özellikleri ve davranışları sunma ilkesidir". Bu, karmaşıklığı yönetilebilir düzeye getirir.
+ ◦ Avantajları: Kullanıcıların sadece gerekli olan bilgilerle ilgilenmelerini sağlar, implementasyon detaylarından izole eder ve kodun anlaşılabilirliğini artırır.
+
+ Kapsülleme (Encapsulation)
+ • Kapsülleme Public, Private ve Protected olarak 3 kısımda incelenir.
+ • Public: Herkesin kullanabildiği özellik ve davranışlara verilen isimdir.
+ • Private: Sadece kendi sınıfında kullanılan özellik ve davranışlara verilen isimdir.
+ • Protected: Sınıf ve Miras Alınan alt sınıflarda kullanılmaya açık olanlara verilen isimdir.
+
+ Miras Alma / Kalıtım
+ Alt ve üst sınıfın ortak özelliklerinden alabilme sistemine Miras Alma denir. Örneğin; Bir nesneni diğer bir nesne ile ortak özelliklerindeki verileri alabilir. Bu, kodun tekrar kullanılabilirliğini artırır ve sınıflar arasında bir hiyerarşi oluşturulmasına olanak tanır.
+
+ ◦ Avantajları: Kodun daha az tekrar edilmesine, genişletilebilirliğe ve bakım kolaylığına katkı sağlar.
+
+ Çok Biçimlilik
+ "Alt Sınıf ve Üst Sınıfın özelliklerinden farklı şekilde davranışlar göstermesine denir." Örneğin; Bir nesnenin diğer bir nesneyle ortak özellikleri olmasına rağmen farklı özelliklerininde tanımlanabilmesine denir.Çok biçimlilik, aynı ismi taşıyan ancak farklı davranışlara sahip olan nesnelerin kullanılabilmesini ifade eder. Bu, aynı arayüzü kullanarak farklı sınıfların nesnelerini kullanabilme esnekliği sağlar.
+ ◦ Avantajları: Kodun daha genel ve esnek olmasına katkı sağlar, aynı arayüzü paylaşan nesnelerin birbirinin yerine kullanılabilir olmasını sağlar.
+
+ Function Currying
+ Bir funcdan dönen değer diğer bir functa kullanılır
+
+ Swift'te OptionSet nedir ve ne zaman kullanılır?
+ bit maskeleri temsil etmek için kullanılan bir protokoldür. Özellikle seçenekleri  gruplamak ve işlemek için kullanılır.
+
+ Property Observers
+ (bir özelliğin değeri değiştiğinde belirli kod bloklarının çalışmasını sağlar.) willSet ve didSet olarak iki türü vardır.
+
+ Reflection
+ bir türün veya (değerin çalışma zamanında manipüle edilmesini sağlayan bir özelliktir.“Mirror”.)
+
+ complatition conditions
+ #if UAT demek
+
+ escaping
+ Biten functa bitmeyenen şeyler için kullanılır aslında.
+ Escaping closure yaşıyorsa kullanılır mesela network callarında
+ main threatte çalışır
+ Weak self
+ Closurelerde kullanılır.
+
+ Tuple
+ Tuple birden farla tipte şey alıyor
+ let tuple = (1, "Hello", 3.14)
+
+ Dict
+ capitals = ["Turkey": "Ankara", "France": "Paris", "Italy": "Rome"]
+
+ IBInspectable
+ var olan bir elemanın Storyboard dosyasından daha önce erişilemeyen bir özelliğine erişmemizi sağlayan bir araçtır.
+
+ iOS Resonder chain
+ Nesneler arasında bir zincir oluşturur ve kullanıcı etkileşimleri bu zincir boyunca iletilir.
+
+ optional chain
+ ?.asd?.asd?
+
+ Type erasure ()
+ nesneyle etkileşime geçerken, nesnenin gerçek türü hakkında bilgi sahibi olmazlar. Bu, kodun daha modüler, esnek ve yeniden kullanılabilir olmasını sağlar.
+
+ Deadlock (birbirini beklemesi program donar)
+ Deadlock, iki veya daha fazla iş parçacığının birbirini beklemesi sonucu oluşan bir durumu ifade eder. Bu durumda, hiçbir iş parçacığı ilerleyemez ve program donar. ( bu ilerleyemez)
+
+ deadlock, 2 veya daha fazla threadin birbirlerini bekleme durumudur ve çözülmezse crash olur çözüm olrak lock mekanizmasını kullanmak mantıklıdır.
+ ama kodu yazarken bunlara yol vermemek en mantıklısıdır
+ race contition (belirsizlik)
+ eş zamanlı olarak bir kaynağa erişmeye çalıştığı ve bu kaynağın sonucunun belirsiz veya beklenmeyen bir şekilde etkilendiği bir durumu ifade eder.
+
+ Race Condition, mesale bir işlemin aynı anda asenkron çalışması durumunda beklenmedik bir işlem olmasına denir buna örnek olarakda bi couter tanımlasak 2 farkli asenkron threadde çalıştırsak 1000 arttırsa her işlem ama burda race condition olabilir kesin olmamakla beraber ve sayı 2000 den fazla artacaktır. race conditionu nasıl engelleyeceğimize gelirsek nonatomic atomic lock synchronized mekanizmaları kullanılabilir ben olsam atomic property kullanılırım
+ Performansın kritik olduğu sistemlerde Critical Section kullanımını minimize edecek önlemlere başvurulmalıdır. Örneğin bu tip sistemlerde uygulama yapısını değiştirerek Critical Section'lar azaltılabilir ve Lock-free veri yapılarını tercih etmek gerekebilir.
+
+ Inout
+ func swapValues(_ a: inout Int, _ b: inout Int) {
+     let temp = a
+     a = b
+     b = temp
+ }
+
+ var x = 5
+ var y = 10
+
+ print("Önceki Değerler: x = x, y = y")
+ swapValues(&x, &y)
+ print("Değiştirilmiş Değerler: x = x, y = y”)
+
+
+ overloading
+ aynı fonksiyon adını veya operatörü farklı parametre setleri ile kullanarak birden fazla şekilde tanımlamak anlamına gelir.
+
+ a+b int
+ a+b double aynı func
+
+
+ Supers
+ alt sınıfın üst sınıfında bulunan metodları veya özellikleri çağırmak için kullanılır.
+
+ Convience init
+ Bir buton düşün title filan yazmak yerine bunu ana viewda convienceinite yazınca title color filan değişiyor hepsine farklı olacak şekilde
+
+ Trailing closure
+ son parametre closures süsllü parantez açıp aksiyonu içeride alabiliyoruz
+ Students.filter{$0.age > 18}
+
+ $0 Closuredeki parametreler yerine kullanılır
+
+ Filter Map Reduce Flatmap Compactmap
+ Flatmap -> Tüm arrayleri tek bir çatı altına toplar
+ Compactmap -> Nilleri siler
+ Filter -> Filtre etmede kullanılır
+ Reduce -> let totalUsers = AppP.reduce(0, { $0 + $1.mPrice })
+ Map -> let incires = AppP.map{$0.mPrice * 90}.first    her öğe üzerinde bir işlem yapar ve sonuçları yeni bir koleksiyonda döndürür
+
+ combine
+ bir framework olduğunu Özellikle, asenkron veri akışlarını işlemek ve yönetmek için güçlü bir araçtır.
+
+ Completion handler
+ bir işlem veya fonksiyonun "tamamlandığında çağrılan bir closure'dır". Bu," asenkron işlemlerde kullanılır" ve işlemin sonucunu veya hata durumunu işlemek için kullanılır
+
+ // Bir fonksiyon tanımla
+ func fetchData(completion: @escaping (Result<String, Error>) -> Void) {
+     // Asenkron bir işlem simüle et
+     DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+         // İşlem tamamlandığında completion handler'ı çağır
+         if Bool.random() {
+             completion(.success("Veri başarıyla alındı"))
+         } else {
+             completion(.failure(NSError(domain: "Hata", code: 500, userInfo: nil)))
+         }
+     }
+ }
+
+ // Fonksiyonu çağır ve completion handler'ı kullan
+ fetchData { result in
+     switch result {
+     case .success(let data):
+         print(data)
+     case .failure(let error):
+         print("Hata oluştu: (error)")
+     }
+ }
+
+ Delegates
+ Genelde delgateler weak olur yani silinir sonunda exceptionu vardır urlsession
+ protocol getset
+ Enum protocols
+
+ static
+ sınıfının veya yapısının belirli bir özelliğini veya "metodu sınıfın kendisine özgü hale getirir". Bu, özelliğin veya metodun sınıfın herhangi bir örneği olmadan doğrudan sınıf adıyla erişilebilir hale gelmesini sağlar.
+Static singletonda kullanılıyor “override edilemiyor“
+
+
+ Veri aktrma yollları
+ closure prpotocol notif manager singleton
+
+ is immutability important?
+ bir nesnenin oluşturulduktan sonra durumunun değiştirilemez olması demektir.
+  her durumda değişmezlik kullanmak uygun olmayabilir. Bazı durumlarda, mutable (değişken) veri yapıları daha uygun olabilir, özellikle performans veya bellek kullanımı kritik ise.
+
+
+OKUDUK
+
+ObservableObject bir protokoldür (protocol), bir class değildir. Sadece class’lar bu protokolü uygulayabilir çünkü referans tipi olmaları gerekir.
+
+ Lazy öncesinde değer alır ve oluşturulduktan sonra değiştirilmedi sürece tekrar çağrılmaz
+
+
+Can’t ask
+
+
+ Network layer
+ NetworkMAnager:
+ Func Request T type
+ Func HandleResponse
+
+ NetworkHelper:
+ HttpMethots oluştururum
+ error caseler oluştururum
+ Base url header
+ Func saveToken
+
+
+
+ FireBase push notification
+ İnit deinit
+ Error Handling
+ Hataları Yakalamak (Do-catch)
+
+ do, try ve catch olarak
+ throw hata yakalama
+
+ Converting Errors to Optional (Hataları Optional Yapmak)
+
+ Bazı durumlarda hatanın tipine ihtiyacımız olmaz, hata olup olmadığı bizi ilgilendirir. Böyle durumlarda do-catch bloğunu yazmadan optional try ile problemi tek satırda çözebiliriz. Varsayalım x metodumuz bize  y döndürecek veya hata fırlatacak.
+
+ try!
+
+ Eğer try bloğunda gerçekleşecek işlemin hata fırlatmayacağından emin isek “try?” yerine “try!” kullanıp result parametresini optional olmaktan kurtarabiliriz.
+
+ if let and guard let
+
+
+ cherry pick
+ Cherry-pick, git'te belirli bir commit'in değişikliklerini bir başka branch'e uygulamak için kullanılan bir komuttur.
+
+ rebase
+ bir branch'in commit geçmişini başka bir branch'in son commit'ine eklemek için kullanılır.
+
+ Merge işlemi, iki branch'in değişikliklerini birleştirir ve birleştirme commit'ini oluşturur
+
+
+ FireBase push notification
+ İnit deinit
+ Error Handling
+ Hataları Yakalamak (Do-catch)
+
+ do, try ve catch olarak
+ throw hata yakalama
+
+ Converting Errors to Optional (Hataları Optional Yapmak)
+
+ Bazı durumlarda hatanın tipine ihtiyacımız olmaz, hata olup olmadığı bizi ilgilendirir. Böyle durumlarda do-catch bloğunu yazmadan optional try ile problemi tek satırda çözebiliriz. Varsayalım x metodumuz bize  y döndürecek veya hata fırlatacak.
+
+ try! 
+
+ Eğer try bloğunda gerçekleşecek işlemin hata fırlatmayacağından emin isek “try?” yerine “try!” kullanıp result parametresini optional olmaktan kurtarabiliriz.
+
+ if let and guard let
+
+ Best Practices for Secure Data Transportation
+
+ Kullanıcı verilerini güvenli bir şekilde depolamanın yanı sıra, uygulamanız ile uzak karşılıkları arasındaki iletişimin güvenli olduğundan emin olmalısınız. Bu, saldırganların ağ trafiğini koklayarak veya kötü amaçlı sunucular çalıştırarak özel verileri toplamasını önler.
+
+ HTTPS
+
+ Çoğu ağ iletişimi, bir istemci ve bir sunucu arasındaki HTTP protokolü üzerinden yapılır. Varsayılan olarak, HTTP bağlantıları şifrelenmez. Saldırganların yerel ağınızdan veri alması veya ortadaki adam saldırıları gerçekleştirmesi kolayca mümkündür.
+
+ iOS 9'dan bu yana, App Transport Security (ATS) adı verilen yeni bir özellik var. Uygulamalarınızdaki ağ iletişiminin güvenliğini artırır. ATS, varsayılan olarak güvenli olmayan bağlantıları engeller. Tüm HTTP bağlantılarının TLS ile güvenli HTTPS kullanılarak yapılmasını gerektirir.
+
+ ATS, bu kısıtlamaları gevşetmek için birçok şekilde yapılandırılabilir. Bu nedenle, belirli etki alanları için güvenli olmayan HTTP bağlantılarına izin verebilir veya HTTPS için kullanılan minimum TLS sürümünü değiştirebilirsiniz.
+
+ Uygulamanız bir uygulama içi tarayıcı içeriyorsa, kullanıcılarınızın web'de normal şekilde gezinmesine olanak tanıyan ve yine de uygulamanızdaki diğer tüm ağ bağlantılarının en yüksek güvenlik standartlarını kullanmasını sağlayan NSAllowsArbitraryLoadsInWebContent yapılandırmasını kullanmalısınız.
+
+ SSLPinning
+ SSL pinning, bir uygulamanın belirli bir sunucuya güvenli bir şekilde bağlanmak için önceden tanımlı SSL/TLS sertifikalarını kullanmasıdır. Bu, sunucunun kimliğini doğrulamak ve araya giren saldırıları engellemek için kullanılır.
+ Varsayılan olarak, HTTPS bağlantıları sistem tarafından doğrulanır: sunucu sertifikasını inceler ve bu etki alanı için geçerli olup olmadığını kontrol eder. Bu, bağlı sunucunun kötü niyetli olmadığından emin olmalıdır. Ancak, saldırganların daha karmaşık ortadaki adam saldırıları gerçekleştirmesi için hala yollar var.
+
+ Sistem sertifikası güven doğrulaması, sertifikanın güvenilir bir sertifika yetkilisinin kök sertifikası tarafından imzalanıp imzalanmadığını kontrol eder. Bu güvenlik mekanizmasını atlatmak için saldırganların, kullanıcının cihaz ayarlarında başka bir kötü amaçlı sertifikaya açıkça güvenmeleri veya bir sertifika yetkilisinin güvenliğini aşmaları gerekir. Saldırgan daha sonra istemci ve sunucu arasında gönderilen tüm mesajları okumak için ortadaki adam saldırısı gerçekleştirebilir.
+
+ Bu tür saldırıları önlemek için bir uygulama, sunucu sertifikalarının ek güven doğrulamasını gerçekleştirebilir. Buna SSL veya Sertifika Sabitleme denir. Uygulama paketinize geçerli sertifikaların (veya genel anahtarlarının veya karmalarının) bir listesini ekleyerek SSL Sabitleme uygulayabilirsiniz. Bu nedenle uygulama, sunucu tarafından kullanılan sertifikanın bu listede olup olmadığını kontrol edebilir ve ancak o zaman sunucuyla iletişim kurabilir.
+
+ Uygulama hataları çok olası olduğundan ve daha fazla güvenlik açığına yol açacağından, bu doğrulamayı sıfırdan uygulamaktan kaçınılmalıdır. TrustKit gibi bir Açık Kaynak çerçevesi kullanmanızı öneririz. Bunu gerçekten kendiniz uygulamanız gerekiyorsa, Apple'ın HTTPS Sunucu Güven Değerlendirmesi hakkındaki teknik notunu okuyun.
+
+ Push Notifications
+
+ Kullanıcılarınıza anında iletme bildirimleri göndermek için Apple'ın APNS servislerini kullanmanız gerekir. Uçtan uca şifreleme kullanmak istiyorsanız veya Apple'a mesajlarınızı okuması için (teorik) bir şans vermek istemiyorsanız, istemci tarafındaki mesajları değiştirmek için UNNotificationServiceExtension uzantılarını kullanabilirsiniz.
+
+ Bu, müşterilerinize şifrelenmiş mesajlar göndermenize veya hassas veriler için yer tutucular kullanmanıza olanak tanır. Mesajlar, uygulama için bir uyandırma çağrısı olarak kullanılacaktır. Uygulama daha sonra mesajın şifresini çözebilir veya yer tutucu mesajları için yerel cihazdan gerekli bilgileri alır ve yer tutucuları hassas verilerle değiştirir. Net metin mesajı daha sonra, Apple sunucularına herhangi bir hassas bilgi gönderilmeden kullanıcının kilit ekranında gösterilecektir.
+
+ Uçtan uca şifreleme
+ Uçtan uca şifreleme, güvenli veri aktarımı için “holy gril, kutsal kase”dir. Mesajları, yalnızca gönderen ve alıcının şifresini çözebileceği ve ne Apple'ın ne de sunucularınızın açık metin verilerini okuyamayacağı şekilde şifrelemenize olanak tanır.
+
+ Uçtan uca şifrelemenin uygulanması kolay değildir ve kriptografik süreçlerde çok fazla deneyim gerektirir. Ekibinizin deneyimi yoksa, şifreleme mekanizmasının uygulanmasına yardımcı olan üçüncü taraf bir uzmana danışmanız çok tavsiye edilir.
+
+ CloudKit
+
+ Uygulamanızın bir sunucuya ihtiyacı yoksa Apple'ın CloudKit'ini kullanabilirsiniz. CloudKit, uygulamanız için oturum açma mekanizması olarak Apple Kimliğinizi kullanırken verileri iCloud kapsayıcılarında saklamanıza olanak tanır. Bu şekilde, tüm bu hizmetleri kendi başınıza uygulamanız gerekmez.
+
+ CloudKit, güvenlik göz önünde bulundurularak yapılmıştır. Bir uygulama geliştiricisi olarak, somut kullanıcı verilerine erişiminiz yoktur ve iletişim varsayılan olarak şifrelenir.
+
+ Uygulamanız ve sunucu arasındaki tüm iletişim, Apple'ın istemci tarafı CloudKit çerçevesi kullanılarak yapılabilir. Ek bir Android veya Web uygulamanız varsa, JavaScript ve Web hizmetlerini kullanarak CloudKit'i kullanmaya devam edebilirsiniz.
+
+ Bunu daha da iyi hale getirmek için: CloudKit, belirli bir miktara kadar tamamen ücretsizdir. Trafik, veri depolama veya istek maliyetlerinden korkmadan milyonlarca kullanıcıya ulaşabilirsiniz. Apples CloudKit ve fiyatlandırma şeması hakkında daha fazla bilgiyi burada bulabilirsiniz.
+
+ Hashing data
+
+ CrpytoSwift
+
+ Authenticating Data using Message authentication codes
+
+ Bir mesajı gönderenin kimliğini doğrulamak ve bu mesajın bütünlüğünü doğrulamak için bir mesaj doğrulama kodu (MAC) kullanılır. Alıcının mesajların kaynağını doğrulamasını ve mesajın içeriğindeki değişiklikleri tespit etmesini sağlar.
+
+ Bu tür bütünlük kontrollerini kullanmak için örneğin CryptoSwift'in HMAC olarak da bilinen karma kimlik doğrulama kodlarını kullanabilirsiniz. HMAC yapısı, CryptoSwift'te bulunan tüm karma işlevlerle kullanılabilen genel bir türdür.
+
+ Encrypting Data using symmetric keys
+
+ Encrypting and decrypting data using a symmetric key is simple, too. You can use one of two available ciphers: ChaChaPoly (ChaCha20-Poly1305) or AES-GCM in CryptoSwift:
+
+ xib, nib farkı, compile edilmiş xib ye nib denir
+ Map hepsini bir şeylere çarpıcam mesela maplemem iyi
+Filter edeceksem filter
+Reduce de hepsine bir şeylerle arpma toplama gibi şeylerde
+Compact maps nill siler
+ flatmap matrixi tek arraye çeker
+
+
+——
+Swift ui
+ CI/CD
+ Public nasıl yok 
+ Fileprivate
+ Ns lock
+⸻
+
+Swift language (advanced)
+	1.	When would you choose nonisolated vs @MainActor on methods?
+	2.	Explain copy-on-write semantics and how to verify they’re working.
+	3.	What makes a type truly value-semantics in Swift? Where do reference semantics sneak in?
+	4.	Walk through how the compiler synthesizes Codable and when you’d write custom coding keys/strategies.
+	5.	Compare Result vs throwing functions in API design; when is each preferable?
+	6.	Explain the ABI stability story and how it interacts with dynamic libraries and frameworks.
+	7.	How do property wrappers compose? Describe pitfalls with wrapped vs projected values.
+	8.	What are key paths good for beyond simple property access? Give design patterns that leverage them.
+	9.	Explain the differences between @frozen, resilience, and library evolution.
+	10.	Describe type erasure (e.g., AnyPublisher, AnySequence) and alternatives now that we have primary associated types.
+	11.	When would you reach for unsafe constructs (e.g., withUnsafeBytes), and how do you make them safe at the boundary?
+	12.	How do you design APIs that remain source-compatible across Swift 5 → 6 concurrency tightening?
+	13.	Explain Sendable conformance rules for generic types and how to audit a module for Sendable soundness.
+	14.	What are noncopyable types (move-only) and where would they help in an iOS codebase?
+	15.	Discuss macros in Swift: freestanding vs attached, good use-cases, and risks of overuse.
+
+Sources: Swift book & docs on macros/resilience/concurrency migration.    
+
+⸻
+
+Swift concurrency (actors, isolation, strict mode)
+	1.	Define data-race safety in Swift 6. What does “strict concurrency checking” enforce?
+	2.	Explain actor isolation, actor reentrancy, and priority inversion scenarios.
+	3.	What does @MainActor guarantee? How does it relate to UIKit/SwiftUI thread affinity?
+	4.	Contrast Task, TaskGroup, DetachedTask, and async let.
+	5.	Show how a nonisolated requirement in a protocol interacts with an actor conformer.
+	6.	When would you annotate closures @Sendable? What happens if captured state isn’t Sendable?
+	7.	Strategies for bridging callback-based APIs to async/await (checked continuations) safely.
+	8.	How do you test async code deterministically?
+	9.	When do you need a custom Executor or global actor?
+	10.	How does structured concurrency cancelation propagate? Pitfalls with child tasks.
+	11.	Explain TaskLocal and one practical use in an app.
+	12.	Techniques to contain legacy non-Sendable types behind isolation boundaries.
+	13.	How to safely expose mutable collections from an actor.
+	14.	When to use @preconcurrency and risks of suppressing warnings.
+	15.	Debugging tools for hangs/deadlocks with async/await.
+	16.	Migrating a GCD-heavy networking layer to async/await without regressions.
+	17.	Auditing a module for Sendable and isolation using compiler flags.
+	18.	Patterns to avoid accidental reentrancy bugs in async state machines.
+
+Sources: Apple Concurrency docs; Swift 6 migration & strict checking; WWDC sessions; Sendable.   
+
+⸻
+
+GCD & OperationQueue (legacy + interop)
+	1.	When is an Operation-based pipeline preferable to raw GCD?
+	2.	How do target queues and QoS interact with DispatchQueue.asyncAfter?
+	3.	Techniques to avoid priority inversion on serial queues.
+	4.	Safely calling async/await from GCD code and vice-versa.
+	5.	Designing a cancelable work item with dependencies using Operation.
+	6.	Diagnosing over-synchronization and ping-pong between queues.
+	7.	Migrating a barrier-based cache to actor isolation.
+
+(Use with Apple’s concurrency & GCD docs.)
+
+⸻
+
+Architecture & design patterns
+	1.	Compare MVC, MVVM, VIPER, Clean, RIBs, and TCA trade-offs for a large app.
+	2.	What belongs in a “domain” module vs “feature” module?
+	3.	Coordinators vs SwiftUI navigation (NavigationStack) for complex flows.
+	4.	Dependency inversion across modules without singletons.
+	5.	Handling cross-cutting concerns (analytics, feature flags) without global state.
+	6.	Defining stable interfaces between SwiftUI and UIKit islands.
+	7.	Designing a resilient async repository layer (caching, retries, backoff).
+	8.	How to enforce architecture boundaries in CI (imports, circulars).
+	9.	Versioned feature toggles and kill-switch design.
+	10.	Evolving architecture during hypergrowth without rewrite.
+	11.	TCA vs MVVM with Observation; when to pick which.
+	12.	RIBs: when does it shine and what are its costs?
+	13.	Coordinating background refresh with foreground state in Clean arch.
+	14.	Strategies to tame deep dependency graphs with SPM.
+
+Sources: objc.io App Architecture; Uber RIBs; TCA docs.  
+
+⸻
+
+UIKit ↔ SwiftUI interop
+	1.	When to wrap UIKit in SwiftUI via UIViewControllerRepresentable vs embed SwiftUI with UIHostingController.
+	2.	Managing two-way data flow and lifecycle across the bridge.
+	3.	Thread-safety rules for updating UIKit from SwiftUI tasks.
+	4.	Hosting SwiftUI in collection/table cells efficiently.
+	5.	Accessibility handoff between UIKit and SwiftUI elements.
+	6.	Reusing Auto Layout components in SwiftUI.
+	7.	Handling navigation state (deep links) across both worlds.
+	8.	Using Environment and dependency injection when crossing the bridge.
+	9.	Performance trade-offs of heavy view trees vs UIKit reuse.
+	10.	Migrating feature-by-feature vs big-bang.
+	11.	Testing strategies across interop boundaries.
+	12.	State ownership with Observation vs view model bindings.
+
+Sources: Representable and HostingController docs; Observation.   
+
+⸻
+
+SwiftUI (advanced)
+	1.	Explain the Observation framework vs @StateObject/@ObservedObject.
+	2.	How do identity and id: affect diffing and animations?
+	3.	Building complex navigation with NavigationStack and navigationDestination.
+	4.	Designing view models that won’t fight SwiftUI refresh cycles.
+	5.	Avoiding layout thrash and over-invalidations.
+	6.	Integrating async work with view lifecycle without leaks.
+	7.	PreferenceKey and anchor preferences—practical use cases.
+	8.	Reducing body recomputation with small view types vs view builders.
+	9.	Handling focus management on iPad and keyboard shortcuts.
+	10.	Accessibility in SwiftUI: semantics, labels, actions.
+	11.	Coordinating transitions, matched geometry, and data updates.
+	12.	Localized strings & String Catalogs in SwiftUI.
+
+Sources: SwiftUI docs for Observation & navigation; String Catalogs.   
+
+⸻
+
+Networking (URLSession, Network.framework, HTTP/2/3, websockets)
+	1.	Design a resilient networking stack with async/await on URLSession.
+	2.	Explain caching: Cache-Control, ETag, URLCache, and validation.
+	3.	Background transfers with URLSessionConfiguration.background and constraints.
+	4.	Handling TLS and ATS exceptions safely.
+	5.	HTTP/2 multiplexing head-of-line blocking issues; when to consider HTTP/3 via Network.framework.
+	6.	WebSockets: choosing URLSessionWebSocketTask vs Network.framework.
+	7.	Request coalescing, deduping, and cancelation strategies.
+	8.	Designing retry & backoff that respects idempotency.
+	9.	Upload performance: streaming vs multipart; cellular constraints.
+	10.	Designing a network client API that’s testable with async sequences.
+	11.	Certificate pinning strategies and rotation plans.
+	12.	Observability: logging request lifecycles without PII.
+	13.	Handling proxies, VPNs, and captive portals.
+	14.	Offline queuing with conflict resolution.
+	15.	Metrics with URLSessionTaskMetrics.
+	16.	Migrating Combine pipelines to async/await.
+
+Sources: URLSession, Network framework, ATS docs.    
+
+⸻
+
+Data persistence (Core Data, SwiftData, SQLite/GRDB)
+	1.	SwiftData vs Core Data: when to choose either today?
+	2.	Modeling relationships, deletes, and batch processing in Core Data.
+	3.	NSPersistentContainer setup for background contexts and merges.
+	4.	Faulting, uniquing, and memory pressure behaviors.
+	5.	Handling migrations: lightweight vs custom mapping models.
+	6.	Data consistency with async/await and Core Data contexts.
+	7.	SwiftData model macros and derived attributes—pros/cons.
+	8.	Conflict resolution on sync and merge policies.
+	9.	Query performance tuning and batch faults.
+	10.	Bridging SwiftData to CloudKit; schema considerations.
+	11.	Choosing SQLite directly (GRDB) for specific constraints.
+	12.	Testing strategies with in-memory stores and fixtures.
+	13.	Large attachments: file system vs database blobs.
+	14.	Schema evolution with backward compatibility.
+
+Sources: Core Data & SwiftData docs.  
+
+⸻
+
+App lifecycle & background execution
+	1.	Explain the scene-based lifecycle and scene sessions.
+	2.	BGTaskScheduler: background processing vs app refresh; constraints & best-effort guarantees.
+	3.	Scheduling work around battery/thermal constraints.
+	4.	Location/background audio/background fetch—what’s actually allowed?
+	5.	Coordinating background URLSession with BGProcessing tasks.
+	6.	State restoration strategies with scenes and SwiftUI.
+	7.	Handling deep links and universal links across multiple scenes.
+	8.	Push-to-sync with content-available vs BGAppRefresh.
+	9.	Foreground vs background priority for critical work.
+	10.	Throttling strategies to avoid suspension.
+	11.	Persistence handoff when app is terminated mid-task.
+	12.	Testing background flows reliably in CI.
+
+Sources: BGTaskScheduler; App/Scene lifecycle.  
+
+⸻
+
+Testing & quality
+	1.	Structuring async XCTest without flakiness; timeouts & cancelation.
+	2.	Test Plans: organizing configs (localization, UI appearance).
+	3.	Snapshot testing trade-offs vs semantic tests.
+	4.	Strategies to test Swift Concurrency (actors/tasks) deterministically.
+	5.	Mocks vs fakes vs spies; dependency injection patterns.
+	6.	UI testing navigation stacks and alerts reliably.
+	7.	Contract tests for API clients with local test servers.
+	8.	Property-based testing for state machines.
+	9.	Measuring performance with measure and Instruments in CI.
+	10.	Handling nondeterministic data races in legacy code.
+	11.	Testing SwiftData/Core Data in memory.
+	12.	Fixture management and data builders.
+	13.	De-flaking approach: quarantine, retries, heuristics.
+	14.	Coverage vs value: what not to test.
+
+Sources: XCTest async & Test Plans docs.  
+
+⸻
+
+Performance & Instruments
+	1.	Build a reproducible workflow to investigate a scroll jank.
+	2.	Time Profiler vs Signposts: when and how to add points of interest.
+	3.	Memory Graph vs Allocations vs Leaks—what each tells you.
+	4.	Diagnosing retain cycles in SwiftUI/Combine closures.
+	5.	Optimizing Core Data fetches (batching, faults).
+	6.	Reducing binary size and launch time; prewarming.
+	7.	Energy diagnostics: networking, location, display, background.
+	8.	Improving image pipelines (decoding, downsampling, caches).
+	9.	Explaining large heap spikes from value-type copies.
+	10.	Instruments workflow for async tasks and reentrancy.
+	11.	Measuring networking with URLSessionTaskMetrics.
+	12.	Thermal state and throttling behavior.
+	13.	Micro-benchmarking pitfalls.
+	14.	App hangs: sysdiagnose & thread dumps.
+
+Sources: Instruments & energy efficiency; Logger/signposts.  
+
+⸻
+
+Security & privacy
+	1.	Designing Keychain access groups for multi-app suites.
+	2.	When to use Secure Enclave vs CryptoKit symmetric/asymmetric APIs.
+	3.	App Transport Security exceptions—safe configuration patterns.
+	4.	Data Protection classes and file-system encryption trade-offs.
+	5.	Handling PII with on-device encryption & background processing.
+	6.	Threat modeling for offline-capable apps.
+	7.	Designing a safe clipboard & screenshot policy.
+	8.	Privacy manifests & Required Reason APIs: how to audit and document usage.
+	9.	ATT prompts: UX timing and fallback when denied.
+	10.	Token storage for OAuth; refresh & rotation.
+	11.	Certificate pinning lifecycle & recovery.
+	12.	Jailbreak/root detection philosophy.
+	13.	Generating cryptographically secure random data.
+	14.	Biometrics fallback strategies (passcode, device passcode).
+	15.	Secrets in CI/CD and build time.
+	16.	Secure logging without leaking secrets.
+
+Sources: Keychain, CryptoKit, ATS, privacy manifests, ATT.   
+
+⸻
+
+StoreKit 2 & monetization
+	1.	Design a purchase flow with StoreKit 2 and entitlement checks.
+	2.	Restoring purchases & handling revoked transactions.
+	3.	Offline purchase receipts—what guarantees exist?
+	4.	App Store Server Notifications v2—how to correlate to users.
+	5.	Server vs on-device receipt validation; when to choose which.
+	6.	Grace periods, billing retry, and offer codes.
+	7.	Handling subscription upgrades/downgrades and proration.
+	8.	Testing: StoreKit config files vs sandbox.
+	9.	Migrating from verifyReceipt to App Store Server API flows.
+	10.	Cross-platform entitlements (iOS/iPadOS/macOS).
+	11.	Observability for purchase failures & fraud signals.
+	12.	Designing paywalls that won’t be rejected.
+
+Sources: StoreKit 2 & server docs/deprecations.  
+
+⸻
+
+Push notifications & user notifications
+	1.	Token-based APNs provider auth flow (JWT) and rotation plan.
+	2.	When to use content-available with silent pushes; limits and best practices.
+	3.	Building notification categories with actions & intents.
+	4.	Background push vs BGAppRefresh—coordination strategies.
+	5.	Rich notifications with media; size/time limits.
+	6.	APNs error handling and retry logic.
+	7.	End-to-end delivery observability and user opt-in funnels.
+	8.	Foreground presentation policies in iOS.
+	9.	Threading model for notification handling with async/await.
+	10.	Handling time-sensitive & critical alerts (eligibility/review).
+
+Sources: APNs provider API; UNUserNotificationCenter.  
+
+⸻
+
+Accessibility & internationalization
+	1.	Designing for Dynamic Type and fonts with UIFontMetrics.
+	2.	Semantics: labels, traits, actions—what matters most for VO.
+	3.	Testing with Accessibility Inspector and automation.
+	4.	Color & contrast, reduced motion/Transparency, high contrast.
+	5.	Large content viewer & scalable touch targets.
+	6.	SwiftUI accessibility modifiers vs UIKit APIs—bridging.
+	7.	Handling right-to-left layouts and mirrored assets.
+	8.	VoiceOver rotor design for complex feeds.
+	9.	Language/region formatting & pluralization.
+	10.	Keyboard navigation for iPad.
+	11.	Captions and transcripts for media.
+	12.	Building an a11y checklist into CI.
+
+Sources: HIG Accessibility, UIAccessibility, Dynamic Type.  
+
+⸻
+
+Build, modularization, CI/CD & code signing
+	1.	SPM package layout for modular iOS apps; binary targets & resources.
+	2.	Versioning public packages and maintaining source stability.
+	3.	Xcode Cloud vs GitHub Actions—trade-offs, secrets, runners.
+	4.	Reproducible builds across machines; deterministic SPM resolution.
+	5.	Code signing: certs, profiles, entitlements—failure modes and recovery.
+	6.	Provisioning in CI for PR builds and ad-hoc testers.
+	7.	Build time optimization strategies (incremental, modular prebuilds).
+	8.	Xcode build system diagnostics (swift-driver, LLBuild).
+	9.	Artifacts caching across CI nodes.
+	10.	Swift compiler flags for strict concurrency & warnings as errors.
+	11.	Previews & snapshot builds for product/design feedback loops.
+	12.	Handling private/internal Swift packages and SSO.
+	13.	Release train & phased rollout design.
+	14.	SPM-based plugin/macros in your workspace—when to adopt.
+
+Sources: SwiftPM docs; Xcode Cloud docs.  
+
+⸻
+
+Observability (logs, metrics, traces)
+	1.	Structuring unified logging with Logger categories and privacy.
+	2.	Creating signposts and correlating with Instruments.
+	3.	Aggregating crashes & hangs; symbolication hygiene.
+	4.	MetricKit for battery/CPU/memory regressions; handling payload cadence.
+	5.	Designing PII-safe logs for privacy manifests.
+	6.	On-device log levels & remote toggling.
+	7.	Alerting on anomalies (spikes in launch crashes).
+	8.	Building an incident review loop with actionable metrics.
+
+Sources: Unified Logging & MetricKit docs.   
+
+⸻
+
+System design for mobile (offline-first & sync)
+	1.	Architect an offline-first feed: local cache shape, IDs, paging.
+	2.	Conflict resolution: last-write-wins vs CRDT-like merges.
+	3.	Designing background sync that won’t drain battery.
+	4.	Handling schema evolution and partial migrations on device.
+	5.	Observing server-driven feature flags with stale-while-revalidate.
+	6.	Rate limiting, retries, and circuit breakers on mobile.
+	7.	Multi-account and data partitioning by account.
+	8.	Secure local storage design (PII compartmentalization).
+	9.	Telemetry for sync health (lag, error budgets).
+	10.	Clock skew & idempotency keys.
+	11.	Pagination strategies that survive deletions/insertions.
+	12.	Cache invalidation strategies for images and API responses.
+	13.	Designing a background indexer with BGProcessing.
+	14.	Graceful degradation under captive/poor networks.
+
+(Leverage Apple BGTaskScheduler & Energy guides.)  
+
+⸻
+
+Advanced frameworks (Core ML / Vision / ARKit & RealityKit)
+	1.	Core ML model configuration for memory-constrained devices; MLComputeUnits.
+	2.	Model updates on device (Core ML weight updates vs shipping new models).
+	3.	Vision pipelines: batching requests and cancelation; performance tips.
+	4.	Text recognition vs barcode vs object detection: choosing request combos.
+	5.	Privacy and on-device inference trade-offs; no-network modes.
+	6.	ARKit vs RealityKit; anchoring and persistence strategies.
+	7.	Camera & image pipeline performance (pixel buffers, Metal textures).
+	8.	Scheduling ML tasks with BGProcessing.
+	9.	Testing ML determinism across devices.
+	10.	Observability for inference latency and failures.
+
+Sources: Core ML, Vision, ARKit/RealityKit docs.   
+
+⸻
+
+App Store policy & compliance
+	1.	What recent changes to the App Store Review Guidelines affect your app category?
+	2.	Designing data collection to satisfy App Privacy (data types & purposes).
+	3.	Required Reason APIs: auditing your uses and documentation.
+	4.	ATT prompt timing and fallback UX when denied.
+	5.	Account deletion requirements & data retention.
+	6.	External link/reader app policies—eligibility and constraints.
+	7.	Region-specific rules & age ratings.
+	8.	SDK privacy manifests from third parties—how to vet and monitor.
+	9.	Handling guideline disputes and appeals.
+	10.	Feature flags to disable gated functionality if a policy changes.

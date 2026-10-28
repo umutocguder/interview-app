@@ -61,7 +61,10 @@ local.properties
 *.swp
 *.lock
 
-# Backups
+# Local AI tool configs
+.cursorrules
+.clinerules
+
 backend/data/backups/*_backup_*.json
 data/backups/*_backup_*.json
 

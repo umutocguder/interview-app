@@ -4,7 +4,25 @@ Bu dosya, 11 Interview projesinde gerçekleştirilen tüm mimari kararları, tek
 
 ---
 
-### [2026-10-20 09:45] Ürün İsminin Tüm Platformlarda "11 Interview" Olarak Yeniden Markalanması (Rebranding)
+### [2026-10-29 01:58] Umut'un Özel Swift & iOS Çalışma Not Defteri (Plain Text / Verbatim) Alanı Eklendi
+- **Görev ve Amaç**:
+  - Kullanıcının ilettiği kapsamlı Swift & iOS mülakat ve teknik çalışma notlarının (1.459 satır, ~84 KB) Vercel üzerinde yayınlanan web uygulamasına özel bir alan olarak, kelimesi kelimesine ve düz metin (plain text) olarak eklenmesi.
+- **Teknik Kararlar ve Uygulama**:
+  1. **Ham Metin Depolama & Bütünlük**:
+     - `web/src/data/swift-notes.txt` ve `web/public/swift-study-notes.txt` içine kullanıcı metni kelimesi kelimesine (%100 verbatim) yerleştirildi.
+     - `web/src/data/raw-notebook.ts` üzerinden TypeScript güvenli `RAW_SWIFT_NOTEBOOK` sabiti oluşturuldu; 1:1 karakter eşitliği otomatik testle doğrulandı.
+  2. **Özel Sayfa (`web/src/app/notes/page.tsx`)**:
+     - Düz metin kod/metin editörü görünümünde (`pre` etiketi, `whitespace-pre-wrap`, `font-mono`) okuma alanı sağlandı.
+     - Tümünü Kopyala (Copy to clipboard), .txt İndir, Anlık Metin İçi Arama ve Vurgulama (Search & Highlight), Yazı Tipi Boyutu Değiştirme (A-, A, A+) ve satır/boyut istatistikleri eklendi.
+  3. **Navigasyon ve Keşfedilebilirlik (`web/src/app/page.tsx`)**:
+     - Ana sayfa header'ına "📓 Not Defterim" bağlantı butonu eklendi.
+     - Hero banner alanına doğrudan erişim butonu yerleştirildi.
+- **Git Branch Modeli**:
+  - Geliştirme zorunlu kural gereği `dev` üzerinde yapıldı, derleme `next build` ile doğrulandı, ardından `master` dalına birleştirilerek Vercel Production'a canlıya alınacak.
+
+---
+
+
 - **Görev ve Amaç**:
   - Kullanıcı isteği doğrultusunda ürünün adı tüm platformlarda (Web, iOS, Android), CI/CD akışında ve dokümantasyonda "11 Interview" olarak güncellendi.
 - **Teknik Değişiklikler**:
