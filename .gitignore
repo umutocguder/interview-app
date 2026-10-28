@@ -69,3 +69,6 @@ data/backups/*_backup_*.json
 AGENTS.md
 CLAUDE.md
 WORKLOG.md
+
+__pycache__/
+*.pyc
