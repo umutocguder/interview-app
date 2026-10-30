@@ -71,3 +71,6 @@ data/backups/*_backup_*.json
 
 __pycache__/
 *.pyc
+
+# graphify generated knowledge graph
+graphify-out/
