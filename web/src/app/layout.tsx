@@ -3,7 +3,7 @@ import "./globals.css";
 import { AuthProvider } from "@/context/AuthContext";
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://interview-master-ai-umutocgdrs-projects.vercel.app"),
+  metadataBase: new URL("https://11hopem.com"),
   title: "11 Interview — Yapay Zeka Destekli Teknik & Davranışsal Mülakat Simülatörü",
   description:
     "Yazılım geliştiriciler, mühendisler ve profesyoneller için AI destekli interaktif mülakat simülatörü. Swift, Python, React ve Sistem Mimarisi sorularıyla kendinizi test edin.",
@@ -25,7 +25,7 @@ export const metadata: Metadata = {
     siteName: "11 Interview",
     title: "11 Interview — Mülakat Hazırlık ve Simülasyon",
     description: "Yapay zeka ile interaktif teknik mülakat hazırlığı yapın.",
-    url: "https://interview-master-ai-umutocgdrs-projects.vercel.app",
+    url: "https://11hopem.com",
     images: [{ url: "/og-image.png", width: 512, height: 512, alt: "11 Interview Logo" }],
     locale: "tr_TR",
   },
@@ -52,9 +52,9 @@ export default function RootLayout({
     "name": "11 Interview",
     "applicationCategory": "EducationalApplication",
     "description": "Yapay zeka destekli interaktif teknik mülakat simülatörü ve kariyer hazırlık platformu.",
-    "url": "https://interview-master-ai-umutocgdrs-projects.vercel.app",
-    "logo": "https://interview-master-ai-umutocgdrs-projects.vercel.app/favicon.svg",
-    "image": "https://interview-master-ai-umutocgdrs-projects.vercel.app/og-image.png",
+    "url": "https://11hopem.com",
+    "logo": "https://11hopem.com/favicon.svg",
+    "image": "https://11hopem.com/og-image.png",
   };
 
   return (

@@ -163,7 +163,7 @@ Bu dosya, 11 Interview projesinde gerçekleştirilen tüm mimari kararları, tek
   4. **Vercel Dağıtımı & GitHub Entegrasyonu:**
      - `web/vercel.json` güvenlik başlıkları (X-Content-Type-Options, X-Frame-Options, XSS koruması) ile yapılandırıldı.
      - Vercel CLI ile `umutocgdrs-projects/interview-master-ai` projesi oluşturuldu ve doğrudan `https://github.com/umutocguder/interview-app` GitHub reposuna bağlandı.
-     - Prodüksiyon dağıtımı tamamlandı ve `https://interview-master-pro.vercel.app` ile `https://interview-master-ai-ten.vercel.app` domainleri canlıya alındı.
+     - Prodüksiyon dağıtımı tamamlandı ve `https://11hopem.com` ile `https://11hopem.com` domainleri canlıya alındı.
 - **Etkilenen Dosyalar**:
   - `web/src/lib/rate-limiter.ts` [NEW]
   - `web/vercel.json` [NEW]
@@ -193,7 +193,7 @@ Bu dosya, 11 Interview projesinde gerçekleştirilen tüm mimari kararları, tek
      - Mülakat Simülatörünün doğrudan filtrelenen/seçilen Swift sorularıyla canlı sesli çalışma desteği.
   3. **Vercel Prodüksiyon Güncellemesi:**
      - `npm run build` ile 5/5 statik sayfa başarıyla derlendi.
-     - Vercel prodüksiyon dağıtımı tamamlandı ve `https://interview-master-ai-ten.vercel.app` üzerinden canlıya alındı.
+     - Vercel prodüksiyon dağıtımı tamamlandı ve `https://11hopem.com` üzerinden canlıya alındı.
 - **Etkilenen Dosyalar**:
   - `web/src/data/swift-questions.ts` [NEW]
   - `web/src/app/page.tsx` [MODIFY]
@@ -208,7 +208,7 @@ Bu dosya, 11 Interview projesinde gerçekleştirilen tüm mimari kararları, tek
      - **Bilingual AI Değerlendirme API'si (`/api/interview/evaluate`):** `language` parametresi eklenerek hem Gemini 1.5 Flash hem de akıllı yerel simülatörün seçilen dile (`tr` veya `en`) göre analiz üretmesi sağlandı.
      - **Arayüz ve Dil Seçici (`page.tsx` & `InterviewSimulator.tsx`):** Header'a `[ 🇹🇷 TR | 🇬🇧 EN ]` seçicisi eklendi; Web Speech API ses tanıma (`recognition.lang`) ve seslendirme (`speechSynthesis`) dilleri `tr-TR` ve `en-US` ile dinamik olarak senkronize edildi.
      - **Otomatik Testler (`interview.test.ts`):** `tsx` test koşucusu yapılandırıldı; i18n sözlük bütünlüğü, soru bankasının çift dilli eksiksizliği ve arama/filtreleme mantığı test edilerek 5/5 test başarıyla geçti.
-     - **Vercel Canlı Dağıtımı:** `npx vercel deploy --prod` ile `https://interview-master-ai-ten.vercel.app` üzerine canlı dağıtım yapıldı (HTTP 200).
+     - **Vercel Canlı Dağıtımı:** `npx vercel deploy --prod` ile `https://11hopem.com` üzerine canlı dağıtım yapıldı (HTTP 200).
   2. **iOS Native Platformu (`ios/InterviewApp/`):**
      - **`LanguageManager.swift`:** `@Observable @MainActor` sınıfı ile `UserDefaults` destekli kalıcı `AppLanguage` (`.tr`, `.en`) yönetimi ve merkezi UI metin sözlüğü oluşturuldu.
      - **`Question.swift` & `Category.swift`:** `LocalizedQuestionContent` ve `LocalizedCategoryContent` yapılarıyla zenginleştirildi; `content(for:)` metodları eklendi.
